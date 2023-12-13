@@ -1,0 +1,140 @@
+{
+  "INITIATE_IMAGE_UPLOAD": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "properties": {"image_url": {"type": "string"}},
+      "required": ["image_url"],
+      "additionalProperties": false
+    }
+  },
+  "OPEN_SHARE_MOMENT_DIALOG": {
+    "request": {
+      "type": "object",
+      "properties": {"mediaUrl": {"type": "string", "maxLength": 1024}},
+      "required": ["mediaUrl"],
+      "additionalProperties": false
+    },
+    "response": null
+  },
+  "AUTHENTICATE": {
+    "request": {
+      "type": "object",
+      "properties": {"access_token": {"type": ["string", "null"]}},
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "access_token": {"type": "string"},
+        "user": {
+          "type": "object",
+          "properties": {
+            "username": {"type": "string"},
+            "discriminator": {"type": "string"},
+            "id": {"type": "string"},
+            "avatar": {"type": ["string", "null"]},
+            "public_flags": {"type": "number"}
+          },
+          "required": ["username", "discriminator", "id", "public_flags"],
+          "additionalProperties": false
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "identify",
+              "email",
+              "connections",
+              "guilds",
+              "guilds.join",
+              "guilds.members.read",
+              "gdm.join",
+              "rpc",
+              "rpc.notifications.read",
+              "rpc.voice.read",
+              "rpc.voice.write",
+              "rpc.video.read",
+              "rpc.video.write",
+              "rpc.screenshare.read",
+              "rpc.screenshare.write",
+              "rpc.activities.write",
+              "bot",
+              "webhook.incoming",
+              "messages.read",
+              "applications.builds.upload",
+              "applications.builds.read",
+              "applications.commands",
+              "applications.commands.update",
+              "applications.commands.permissions.update",
+              "applications.store.update",
+              "applications.entitlements",
+              "activities.read",
+              "activities.write",
+              "relationships.read",
+              "voice",
+              "dm_channels.read",
+              "role_connections.write"
+            ]
+          }
+        },
+        "expires": {"type": "string"},
+        "application": {
+          "type": "object",
+          "properties": {
+            "description": {"type": "string"},
+            "icon": {"type": ["string", "null"]},
+            "id": {"type": "string"},
+            "rpc_origins": {"type": "array", "items": {"type": "string"}},
+            "name": {"type": "string"}
+          },
+          "required": ["description", "id", "name"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["access_token", "user", "scopes", "expires", "application"],
+      "additionalProperties": false
+    }
+  },
+  "GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "properties": {
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Discord User",
+            "properties": {
+              "id": {"type": "string", "description": "User ID"},
+              "username": {"type": "string"},
+              "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+              "discriminator": {
+                "type": "string",
+                "description": "Global name discriminator. Will be 0 if a unique username"
+              },
+              "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+              "flags": {"type": "number", "description": "Public user flags"},
+              "bot": {"type": "boolean", "description": "If a bot user."},
+              "avatar_decoration_data": {
+                "type": ["object", "null"],
+                "description": "Details about avatar decoration",
+                "properties": {"asset": {"type": "string"}, "skuId": {"type": "string"}},
+                "required": ["asset"],
+                "additionalProperties": false
+              },
+              "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"},
+              "nickname": {"type": "string", "description": "Server nickname. Not unique."}
+            },
+            "required": ["id", "username", "discriminator", "flags", "bot"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["participants"],
+      "additionalProperties": false
+    }
+  }
+}

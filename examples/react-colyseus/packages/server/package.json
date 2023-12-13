@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "The activity server",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm-run-all build start:dev",
+    "start:dev": "node ./dist/app.js",
+    "start:prod": "NODE_ENV=production PORT=3000 node ./dist/app.js",
+    "dev": "nodemon --watch src -e ts,ejs --exec $npm_execpath start",
+    "build": "npm-run-all build:clean build:tsc",
+    "build:clean": "rimraf dist/*",
+    "build:tsc": "tsc",
+    "debug:start": "npm-run-all build debug:start:prod",
+    "debug:start:prod": "node --nolazy --inspect-brk=9229 ./dist/app.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@colyseus/uwebsockets-transport": "^0.14.28",
+    "cross-fetch": "^3.1.5",
+    "dotenv": "^16.0.1",
+    "http-proxy-middleware": "^2.0.6",
+    "uwebsockets-express": "^1.2.2"
+  }
+}

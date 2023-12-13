@@ -1,0 +1,27 @@
+{
+  "name": "nested-messages",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "start": "node server/index.js",
+    "dev": "nodemon  --watch client -e ts,html --exec \"$npm_execpath run build && $npm_execpath run start\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discord/embedded-app-sdk": "workspace:@discord/embedded-app-sdk@*",
+    "cross-fetch": "^3.1.5",
+    "dotenv": "^16.0.3",
+    "esbuild": "0.17.11",
+    "eventemitter3": "^5.0.0",
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "glob": "^9.2.1",
+    "nodemon": "^2.0.21",
+    "typescript": "^5.2.2"
+  }
+}

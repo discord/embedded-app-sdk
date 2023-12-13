@@ -1,0 +1,112 @@
+{
+  "root": true,
+  "plugins": ["promise", "import", "@typescript-eslint", "prettier"],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": ["plugin:import/typescript", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "camelcase": [
+      "error",
+      {
+        "allow": ["^UNSAFE_"],
+        "properties": "always"
+      }
+    ],
+    "one-var": ["error", "never"],
+    "prefer-arrow-callback": [
+      "error",
+      {
+        "allowNamedFunctions": true
+      }
+    ],
+    "prefer-spread": "error",
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all"
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-console": ["error", {"allow": ["info", "warn", "error"]}],
+    "no-alert": ["error"],
+    "no-debugger": ["error"],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ],
+    "jsx-quotes": ["error", "prefer-double"],
+    "require-await": "error",
+    "import/no-unresolved": [
+      "error",
+      {
+        "commonjs": true,
+        "ignore": ["\\.png$", "\\.jpe?g$", "^csstype$"]
+      }
+    ],
+    "no-use-before-define": "warn",
+    "import/no-duplicates": 0
+  },
+  "overrides": [
+    {
+      "files": ["**/*.{ts,tsx}"],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "@typescript-eslint/adjacent-overload-signatures": "error",
+        "@typescript-eslint/ban-types": "error",
+        "@typescript-eslint/no-misused-new": "error",
+        "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "array-simple"
+          }
+        ],
+        // TS rule overrides
+        "camelcase": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_"
+          }
+        ],
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": [
+          "error",
+          {
+            "allowShortCircuit": true,
+            "allowTernary": true,
+            "allowTaggedTemplates": true
+          }
+        ],
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-useless-constructor": "error",
+        "@typescript-eslint/prefer-ts-expect-error": "error",
+        // TypeScript handles these errors
+        "no-dupe-class-members": "off",
+        "no-undef": "off",
+        "import/default": "off",
+        "import/export": "off",
+        "import/named": "off"
+      }
+    }
+  ]
+}

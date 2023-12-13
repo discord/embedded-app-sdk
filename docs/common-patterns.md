@@ -1,0 +1,26 @@
+## Common Patterns
+
+This section explores features and user-flows that are common to activities. Rather than referencing individual commands, we'll try to approach these holistically, with references to how they manifest in the web and mobile apps.
+
+- [Embedded Links](/docs/common-patterns/embedded-links.md)
+- [Encourage Hardware Acceleration](/docs/common-patterns/encourage-hardware-acceleration.md)
+- [In-App-Purchases (IAP)](/docs/common-patterns/in-app-purchases.md)
+- [Application Orientation](/docs/common-patterns/application-orientation.md)
+- [Mobile Safe Areas](/docs/common-patterns/mobile-safe-areas.md)
+- [Mobile Thermal States](/docs/common-patterns/mobile-thermal-states.md)
+- [Modifying Participants Audio](/docs/common-patterns/modifying-participants-audio.md)
+- [Open Invite Dialog](/docs/common-patterns/open-invite-dialog.md)
+- [Rendering Avatars and Names](/docs/common-patterns/rendering-avatars-and-names.md)
+- [Setting Up the Embedded App Shelf](/docs/common-patterns/setting-up-the-embedded-app-shelf.md)
+- [Preventing unwanted application sessions](/docs/common-patterns/preventing-unwanted-application-sessions.md)
+- [Instance Participants](/docs/common-patterns/instance-participants.md)
+- [Creating a full URL](/docs/common-patterns/creating-a-full-url.md)
+- [Instance Management](/docs/common-patterns/instance-management.md)
+- [Local SDK Development](/docs/common-patterns/local-sdk-development.md)
+- [Logging](/docs/common-patterns/logging.md)
+- [Network Shims](/docs/common-patterns/network-shims.md)
+- [postMessage Protocol](/docs/common-patterns/post-message-protocol.md)
+- [URL Mapping](/docs/common-patterns/url-mapping.md)
+- [Handling 429 Error Codes](/docs/common-patterns/handling-429-error-codes.md)
+- [Production Readiness](/docs/common-patterns/production-readiness.md)
+- [Migrating from v1 to v2](/docs/common-patterns/v2-migration.md)

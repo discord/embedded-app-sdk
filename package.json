@@ -1,0 +1,80 @@
+{
+  "name": "@discord/embedded-app-sdk",
+  "version": "1.0.0",
+  "description": "Communicate with Discord via window.postMessage",
+  "author": "Discord",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/discord/embedded-app-sdk/issues"
+  },
+  "homepage": "https://github.com/discord/embedded-app-sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/discord/embedded-app-sdk.git"
+  },
+  "main": "output/index.cjs",
+  "types": "output/index.d.ts",
+  "module": "output/index.mjs",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./output/index.d.ts",
+      "require": "./output/index.cjs",
+      "import": "./output/index.mjs"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "test:all": "pnpm test -r",
+    "dev": "pnpm build --watch",
+    "build": "rollup --bundleConfigAsCjs -c rollup.config.mjs",
+    "lint:ts": "tsc -b ./tsconfig-all.json",
+    "lint": "pnpm eslint ./src",
+    "lint:fix": "pnpm eslint --fix ./src ./examples/**/*.{ts,tsx}",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --fix"
+  },
+  "files": [
+    "output/**/*"
+  ],
+  "dependencies": {
+    "@types/lodash.transform": "^4.6.6",
+    "@types/uuid": "^8.3.1",
+    "big-integer": "1.6.48",
+    "decimal.js-light": "2.5.0",
+    "eventemitter3": "^4.0.7",
+    "lodash.transform": "^4.6.0",
+    "rollup": "^4.8.0",
+    "uuid": "^8.3.2",
+    "zod": "^3.9.8"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.15.7",
+    "@jest/types": "^27.2.5",
+    "@rollup/plugin-commonjs": "25.0.2",
+    "@rollup/plugin-node-resolve": "15.1.0",
+    "@rollup/plugin-typescript": "11.1.5",
+    "@types/events": "^3.0.0",
+    "@types/jest": "^27.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-no-unsanitized": "^3.1.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^7.0.2",
+    "jest": "^27.3.1",
+    "json-schema-to-zod": "^1.1.1",
+    "lint-staged": "^13.1.0",
+    "lodash.camelcase": "^4.3.0",
+    "prettier": "^2.8.3",
+    "ts-jest": "^29.1.1",
+    "typescript": "5.2.2",
+    "zx": "^7.2.3"
+  }
+}

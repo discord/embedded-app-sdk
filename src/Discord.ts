@@ -1,0 +1,351 @@
+import EventEmitter from 'eventemitter3';
+
+import * as zod from 'zod';
+import {ClosePayload, IncomingPayload, parseIncomingPayload} from './schema';
+import commands, {Commands} from './commands';
+import {v4 as uuidv4} from 'uuid';
+import {SDKError} from './error';
+import {Events, ERROR, Events as RPCEvents} from './schema/events';
+import {Platform, RPCCloseCodes, RPCErrorCodes} from './Constants';
+import {initializeNetworkShims} from './utils/networkShims';
+import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
+import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
+import {LayoutModeTypeObject} from './schema/common';
+import type {TSendCommand, TSendCommandPayload} from './schema/types';
+import {IDiscordSDK, EventListener, LayoutModeEventListeners, SdkConfiguration} from './interface';
+
+enum Opcodes {
+  HANDSHAKE = 0,
+  FRAME = 1,
+  CLOSE = 2,
+  HELLO = 3,
+}
+
+const ALLOWED_ORIGINS = new Set([
+  window.location.origin,
+  'https://discord.com',
+  'https://discordapp.com',
+  'https://ptb.discord.com',
+  'https://ptb.discordapp.com',
+  'https://canary.discord.com',
+  'https://canary.discordapp.com',
+  'https://staging.discord.co',
+  'http://localhost:3333',
+  'https://pax.discord.com',
+  'null',
+]);
+
+/**
+ * The embedded application is running in an IFrame either within the main Discord client window or in a popout. The RPC server is always running in the main Discord client window. In either case, the referrer is the correct origin.
+ */
+function getRPCServerSource(): [Window, string] {
+  return [window.parent.opener ?? window.parent, !!document.referrer ? document.referrer : '*'];
+}
+
+export class DiscordSDK implements IDiscordSDK {
+  readonly clientId: string;
+  readonly instanceId: string;
+  readonly platform: Platform;
+  readonly guildId: string | null;
+  readonly channelId: string | null;
+  readonly configuration: SdkConfiguration;
+
+  private frameId: string;
+  private eventBus = new EventEmitter();
+  private source: Window | WindowProxy | null = null;
+  private sourceOrigin: string = '';
+  private isReady: boolean;
+  private pendingCommands: Map<
+    string,
+    {
+      resolve: (response: unknown) => unknown;
+      reject: (error: unknown) => unknown;
+    }
+  > = new Map();
+
+  /**
+   * The key is the layout mode listener passed in by the public API for
+   * subscribeToLayoutModeUpdatesCompat, and the value is the corresponding
+   * listeners, created by the SDK, for layout mode updates and PIP mode updates.
+   */
+  private layoutModeUpdateListenerMap: Map<EventListener, LayoutModeEventListeners> = new Map();
+
+  private getTransfer(payload: TSendCommandPayload): Transferable[] | undefined {
+    switch (payload.cmd) {
+      case Commands.SUBSCRIBE:
+      case Commands.UNSUBSCRIBE:
+        return undefined;
+      default:
+        return payload.transfer ?? undefined;
+    }
+  }
+
+  private sendCommand: TSendCommand = (payload: TSendCommandPayload) => {
+    if (this.source == null) throw new Error('Attempting to send message before initialization');
+    const nonce = uuidv4();
+    this.source?.postMessage([Opcodes.FRAME, {...payload, nonce}], this.sourceOrigin, this.getTransfer(payload));
+
+    const promise = new Promise((resolve, reject) => {
+      this.pendingCommands.set(nonce, {resolve, reject});
+    });
+    return promise;
+  };
+
+  commands = commands(this.sendCommand);
+
+  constructor(clientId: string, configuration?: SdkConfiguration) {
+    this.isReady = false;
+    this.clientId = clientId;
+    this.configuration = configuration ?? getDefaultSdkConfiguration();
+
+    window.addEventListener('message', this.handleMessage);
+
+    // START Capture URL Query Params
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const frameId = urlParams.get('frame_id');
+    if (!frameId) {
+      throw new Error('frame_id query param is not defined');
+    }
+    this.frameId = frameId;
+
+    const instanceId = urlParams.get('instance_id');
+    if (!instanceId) {
+      throw new Error('instance_id query param is not defined');
+    }
+    this.instanceId = instanceId;
+
+    const platform = urlParams.get('platform') as Platform;
+    if (!platform) {
+      throw new Error('platform query param is not defined');
+    } else if (platform !== Platform.DESKTOP && platform !== Platform.MOBILE) {
+      throw new Error(
+        `Invalid query param "platform" of "${platform}". Valid values are "${Platform.DESKTOP}" or "${Platform.MOBILE}"`
+      );
+    }
+    this.platform = platform;
+
+    this.guildId = urlParams.get('guild_id');
+    this.channelId = urlParams.get('channel_id');
+    // END Capture URL Query Params
+
+    [this.source, this.sourceOrigin] = getRPCServerSource();
+    this.addOnReadyListener();
+    this.handshake();
+  }
+
+  close(code: RPCCloseCodes, message: string) {
+    window.removeEventListener('message', this.handleMessage);
+
+    const nonce = uuidv4();
+    this.source?.postMessage([Opcodes.CLOSE, {code, message, nonce}], this.sourceOrigin);
+  }
+
+  async subscribe(event: string, listener: EventListener, subscribeArgs?: Record<string, unknown>) {
+    const listenerCount = this.eventBus.listenerCount(event);
+    const emitter = this.eventBus.on(event, listener);
+
+    // If first subscription, subscribe via RPC
+    if (Object.values(RPCEvents).includes(event as RPCEvents) && event !== RPCEvents.READY && listenerCount === 0) {
+      await this.sendCommand({
+        cmd: Commands.SUBSCRIBE,
+        args: subscribeArgs,
+        evt: event,
+      });
+    }
+    return emitter;
+  }
+
+  async unsubscribe(event: string, listener: EventListener) {
+    if (
+      Object.values(RPCEvents).includes(event as RPCEvents) &&
+      event !== RPCEvents.READY &&
+      this.eventBus.listenerCount(event) === 1
+    ) {
+      await this.sendCommand({
+        cmd: Commands.UNSUBSCRIBE,
+        evt: event,
+      });
+    }
+    return this.eventBus.off(event, listener);
+  }
+
+  async ready() {
+    if (this.isReady) {
+      return;
+    } else {
+      await new Promise<void>((resolve) => {
+        this.eventBus.once(RPCEvents.READY, resolve);
+      });
+    }
+  }
+
+  initializeNetworkShims = initializeNetworkShims;
+
+  async subscribeToLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
+    const pipModeListener = (update: {is_pip_mode: boolean}) => {
+      const layoutMode = update.is_pip_mode ? LayoutModeTypeObject.PIP : LayoutModeTypeObject.FOCUSED;
+      listener({layout_mode: layoutMode});
+    };
+
+    const pipModeSubscription = await this.subscribe(Events.ACTIVITY_PIP_MODE_UPDATE, pipModeListener);
+
+    const layoutModeListener = (update: {layout_mode: number}) => {
+      this.unsubscribe(Events.ACTIVITY_PIP_MODE_UPDATE, pipModeListener);
+      listener(update);
+    };
+
+    this.layoutModeUpdateListenerMap.set(listener, {layoutModeListener, pipModeListener});
+
+    try {
+      const layoutModeSubscription = await this.subscribe(Events.ACTIVITY_LAYOUT_MODE_UPDATE, layoutModeListener);
+      return layoutModeSubscription;
+    } catch (error: any) {
+      if (error.code === RPCErrorCodes.INVALID_EVENT) {
+        return pipModeSubscription;
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  async unsubscribeFromLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
+    const listeners = this.layoutModeUpdateListenerMap.get(listener);
+    this.layoutModeUpdateListenerMap.delete(listener);
+    if (listeners != null) {
+      const {layoutModeListener, pipModeListener} = listeners;
+
+      let layoutModeUnsubscribeResult = null;
+      let pipModeUnsubscribeResult = null;
+
+      if (layoutModeListener != null) {
+        try {
+          layoutModeUnsubscribeResult = await this.unsubscribe(Events.ACTIVITY_LAYOUT_MODE_UPDATE, layoutModeListener);
+        } catch (error: any) {
+          if (error.code === RPCErrorCodes.INVALID_EVENT) {
+            // fall back to returning the pip mode unsubscribe result.
+          } else {
+            throw error;
+          }
+        }
+      }
+
+      if (pipModeListener != null) {
+        pipModeUnsubscribeResult = await this.unsubscribe(Events.ACTIVITY_PIP_MODE_UPDATE, pipModeListener);
+      }
+
+      return layoutModeUnsubscribeResult ?? pipModeUnsubscribeResult;
+    }
+  }
+
+  private handshake() {
+    this.source?.postMessage(
+      [
+        Opcodes.HANDSHAKE,
+        {
+          v: 1,
+          encoding: 'json',
+          client_id: this.clientId,
+          frame_id: this.frameId,
+        },
+      ],
+      this.sourceOrigin
+    );
+  }
+
+  private addOnReadyListener() {
+    this.eventBus.once(RPCEvents.READY, () => {
+      this.overrideConsoleLogging();
+      this.isReady = true;
+    });
+  }
+
+  private overrideConsoleLogging() {
+    if (this.configuration.disableConsoleLogOverride) return;
+
+    const sendCaptureLogCommand = (level: ConsoleLevel, message: string) => {
+      this.commands.captureLog({
+        level,
+        message,
+      });
+    };
+    consoleLevels.forEach((level) => {
+      wrapConsoleMethod(console, level, sendCaptureLogCommand);
+    });
+  }
+
+  /**
+   * WARNING - All "console" logs are emitted as messages to the Discord client
+   *  If you write "console.log" anywhere in handleMessage or subsequent message handling
+   * there is a good chance you will cause an infinite loop where you receive a message
+   * which causes "console.log" which sends a message, which causes the discord client to
+   * send a reply which causes handleMessage to fire again, and again to inifinity
+   *
+   * If you need to log within handleMessage, consider setting
+   * config.disableConsoleLogOverride to true when initializing the SDK
+   */
+  private handleMessage = (event: MessageEvent) => {
+    if (!ALLOWED_ORIGINS.has(event.origin)) return;
+
+    const tuple = event.data;
+    if (!Array.isArray(tuple)) {
+      return;
+    }
+    const [opcode, data] = tuple;
+
+    switch (opcode) {
+      case Opcodes.HELLO:
+        // backwards compat; the Discord client will still send HELLOs for old applications.
+        //
+        // TODO: figure out compatibility approach; it would be easier to maintain compatibility at the SDK level, not the underlying RPC protocol level...
+        return;
+      case Opcodes.CLOSE:
+        return this.handleClose(data);
+      case Opcodes.HANDSHAKE:
+        return this.handleHandshake();
+      case Opcodes.FRAME:
+        return this.handleFrame(data);
+      default:
+        throw new Error('Invalid message format');
+    }
+  };
+
+  private handleClose(data: unknown) {
+    ClosePayload.parse(data);
+  }
+
+  private handleHandshake() {}
+
+  private handleFrame(payload: zod.infer<typeof IncomingPayload>) {
+    let parsed;
+    try {
+      parsed = parseIncomingPayload(payload);
+    } catch (e) {
+      console.error('Failed to parse', payload);
+      console.error(e);
+      return;
+    }
+
+    if (parsed.cmd === 'DISPATCH') {
+      this.eventBus.emit(parsed.evt, parsed.data);
+    } else {
+      if (parsed.evt === ERROR) {
+        // In response to a command
+        if (parsed.nonce != null) {
+          this.pendingCommands.get(parsed.nonce)?.reject(parsed.data);
+          this.pendingCommands.delete(parsed.nonce);
+          return;
+        }
+        // General error
+        this.eventBus.emit('error', new SDKError(parsed.data.code, parsed.data.message));
+      }
+
+      if (parsed.nonce == null) {
+        console.error('Missing nonce', payload);
+        return;
+      }
+      this.pendingCommands.get(parsed.nonce)?.resolve(parsed);
+      this.pendingCommands.delete(parsed.nonce);
+    }
+  }
+}

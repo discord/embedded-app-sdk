@@ -1,0 +1,26 @@
+name: Github Publish
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm build
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ github.token }}
+          registry: https://npm.pkg.github.com

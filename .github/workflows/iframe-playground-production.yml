@@ -1,0 +1,55 @@
+name: iframe playground production deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      # build latest embedded-app-sdk
+      - name: build latest embedded-app-sdk
+        run: |
+          pnpm install && pnpm build
+
+      # create env file
+      - name: create env file
+        run: |
+          cd examples/iframe-playground
+          echo "${{ secrets.ENV_FILE }}" > .env.production
+
+      # build iframe playground client
+      - name: build iframe-playground client
+        run: |
+          cd examples/iframe-playground/packages/client
+          pnpm build
+
+      # deploy client
+      - name: deploy client
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          preCommands: cd examples/iframe-playground/packages/client
+          command: pages publish --project-name=iframe-playground dist
+
+      # deploy server
+      - name: deploy server
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          preCommands: |
+            cd examples/iframe-playground/packages/server
+            ./handle-wrangler-secrets.sh production remote
+          command: publish src/index.ts --env production

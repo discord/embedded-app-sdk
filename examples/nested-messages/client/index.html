@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <style>
+      html,
+      :root {
+        --sait: var(--discord-safe-area-inset-top, env(safe-area-inset-top));
+        --saib: var(--discord-safe-area-inset-bottom, env(safe-area-inset-bottom));
+        --sail: var(--discord-safe-area-inset-left, env(safe-area-inset-left));
+        --sair: var(--discord-safe-area-inset-right, env(safe-area-inset-right));
+      }
+      body {
+        background-color: #ffffff;
+        padding-top: var(--sait);
+        padding-bottom: var(--saib);
+        padding-left: var(--sail);
+        padding-right: var(--sair);
+      }
+    </style>
+    <script src="index.js"></script>
+  </head>
+  <body>
+    <div>Parent iframe</div>
+    <iframe id="child-iframe" src="/nested" width="250px" height="250px"></iframe>
+  </body>
+</html>

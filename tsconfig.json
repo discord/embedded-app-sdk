@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    // TODO: Enable this check. It is stricter.
+    // https://app.asana.com/0/1202090529698493/1205406173366739/f
+    "noUncheckedIndexedAccess": false,
+    // TODO(gabemeola): Enable this check to ensure type imports are clear
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src"],
+  "exclude": ["**/__tests__/*", "node_modules"]
+}

@@ -1,0 +1,28 @@
+name: ci
+
+on: [pull_request]
+
+jobs:
+  test-ci:
+    name: test-ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: install deps
+        run: pnpm install
+      - name: build sdk
+        run: pnpm build
+      - name: lint
+        run: pnpm lint
+      - name: check ts
+        run: pnpm lint:ts
+      - name: test
+        run: pnpm test:all
