@@ -6,12 +6,19 @@
 
 This library enables communication between your Application and Discord. Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time application inside of Discord's UI via an embedded iframe.
 
+- [Installing this package](#installing-this-package)
 - [Quick Start](#quick-start)
 - [Common Patterns](#common-patterns)
 - [Production Readiness](#production-readiness)
 - [Examples](#examples)
 - [Security Notice](#security-notice)
 - [SDK development](#sdk-development)
+
+## Installing this package
+
+```shell
+npm install @discord/embedded-app-sdk
+```
 
 ## Quick Start
 
@@ -30,12 +37,6 @@ Making a polished application takes time. Once your application is ready for pro
 - [discord-application-starter](/examples/discord-application-starter) is a minimal example
 - [iframe-playground](/examples/iframe-playground) is a playground for testing any @discord/embeddedd-app-sdk functionality
 - [react-colyseus](/examples/react-colyseus/) shows how to set up shared application state with Colyseus and React
-
-## Installing this package
-
-```shell
-npm install @discord/embedded-app-sdk
-```
 
 ## Usage
 
