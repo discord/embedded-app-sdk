@@ -1,4 +1,5 @@
 import {styled} from './styled';
+import {Link} from 'react-router-dom';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 
 export const Navigation = styled(ScrollArea.Root, {
@@ -14,27 +15,26 @@ export const Ul = styled('ul', {
   flexDirection: 'column',
 });
 
-export const Li = styled('li', {
+export const Li = styled(Link, {
   padding: '24px',
-  '& a': {
-    padding: '6px',
-    outlineColor: '$indigo12',
-    textDecoration: 'none',
-    borderRadius: '2px',
+  textDecoration: 'none',
+  color: '$slate12',
+  '&:visited': {
     color: '$slate12',
   },
-  '& a:visited': {
-    color: '$slate12',
+  '&:hover': {
+    backgroundColor: '$slate4',
   },
   variants: {
     selected: {
       true: {
-        '& a': {
-          backgroundColor: '$indigo6',
+        backgroundColor: '$indigo6',
+        color: '$indigo12',
+        '&:visited': {
           color: '$indigo12',
         },
-        '& a:visited': {
-          color: '$indigo12',
+        '&:hover': {
+          backgroundColor: '$indigo7',
         },
       },
     },

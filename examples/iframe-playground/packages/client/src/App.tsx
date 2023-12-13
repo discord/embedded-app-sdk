@@ -183,8 +183,8 @@ function RootedApp(): React.ReactElement {
         <Scrollable.Viewport>
           <S.Ul>
             {Object.values(routes).map((r) => (
-              <S.Li key={r.path} selected={location.pathname === r.path}>
-                <Link to={r.path}>{r.name}</Link>
+              <S.Li as={Link} to={r.path} key={r.path} selected={location.pathname === r.path}>
+                <p>{r.name}</p>
               </S.Li>
             ))}
           </S.Ul>
