@@ -4,7 +4,7 @@
   <img src="/docs/assets/nelly-holding-media.svg" alt="Embedded App SDK Mascot, Nelly" />
 <p>
 
-This library enables communication between your Application and Discord. Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time application inside of Discord's UI via an embedded iframe.
+This library enables communication between your Application and Discord. Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time website inside of Discord's UI via an embedded iframe.
 
 - [Installing this package](#installing-this-package)
 - [Quick Start](#quick-start)
