@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(clientBuildPath));
 }
 
-// Fetch token from developer portal and return to the activity
+// Fetch token from developer portal and return to the embedded app
 app.post('/api/token', async (req: Request, res: Response) => {
   const response = await fetchAndRetry(`https://discord.com/api/oauth2/token`, {
     method: 'POST',

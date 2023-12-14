@@ -43,7 +43,7 @@ export const start = async () => {
     ].filter((scope) => scope != null) as Types.OAuthScopes[],
   });
 
-  // Retrieve an access_token from your activity's server
+  // Retrieve an access_token from your embedded app's server
   const response = await fetch('/api/token', {
     method: 'POST',
     headers: {

@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "0.1.0",
-  "description": "The activity server",
+  "description": "The app server",
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all build start:dev",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@colyseus/uwebsockets-transport": "^0.14.28",
+    "@colyseus/ws-transport": "^0.15.1",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.1",
     "http-proxy-middleware": "^2.0.6",

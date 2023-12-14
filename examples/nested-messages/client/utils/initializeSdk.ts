@@ -1,8 +1,8 @@
 import {DiscordSDK} from '@discord/embedded-app-sdk';
 
 /**
- * This function should be called from the top-level of your activity
- * It initializes the SDK, then authorizes, and authenticates the activity
+ * This function should be called from the top-level of your embedded app
+ * It initializes the SDK, then authorizes, and authenticates the embedded app
  */
 export async function initializeSdk(): Promise<DiscordSDK> {
   if (typeof process.env.CLIENT_ID !== 'string') {
@@ -20,7 +20,7 @@ export async function initializeSdk(): Promise<DiscordSDK> {
     scope: ['identify', 'rpc.activities.write', 'rpc.voice.read'],
   });
 
-  // Retrieve an access_token from your activity's server
+  // Retrieve an access_token from your embedded app's server
   const response = await fetch('/api/token', {
     method: 'POST',
     headers: {

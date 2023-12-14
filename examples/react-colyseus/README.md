@@ -21,7 +21,7 @@ The server (aka back-end) is using Express with typescript. Any file in the serv
 
 ## Colyseus
 
-We're going to manage and synchronize our activity state via [Colyseus](https://www.colyseus.io/). Our server is stateful and will hold the source of truth for our activity, and each client will post messages to the server to modify this state. ⚠️ This example is not (yet) architected to scale to production. It is meant for rapid prototyping and to showcase common SDK and API patterns.
+We're going to manage and synchronize our embedded app's state via [Colyseus](https://www.colyseus.io/). Our server is stateful and will hold the source of truth for our embedded app, and each client will post messages to the server to modify this state. ⚠️ This example is not (yet) architected to scale to production. It is meant for rapid prototyping and to showcase common SDK and API patterns.
 
 ## Setting up your Discord Application
 
@@ -40,9 +40,8 @@ CLIENT_SECRET=PASTE_OAUTH2_CLIENT_SECRET_HERE
 
 ## Running your app locally
 
-As described in [setting-up-your-discord-application.md](/docs/setting-up-your-discord-application.md#running-an-activity-with-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
-
-To run this example app locally, first run `pnpm install` from the root of the `/embedded-app-sdk` directory. Then run the following from the root of this example project's directory (/embedded-app-sdk/examples/react-colyseus).
+As described in [running-your-application.md](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
+To run this example app locally, first run `pnpm install` from the root of the `/embedded-app-sdk` directory. Then run the following from the root of this example project's directory (/embedded-app-sdk/examples/discord-embedded-app-starter)
 
 ```
 pnpm server:dev
@@ -50,7 +49,7 @@ pnpm client:dev # You will need to run this in a separate terminal window
 cloudflared tunnel --url http://localhost:3000 # You will need to run this in a separate terminal window
 ```
 
-Be sure to complete all the steps listed [here](/docs/setting-up-your-discord-application.md#running-an-activity-with-a-network-tunnel) to ensure your development setup is working as expected.
+Be sure to complete all the steps listed [here](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel) to ensure your development setup is working as expected.
 
 ## Where do you go from here?
 
@@ -60,7 +59,7 @@ For more resources on 3rd party Game Engine SDKs for colyseus go [here](https://
 
 ## Common patterns with Colyseus
 
-### Expanding Activity state
+### Expanding state
 
 Let's say you wanted to add position (x, y) to each player, and allow them to move. This requires changes across the front-end and back-end. Here's an example of how to do that:
 

@@ -27,10 +27,8 @@ Before we write any code, lets follow the instructions [here](https://github.com
 
 ## Running your app locally
 
-As described in [setting-up-your-discord-application.md](https://github.com/discord/embedded-app-sdk/blob/main/docs/setting-up-your-discord-application.md#running-an-activity-with-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
-To run your app locally, run the following from the root of this project's directory.
-
-In order to use Wrangler 2.0 we need node version 16
+As described in [running-your-application.md](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
+To run your app locally, run the following from this directory (/examples/iframe-playground)
 
 ```
 pnpm install # only need to run this the first time
@@ -38,7 +36,7 @@ pnpm dev
 pnpm tunnel # from another terminal
 ```
 
-Be sure to complete all the steps listed [here](https://github.com/discord/embedded-app-sdk/blob/main/docs/setting-up-your-discord-application.md#running-an-activity-with-a-network-tunnel) to ensure your development setup is working as expected.
+Be sure to complete all the steps listed [here](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel) to ensure your development setup is working as expected.
 
 ### Adding a new environment variable
 
@@ -65,7 +63,7 @@ See [/docs/setting-up-your-discord-application.md](/docs/setting-up-your-discord
 
 # Manual Deployment
 
-Steps to manually deploy the activity 0. Have access to the Discord Dev cloudflare account
+Steps to manually deploy the embedded app 0. Have access to the Discord Dev cloudflare account
 
 1. Log into cloudflare with your credentials associated with Discord Dev
 

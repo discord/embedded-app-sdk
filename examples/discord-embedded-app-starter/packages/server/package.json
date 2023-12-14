@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "0.1.0",
-  "description": "The activity server",
+  "description": "The app server",
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all build start:prod",

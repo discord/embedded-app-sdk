@@ -49,7 +49,7 @@ export function useAuthenticatedContext() {
 }
 
 /**
- * This is a helper hook which is used to connect your activity with Discord and Colyseus
+ * This is a helper hook which is used to connect your embedded app with Discord and Colyseus
  */
 function useAuthenticatedContextSetup() {
   const [auth, setAuth] = React.useState<TAuthenticatedContext | null>(null);
@@ -89,7 +89,7 @@ function useAuthenticatedContextSetup() {
         ],
       });
 
-      // Retrieve an access_token from your activity's server
+      // Retrieve an access_token from your embedded app's server
       const response = await fetch('/api/token', {
         method: 'POST',
         headers: {
