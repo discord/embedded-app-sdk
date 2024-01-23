@@ -37,7 +37,7 @@ export const AuthenticateResponseSchema = z.object({
           'guilds.join',
           'guilds.members.read',
           'gdm.join',
-          'rpc',
+          '__NOT_AVAILABLE_FOR_USE__rpc',
           'rpc.notifications.read',
           'rpc.voice.read',
           'rpc.voice.write',

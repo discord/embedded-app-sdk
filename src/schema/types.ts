@@ -71,7 +71,6 @@ export type LayoutModeTypeObject = typeof Common.LayoutModeTypeObject;
 
 export type OAuthScopes =
   | 'bot'
-  | 'rpc'
   | 'identify'
   | 'connections'
   | 'email'
