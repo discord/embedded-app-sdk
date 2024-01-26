@@ -44,9 +44,8 @@ As described in [running-your-application.md](/docs/common-patterns/running-your
 To run this example app locally, first run `pnpm install` from the root of the `/embedded-app-sdk` directory. Then run the following from the root of this example project's directory (/embedded-app-sdk/examples/discord-embedded-app-starter)
 
 ```
-pnpm server:dev
-pnpm client:dev # You will need to run this in a separate terminal window
-cloudflared tunnel --url http://localhost:3000 # You will need to run this in a separate terminal window
+pnpm dev
+pnpm tunnel # You will need to run this in a separate terminal window
 ```
 
 Be sure to complete all the steps listed [here](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel) to ensure your development setup is working as expected.
