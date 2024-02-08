@@ -13,6 +13,8 @@ function regexFromTarget(target: string): RegExp {
   return new RegExp(`${regexString}(/|$)`);
 }
 
+const FILE_EXTENSION_REGEX = /\.[a-z0-9]{1,4}$/;
+
 export interface MatchAndRewriteURLInputs {
   originalURL: URL;
   prefixHost: string;
@@ -49,8 +51,10 @@ export function matchAndRewriteURL({originalURL, prefix, prefixHost, target}: Ma
   newURL.pathname += newURL.pathname === '/' ? originalURL.pathname.slice(1) : originalURL.pathname;
   // Remove the target's path from the new url path
   newURL.pathname = newURL.pathname.replace(targetURL.pathname, '');
-  // Keep the trailing slash
-  newURL.pathname += newURL.pathname.endsWith('/') ? '' : '/';
+  // Add a trailing slash if doesn't already have one or if matches filename regex
+  if (!newURL.pathname.endsWith('/') && !FILE_EXTENSION_REGEX.test(newURL.pathname)) {
+    newURL.pathname += '/';
+  }
   return newURL;
 }
 

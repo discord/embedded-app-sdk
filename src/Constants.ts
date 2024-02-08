@@ -34,4 +34,5 @@ export enum Platform {
 
 export const Permissions = Object.freeze({
   CREATE_INSTANT_INVITE: BigFlagUtils.getFlag(0),
+  ADMINISTRATOR: BigFlagUtils.getFlag(3),
 });

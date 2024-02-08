@@ -155,5 +155,38 @@ describe('matchAndRewriteURL', () => {
       });
       expect(url2.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url/?key=abc123');
     });
+
+    it("Doesn't apply trailing slash to complete filenames", () => {
+      const prefixHost = '123456789012345678.discordsays.com';
+      const target = 'domain.com';
+      const TEST_CASES: Array<MatchAndRewriteURLInputs & {result: string}> = [
+        {
+          originalURL: new URL('https://domain.com/file/music.mp3'),
+          prefixHost,
+          prefix: '/',
+          target,
+          result: 'https://123456789012345678.discordsays.com/file/music.mp3',
+        },
+        {
+          originalURL: new URL('https://domain.com/file/text.txt'),
+          prefixHost,
+          prefix: '/',
+          target,
+          result: 'https://123456789012345678.discordsays.com/file/text.txt',
+        },
+        {
+          originalURL: new URL('https://domain.com/a.b/c.html'),
+          prefixHost,
+          prefix: '/path/to/files',
+          target,
+          result: 'https://123456789012345678.discordsays.com/path/to/files/a.b/c.html',
+        },
+      ];
+
+      for (const {result, ...rest} of TEST_CASES) {
+        const resultURL = matchAndRewriteURL(rest);
+        expect(resultURL?.toString()).toEqual(result);
+      }
+    });
   });
 });
