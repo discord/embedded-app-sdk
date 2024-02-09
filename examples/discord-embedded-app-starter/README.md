@@ -18,11 +18,11 @@ The server (aka back-end) is using Express with typescript. Any file in the serv
 
 ## Setting up your Discord Application
 
-Before we write any code, lets follow the instructions [here](/docs/setting-up-your-discord-application.md) to make sure your Discord application is set up correctly.
+Before we write any code, lets follow the instructions [here](DOCS-TODO/docs/setting-up-your-discord-application.md) to make sure your Discord application is set up correctly.
 
 ## Setting up your environment variables
 
-In this directory (`/examples/discord-embedded-app-starter`) we need to create a `.env` file with the OAuth2 variables, as described [here](/docs/setting-up-your-discord-application.md#oauth2).
+In this directory (`/examples/discord-embedded-app-starter`) we need to create a `.env` file with the OAuth2 variables, as described [here](DOCS-TODO/docs/setting-up-your-discord-application.md#oauth2).
 
 ```env
 VITE_CLIENT_ID=123456789012345678
@@ -41,7 +41,7 @@ This will ensure that you have type safety when consuming your environment varia
 
 ## Running your app locally
 
-As described in [running-your-application.md](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
+As described in [running-your-application.md](DOCS-TODO/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
 To run this example app locally, first run `pnpm install` from the root of the `/embedded-app-sdk` directory. Then run the following from the root of this example project's directory (/embedded-app-sdk/examples/discord-embedded-app-starter)
 
 ```
@@ -49,4 +49,4 @@ pnpm dev
 cloudflared tunnel --url http://localhost:3000 # You will need to run this in a separate terminal window
 ```
 
-Be sure to complete all the steps listed [here](/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel) to ensure your development setup is working as expected.
+Be sure to complete all the steps listed [here](DOCS-TODO/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel) to ensure your development setup is working as expected.
