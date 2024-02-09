@@ -16,8 +16,10 @@ This library enables communication between your Application and Discord. Whether
 
 ## Installing this package
 
+TODO - remove `github:` prefix once public npm package is available
+
 ```shell
-npm install @discord/embedded-app-sdk
+npm install github:@discord/embedded-app-sdk
 ```
 
 ## Quick Start
