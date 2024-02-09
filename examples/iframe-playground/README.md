@@ -23,7 +23,7 @@ The server (aka back-end) is using Cloudflare workers with typescript. Any file 
 
 Before we write any code, lets follow the instructions [here](https://github.com/discord/embedded-app-sdk/blob/main/docs/setting-up-your-discord-application.md) to make sure your Discord application is set up correctly.
 
-![oauth2-details](https://github.com/discord/embedded-app-sdk/blob/main/docs/assets/oauth2-details.png)
+![oauth2-details](https://github.com/discord/embedded-app-sdk/blob/main/assets/oauth2-details.png)
 
 ## Running your app locally
 
