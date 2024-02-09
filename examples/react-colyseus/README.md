@@ -1,6 +1,6 @@
 # React Colyseus Example
 
-![Screenshot of the react colyseus example running](/docs/assets/example-application.gif)
+![Screenshot of the react colyseus example running](/assets/example-application.gif)
 
 This repo is an example built on top of two javascript frameworks
 
