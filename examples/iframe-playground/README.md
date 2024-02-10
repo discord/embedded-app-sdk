@@ -21,13 +21,13 @@ The server (aka back-end) is using Cloudflare workers with typescript. Any file 
 
 ## Setting up your Discord Application
 
-Before we write any code, lets follow the instructions [here](DOCS-TODO/docs/setting-up-your-discord-application.md) to make sure your Discord application is set up correctly.
+Before we write any code, lets follow the instructions [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-1-create-a-new-discord-application) to make sure your Discord application is set up correctly.
 
 ![oauth2-details](https://github.com/discord/embedded-app-sdk/blob/main/assets/oauth2-details.png)
 
 ## Running your app locally
 
-As described in [running-your-application.md](DOCS-TODO/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
+As described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-10-running-your-application-inside-of-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
 To run your app locally, run the following from this directory (/examples/iframe-playground)
 
 ```
@@ -36,7 +36,7 @@ pnpm dev
 pnpm tunnel # from another terminal
 ```
 
-Be sure to complete all the steps listed [here](DOCS-TODO/docs/common-patterns/running-your-application.md#running-an-application-through-a-network-tunnel) to ensure your development setup is working as expected.
+Be sure to complete all the steps listed [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity) to ensure your development setup is working as expected.
 
 ### Adding a new environment variable
 
@@ -59,7 +59,7 @@ CLIENT_SECRET=abcdefghijklmnopqrstuvwxyzabcdef # This should be the application 
 BOT_TOKEN=bot_token
 ```
 
-See [/docs/setting-up-your-discord-application.md](DOCS-TODO/docs/setting-up-your-discord-application.md) for instructions on getting the oauth2 token and the bot token.
+See instructions on getting the oauth2 token and the bot token [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-2-find-your-oauth2-credentials).
 
 # Manual Deployment
 

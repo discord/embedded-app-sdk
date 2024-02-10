@@ -16,7 +16,7 @@ pnpm build
 ### Set up your .env file
 
 Copy/rename the [.example.env](/examples/nested-messages/.example.env) file to `.env`.
-Fill in `CLIENT_ID` and `CLIENT_SECRET` with the OAuth2 Client ID and Client Secret, as described [here](DOCS-TODO/docs/setting-up-your-discord-application.md#oauth2).
+Fill in `CLIENT_ID` and `CLIENT_SECRET` with the OAuth2 Client ID and Client Secret, as described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-2-find-your-oauth2-credentials).
 
 To serve this embedded app locally, from terminal navigate to `/embedded-app-sdk/examples/nested-messages` and run the following:
 

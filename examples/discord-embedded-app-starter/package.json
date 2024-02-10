@@ -5,7 +5,8 @@
   "description": "A minimal starter project using embedded-app-sdk",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run --filter \"./packages/**\" --parallel dev"
+    "dev": "pnpm run --filter \"./packages/**\" --parallel dev",
+    "tunnel": "cloudflared tunnel --url http://localhost:3000"
   },
   "author": "",
   "license": "ISC",
