@@ -4,7 +4,6 @@ import transform from 'lodash.transform';
 
 import {Events} from './schema/events';
 import {Platform} from './Constants';
-import {Mapping} from './utils/networkShims';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {IDiscordSDK} from './interface';
 import {ChannelTypesObject} from './schema/common';
@@ -66,10 +65,6 @@ export class DiscordSDKMock implements IDiscordSDK {
 
   async unsubscribeFromLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
     return await this.eventBus.off(Events.ACTIVITY_LAYOUT_MODE_UPDATE, listener);
-  }
-
-  initializeNetworkShims(mappings: Mapping[]) {
-    console.info('Mock initializing network shims', mappings);
   }
 
   emitEvent<T>(event: string, data: T) {
