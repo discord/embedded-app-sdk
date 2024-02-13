@@ -10,6 +10,7 @@ import PermissionUtils from './utils/PermissionUtils';
 import PriceUtils from './utils/PriceUtils';
 import {DiscordSDKMock} from './mock';
 import {ISDKError} from './error';
+import {initializeNetworkShims} from './utils/networkShims';
 
 const {Commands} = Common;
 export {
@@ -26,5 +27,6 @@ export {
   RPCCloseCodes,
   RPCErrorCodes,
   Responses,
+  initializeNetworkShims,
 };
 export type {IDiscordSDK, CommandTypes, CommandInputTypes, CommandResponseTypes, ISDKError, Types};

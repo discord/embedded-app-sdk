@@ -1,6 +1,5 @@
 import {Platform, RPCCloseCodes} from './Constants';
 import commands from './commands';
-import type {Mapping} from './utils/networkShims';
 
 /**
  * An optional configuration object to customize the sdk options
@@ -30,7 +29,6 @@ export interface IDiscordSDK {
     subscribeArgs?: Record<string, unknown>
   ): Promise<any>;
   unsubscribe(event: string, listener: (...args: any[]) => unknown): Promise<any>;
-  initializeNetworkShims(mappings: Mapping[]): void;
   ready(): Promise<void>;
 
   /**

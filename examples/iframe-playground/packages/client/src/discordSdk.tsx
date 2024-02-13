@@ -1,4 +1,4 @@
-import {DiscordSDK, DiscordSDKMock, IDiscordSDK} from '@discord/embedded-app-sdk';
+import {DiscordSDK, DiscordSDKMock, IDiscordSDK, initializeNetworkShims} from '@discord/embedded-app-sdk';
 
 const queryParams = new URLSearchParams(window.location.search);
 const isEmbedded = queryParams.get('frame_id') != null;
@@ -7,7 +7,7 @@ let discordSdk: IDiscordSDK;
 
 if (isEmbedded) {
   discordSdk = new DiscordSDK(import.meta.env.VITE_CLIENT_ID, {disableConsoleLogOverride: true});
-  discordSdk.initializeNetworkShims([]);
+  initializeNetworkShims([]);
 } else {
   discordSdk = new DiscordSDKMock(import.meta.env.VITE_CLIENT_ID, null, null);
   // @ts-expect-error

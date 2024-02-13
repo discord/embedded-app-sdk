@@ -7,7 +7,6 @@ import {v4 as uuidv4} from 'uuid';
 import {SDKError} from './error';
 import {Events, ERROR, Events as RPCEvents} from './schema/events';
 import {Platform, RPCCloseCodes, RPCErrorCodes} from './Constants';
-import {initializeNetworkShims} from './utils/networkShims';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import {LayoutModeTypeObject} from './schema/common';
@@ -179,8 +178,6 @@ export class DiscordSDK implements IDiscordSDK {
       });
     }
   }
-
-  initializeNetworkShims = initializeNetworkShims;
 
   async subscribeToLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
     const pipModeListener = (update: {is_pip_mode: boolean}) => {
