@@ -5,13 +5,12 @@ import {ClosePayload, IncomingPayload, parseIncomingPayload} from './schema';
 import commands, {Commands} from './commands';
 import {v4 as uuidv4} from 'uuid';
 import {SDKError} from './error';
-import {Events, ERROR, Events as RPCEvents} from './schema/events';
-import {Platform, RPCCloseCodes, RPCErrorCodes} from './Constants';
+import {EventSchema, ERROR, Events as RPCEvents} from './schema/events';
+import {Platform, RPCCloseCodes} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
-import {LayoutModeTypeObject} from './schema/common';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
-import {IDiscordSDK, EventListener, LayoutModeEventListeners, SdkConfiguration} from './interface';
+import {IDiscordSDK, LayoutModeEventListeners, SdkConfiguration} from './interface';
 
 enum Opcodes {
   HANDSHAKE = 0,
@@ -140,7 +139,11 @@ export class DiscordSDK implements IDiscordSDK {
     this.source?.postMessage([Opcodes.CLOSE, {code, message, nonce}], this.sourceOrigin);
   }
 
-  async subscribe(event: string, listener: EventListener, subscribeArgs?: Record<string, unknown>) {
+  async subscribe<K extends keyof typeof EventSchema>(
+    event: K,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>) => unknown,
+    subscribeArgs?: (typeof EventSchema)[K]['subscribeArgs']
+  ) {
     const listenerCount = this.eventBus.listenerCount(event);
     const emitter = this.eventBus.on(event, listener);
 
@@ -176,62 +179,6 @@ export class DiscordSDK implements IDiscordSDK {
       await new Promise<void>((resolve) => {
         this.eventBus.once(RPCEvents.READY, resolve);
       });
-    }
-  }
-
-  async subscribeToLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
-    const pipModeListener = (update: {is_pip_mode: boolean}) => {
-      const layoutMode = update.is_pip_mode ? LayoutModeTypeObject.PIP : LayoutModeTypeObject.FOCUSED;
-      listener({layout_mode: layoutMode});
-    };
-
-    const pipModeSubscription = await this.subscribe(Events.ACTIVITY_PIP_MODE_UPDATE, pipModeListener);
-
-    const layoutModeListener = (update: {layout_mode: number}) => {
-      this.unsubscribe(Events.ACTIVITY_PIP_MODE_UPDATE, pipModeListener);
-      listener(update);
-    };
-
-    this.layoutModeUpdateListenerMap.set(listener, {layoutModeListener, pipModeListener});
-
-    try {
-      const layoutModeSubscription = await this.subscribe(Events.ACTIVITY_LAYOUT_MODE_UPDATE, layoutModeListener);
-      return layoutModeSubscription;
-    } catch (error: any) {
-      if (error.code === RPCErrorCodes.INVALID_EVENT) {
-        return pipModeSubscription;
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  async unsubscribeFromLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
-    const listeners = this.layoutModeUpdateListenerMap.get(listener);
-    this.layoutModeUpdateListenerMap.delete(listener);
-    if (listeners != null) {
-      const {layoutModeListener, pipModeListener} = listeners;
-
-      let layoutModeUnsubscribeResult = null;
-      let pipModeUnsubscribeResult = null;
-
-      if (layoutModeListener != null) {
-        try {
-          layoutModeUnsubscribeResult = await this.unsubscribe(Events.ACTIVITY_LAYOUT_MODE_UPDATE, layoutModeListener);
-        } catch (error: any) {
-          if (error.code === RPCErrorCodes.INVALID_EVENT) {
-            // fall back to returning the pip mode unsubscribe result.
-          } else {
-            throw error;
-          }
-        }
-      }
-
-      if (pipModeListener != null) {
-        pipModeUnsubscribeResult = await this.unsubscribe(Events.ACTIVITY_PIP_MODE_UPDATE, pipModeListener);
-      }
-
-      return layoutModeUnsubscribeResult ?? pipModeUnsubscribeResult;
     }
   }
 

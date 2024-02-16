@@ -32,12 +32,18 @@ export const IncomingPayload = zod
   })
   .passthrough();
 
-export function parseIncomingPayload(
+export function parseIncomingPayload<K extends keyof typeof Events.EventSchema = keyof typeof Events.EventSchema>(
   payload: zod.infer<typeof IncomingPayload>
-): zod.infer<typeof Events.EventFrame> | zod.infer<typeof Responses.ResponseFrame> {
+):
+  | zod.infer<(typeof Events.EventSchema)[K]['parser']>
+  | zod.infer<typeof Responses.ResponseFrame>
+  | zod.infer<typeof Events.ErrorEvent> {
   const incoming = IncomingPayload.parse(payload);
 
   if (incoming.evt != null) {
+    if (incoming.evt === Events.ERROR) {
+      return Events.ErrorEvent.parse(incoming);
+    }
     return Events.parseEventPayload(Events.EventFrame.parse(incoming));
   } else {
     return Responses.parseResponsePayload(Responses.ResponseFrame.passthrough().parse(incoming));

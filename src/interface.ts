@@ -1,5 +1,7 @@
 import {Platform, RPCCloseCodes} from './Constants';
 import commands from './commands';
+import {EventSchema} from './schema/events';
+import * as zod from 'zod';
 
 /**
  * An optional configuration object to customize the sdk options
@@ -23,28 +25,14 @@ export interface IDiscordSDK {
   readonly guildId: string | null;
 
   close(code: RPCCloseCodes, message: string): void;
-  subscribe(
-    event: string,
-    listener: (...args: any[]) => unknown,
-    subscribeArgs?: Record<string, unknown>
+  subscribe<K extends keyof typeof EventSchema>(
+    event: K,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>) => unknown,
+    subscribeArgs?: (typeof EventSchema)[K]['subscribeArgs']
   ): Promise<any>;
   unsubscribe(event: string, listener: (...args: any[]) => unknown): Promise<any>;
   ready(): Promise<void>;
-
-  /**
-   * Subscribe to the ACTIVITY_LAYOUT_MODE_UPDATE event, and handle backward compatibility
-   * with old Discord clients that only support ACTIVITY_PIP_MODE_UPDATE.
-   */
-  subscribeToLayoutModeUpdatesCompat(listener: (...args: any[]) => unknown): Promise<any>;
-
-  /**
-   * Unsubscribe from the ACTIVITY_LAYOUT_MODE_UPDATE event, and handle backward compatibility
-   * with old Discord clients that only support ACTIVITY_PIP_MODE_UPDATE.
-   */
-  unsubscribeFromLayoutModeUpdatesCompat(listener: (...args: any[]) => unknown): Promise<any>;
 }
-
-export type EventListener = (...args: any[]) => unknown;
 
 export interface LayoutModeEventListeners {
   layoutModeListener: EventListener;

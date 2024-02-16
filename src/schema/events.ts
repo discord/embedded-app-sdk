@@ -50,6 +50,206 @@ export enum Events {
   ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
 }
 
+export const DispatchEventFrame = ReceiveFrame.extend({
+  evt: zod.nativeEnum(Events),
+  nonce: zod.string().nullable(),
+  cmd: zod.literal(DISPATCH),
+  data: zod.object({}).passthrough(),
+});
+
+interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
+  subscribeArgs?: Record<string, unknown>;
+  parser: Z;
+}
+export const EventSchema = {
+  [Events.READY]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.READY),
+      data: zod.object({}),
+    }),
+  },
+  [Events.GUILD_STATUS]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.GUILD_STATUS),
+      data: zod.object({}),
+    }),
+  },
+  [Events.GUILD_CREATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.GUILD_CREATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.CHANNEL_CREATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.CHANNEL_CREATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.VOICE_CHANNEL_SELECT]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_CHANNEL_SELECT),
+      data: zod.object({}),
+    }),
+  },
+  [Events.VOICE_SETTINGS_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_SETTINGS_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.VOICE_STATE_CREATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_STATE_CREATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.VOICE_STATE_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_STATE_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.VOICE_STATE_DELETE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_STATE_DELETE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.VOICE_CONNECTION_STATUS]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_CONNECTION_STATUS),
+      data: zod.object({}),
+    }),
+  },
+  [Events.MESSAGE_CREATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.MESSAGE_CREATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.MESSAGE_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.MESSAGE_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.MESSAGE_DELETE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.MESSAGE_DELETE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.SPEAKING_START]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPEAKING_START),
+      data: zod.object({}),
+    }),
+  },
+  [Events.SPEAKING_STOP]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPEAKING_STOP),
+      data: zod.object({}),
+    }),
+  },
+  [Events.NOTIFICATION_CREATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.NOTIFICATION_CREATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.CAPTURE_SHORTCUT_CHANGE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.CAPTURE_SHORTCUT_CHANGE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ACTIVITY_JOIN]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_JOIN),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ACTIVITY_JOIN_REQUEST]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_JOIN_REQUEST),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ACTIVITY_PIP_MODE_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_PIP_MODE_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ORIENTATION_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ORIENTATION_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.CURRENT_USER_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.CURRENT_USER_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ENTITLEMENT_CREATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ENTITLEMENT_CREATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.THERMAL_STATE_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.THERMAL_STATE_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+  [Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE]: {
+    subscribeArgs: undefined,
+    parser: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE),
+      data: zod.object({}),
+    }),
+  },
+} satisfies Record<keyof typeof Events, EventArgs>;
+
+export type GetEventListener<K extends keyof typeof EventSchema> = (
+  event: zod.infer<(typeof EventSchema)[K]['parser']>
+) => unknown;
+
 export const ErrorEvent = ReceiveFrame.extend({
   evt: zod.literal(ERROR),
   data: zod
@@ -60,13 +260,6 @@ export const ErrorEvent = ReceiveFrame.extend({
     .passthrough(),
   cmd: zod.nativeEnum(Commands),
   nonce: zod.string().nullable(),
-});
-
-export const DispatchEventFrame = ReceiveFrame.extend({
-  evt: zod.nativeEnum(Events),
-  nonce: zod.string().nullable(),
-  cmd: zod.literal(DISPATCH),
-  data: zod.object({}).passthrough(),
 });
 
 export const OtherEvent = DispatchEventFrame.extend({
@@ -254,63 +447,13 @@ export const InstanceConnectedParticipantsUpdate = makeEvent(Events.ACTIVITY_INS
   participants: GetActivityInstanceConnectedParticipantsResponseSchema.shape.participants,
 });
 
-export function parseEventPayload(data: zod.infer<typeof EventFrame>) {
-  switch (data.evt) {
-    case Events.ACTIVITY_JOIN:
-      return ActivityJoin.parse(data);
-    case Events.ACTIVITY_JOIN_REQUEST:
-      return ActivityJoinRequest.parse(data);
-    case Events.ACTIVITY_PIP_MODE_UPDATE:
-      return ActivityPIPModeUpdate.parse(data);
-    case Events.ACTIVITY_LAYOUT_MODE_UPDATE:
-      return ActivityLayoutModeUpdate.parse(data);
-    case Events.CAPTURE_SHORTCUT_CHANGE:
-      return CaptureShortcutChange.parse(data);
-    case Events.CHANNEL_CREATE:
-      return ChannelCreate.parse(data);
-    case ERROR:
-      return ErrorEvent.parse(data);
-    case Events.GUILD_CREATE:
-      return GuildCreate.parse(data);
-    case Events.GUILD_STATUS:
-      return GuildStatus.parse(data);
-    case Events.MESSAGE_CREATE:
-      return MessageCreate.parse(data);
-    case Events.MESSAGE_DELETE:
-      return MessageDelete.parse(data);
-    case Events.MESSAGE_UPDATE:
-      return MessageUpdate.parse(data);
-    case Events.NOTIFICATION_CREATE:
-      return NotificationCreate.parse(data);
-    case Events.ORIENTATION_UPDATE:
-      return OrientationUpdate.parse(data);
-    case Events.READY:
-      return Ready.parse(data);
-    case Events.SPEAKING_START:
-      return StartSpeaking.parse(data);
-    case Events.SPEAKING_STOP:
-      return StopSpeaking.parse(data);
-    case Events.VOICE_CHANNEL_SELECT:
-      return VoiceChannelSelect.parse(data);
-    case Events.VOICE_CONNECTION_STATUS:
-      return VoiceConnectionStatus.parse(data);
-    case Events.VOICE_SETTINGS_UPDATE:
-      return VoiceSettingsUpdate.parse(data);
-    case Events.VOICE_STATE_CREATE:
-      return VoiceStateCreate.parse(data);
-    case Events.VOICE_STATE_DELETE:
-      return VoiceStateDelete.parse(data);
-    case Events.VOICE_STATE_UPDATE:
-      return VoiceStateUpdate.parse(data);
-    case Events.CURRENT_USER_UPDATE:
-      return CurrentUserUpdate.parse(data);
-    case Events.ENTITLEMENT_CREATE:
-      return EntitlementCreate.parse(data);
-    case Events.THERMAL_STATE_UPDATE:
-      return ThermalStateUpdate.parse(data);
-    case Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE:
-      return InstanceConnectedParticipantsUpdate.parse(data);
-    default:
-      throw new Error(`Unrecognized event type ${data.evt}`);
+export function parseEventPayload<K extends keyof typeof EventSchema = keyof typeof EventSchema>(
+  data: zod.infer<typeof EventFrame>
+): zod.infer<(typeof EventSchema)[K]['parser']> {
+  const event = data.evt;
+  if (!(event in Events)) {
+    throw new Error(`Unrecognized event type ${data.evt}`);
   }
+  const eventSchema = EventSchema[event as Events];
+  return eventSchema.parser.parse(data);
 }
