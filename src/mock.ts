@@ -1,8 +1,9 @@
+import * as zod from 'zod';
 import EventEmitter from 'eventemitter3';
 import bigInt from 'big-integer';
 import transform from 'lodash.transform';
 
-import {Events} from './schema/events';
+import {EventSchema} from './schema/events';
 import {Platform} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {IDiscordSDK} from './interface';
@@ -51,20 +52,16 @@ export class DiscordSDKMock implements IDiscordSDK {
     return Promise.resolve();
   }
 
-  async subscribe(event: string, listener: EventListener) {
+  async subscribe<K extends keyof typeof EventSchema>(
+    event: K,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>) => unknown,
+    _subscribeArgs?: (typeof EventSchema)[K]['subscribeArgs']
+  ) {
     return await this.eventBus.on(event, listener);
   }
 
   async unsubscribe(event: string, listener: EventListener) {
     return await this.eventBus.off(event, listener);
-  }
-
-  async subscribeToLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
-    return await this.eventBus.on(Events.ACTIVITY_LAYOUT_MODE_UPDATE, listener);
-  }
-
-  async unsubscribeFromLayoutModeUpdatesCompat(listener: EventListener): Promise<any> {
-    return await this.eventBus.off(Events.ACTIVITY_LAYOUT_MODE_UPDATE, listener);
   }
 
   emitEvent<T>(event: string, data: T) {
