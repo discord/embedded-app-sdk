@@ -10,7 +10,8 @@ import {Platform, RPCCloseCodes} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
-import {IDiscordSDK, LayoutModeEventListeners, SdkConfiguration} from './interface';
+import {IDiscordSDK, LayoutModeEventListeners, MaybeZodObject, SdkConfiguration} from './interface';
+import {initializeNetworkShims} from './utils/networkShims';
 
 enum Opcodes {
   HANDSHAKE = 0,
@@ -131,7 +132,6 @@ export class DiscordSDK implements IDiscordSDK {
     this.addOnReadyListener();
     this.handshake();
   }
-
   close(code: RPCCloseCodes, message: string) {
     window.removeEventListener('message', this.handleMessage);
 
@@ -141,8 +141,8 @@ export class DiscordSDK implements IDiscordSDK {
 
   async subscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>) => unknown,
-    subscribeArgs?: (typeof EventSchema)[K]['subscribeArgs']
+    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>['data']) => unknown,
+    subscribeArgs?: MaybeZodObject<(typeof EventSchema)[K]>
   ) {
     const listenerCount = this.eventBus.listenerCount(event);
     const emitter = this.eventBus.on(event, listener);
@@ -157,13 +157,11 @@ export class DiscordSDK implements IDiscordSDK {
     }
     return emitter;
   }
-
-  async unsubscribe(event: string, listener: EventListener) {
-    if (
-      Object.values(RPCEvents).includes(event as RPCEvents) &&
-      event !== RPCEvents.READY &&
-      this.eventBus.listenerCount(event) === 1
-    ) {
+  async unsubscribe<K extends keyof typeof EventSchema>(
+    event: K,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>['data']) => unknown
+  ) {
+    if (event !== RPCEvents.READY && this.eventBus.listenerCount(event) === 1) {
       await this.sendCommand({
         cmd: Commands.UNSUBSCRIBE,
         evt: event,

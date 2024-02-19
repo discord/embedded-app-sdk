@@ -57,188 +57,170 @@ export const DispatchEventFrame = ReceiveFrame.extend({
   data: zod.object({}).passthrough(),
 });
 
-interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
-  subscribeArgs?: Record<string, unknown>;
+export interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
+  subscribeArgs?: Z; // do zod things here Record<string, unknown>;
   parser: Z;
 }
 export const EventSchema = {
   [Events.READY]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.READY),
       data: zod.object({}),
     }),
   },
   [Events.GUILD_STATUS]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.GUILD_STATUS),
       data: zod.object({}),
     }),
   },
   [Events.GUILD_CREATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.GUILD_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.CHANNEL_CREATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.CHANNEL_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.VOICE_CHANNEL_SELECT]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_CHANNEL_SELECT),
       data: zod.object({}),
     }),
   },
   [Events.VOICE_SETTINGS_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_SETTINGS_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.VOICE_STATE_CREATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.VOICE_STATE_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_UPDATE),
-      data: zod.object({}),
+      data: zod.object({
+        channel_id: zod.string(),
+      }),
+    }),
+    subscribeArgs: zod.object({
+      channel_id: zod.string(),
     }),
   },
   [Events.VOICE_STATE_DELETE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_DELETE),
       data: zod.object({}),
     }),
   },
   [Events.VOICE_CONNECTION_STATUS]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_CONNECTION_STATUS),
       data: zod.object({}),
     }),
   },
   [Events.MESSAGE_CREATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.MESSAGE_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.MESSAGE_DELETE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_DELETE),
       data: zod.object({}),
     }),
   },
   [Events.SPEAKING_START]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_START),
       data: zod.object({}),
     }),
   },
   [Events.SPEAKING_STOP]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_STOP),
       data: zod.object({}),
     }),
   },
   [Events.NOTIFICATION_CREATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.NOTIFICATION_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.CAPTURE_SHORTCUT_CHANGE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.CAPTURE_SHORTCUT_CHANGE),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_JOIN]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_JOIN_REQUEST]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN_REQUEST),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_PIP_MODE_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_PIP_MODE_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.ORIENTATION_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ORIENTATION_UPDATE),
-      data: zod.object({}),
+      screen_orientation: zodCoerceUnhandledValue(OrientationTypeObject),
+      /**
+       * @deprecated use screen_orientation instead
+       */
+      orientation: zod.nativeEnum(Orientation),
     }),
   },
   [Events.CURRENT_USER_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.CURRENT_USER_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.ENTITLEMENT_CREATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.ENTITLEMENT_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.THERMAL_STATE_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.THERMAL_STATE_UPDATE),
-      data: zod.object({}),
+      data: zod.object({thermal_state: ThermalState}),
     }),
   },
   [Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE]: {
-    subscribeArgs: undefined,
     parser: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE),
       data: zod.object({}),
@@ -247,7 +229,7 @@ export const EventSchema = {
 } satisfies Record<keyof typeof Events, EventArgs>;
 
 export type GetEventListener<K extends keyof typeof EventSchema> = (
-  event: zod.infer<(typeof EventSchema)[K]['parser']>
+  event: zod.infer<(typeof EventSchema)[K]['parser']>['data']
 ) => unknown;
 
 export const ErrorEvent = ReceiveFrame.extend({

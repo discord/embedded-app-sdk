@@ -54,7 +54,7 @@ export class DiscordSDKMock implements IDiscordSDK {
 
   async subscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>) => unknown,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['parser']>['data']) => unknown,
     _subscribeArgs?: (typeof EventSchema)[K]['subscribeArgs']
   ) {
     return await this.eventBus.on(event, listener);
