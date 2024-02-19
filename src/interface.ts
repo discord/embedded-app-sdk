@@ -1,6 +1,6 @@
 import {Platform, RPCCloseCodes} from './Constants';
 import commands from './commands';
-import {EventSchema} from './schema/events';
+import {EventArgs, EventSchema} from './schema/events';
 import * as zod from 'zod';
 
 /**
@@ -14,6 +14,10 @@ export interface SdkConfiguration {
    */
   readonly disableConsoleLogOverride: boolean;
 }
+
+export type MaybeZodObject<T extends EventArgs> = T['subscribeArgs'] extends NonNullable<EventArgs['subscribeArgs']>
+  ? zod.infer<T['subscribeArgs']>
+  : undefined;
 
 export interface IDiscordSDK {
   readonly clientId: string;
