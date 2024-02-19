@@ -58,9 +58,12 @@ export const DispatchEventFrame = ReceiveFrame.extend({
 });
 
 export interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
-  subscribeArgs?: Z; // do zod things here Record<string, unknown>;
   parser: Z;
+  // BAD CODE ALERT - this arg will not be used for any runtime validation
+  // It's only used to enforce typescript. But it's easier to keep both as zod
+  subscribeArgs?: Z;
 }
+
 export const EventSchema = {
   [Events.READY]: {
     parser: DispatchEventFrame.extend({
