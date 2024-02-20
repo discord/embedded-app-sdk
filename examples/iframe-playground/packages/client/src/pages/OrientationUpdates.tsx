@@ -1,11 +1,11 @@
 import React from 'react';
 import discordSdk from '../discordSdk';
-import {Common, Events, GetEventListener} from '@discord/embedded-app-sdk';
+import {Common, Events, EventPayloadData} from '@discord/embedded-app-sdk';
 
 export default function OrientationUpdates() {
   const [orientationString, setOrientationString] = React.useState<string>('');
 
-  const updateOrientation = React.useCallback<GetEventListener<'ORIENTATION_UPDATE'>>((update) => {
+  const updateOrientation = React.useCallback<EventPayloadData<'ORIENTATION_UPDATE'>>((update) => {
     const screenOrientation = update.screen_orientation;
     let orientationStr;
     switch (screenOrientation) {

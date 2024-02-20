@@ -2,7 +2,7 @@ import React from 'react';
 import discordSdk from '../discordSdk';
 import ReactJsonView from '../components/ReactJsonView';
 import {useLocation} from 'react-router-dom';
-import {GetEventListener} from '@discord/embedded-app-sdk';
+import {EventPayloadData} from '@discord/embedded-app-sdk';
 
 export default function VoiceState() {
   const [voiceState, setVoiceState] = React.useState<any | null>(null);
@@ -12,7 +12,7 @@ export default function VoiceState() {
     const {channelId} = discordSdk;
     if (!channelId) return;
 
-    const updateVoiceState: GetEventListener<'VOICE_STATE_UPDATE'> = (voiceState) => {
+    const updateVoiceState: EventPayloadData<'VOICE_STATE_UPDATE'> = (voiceState) => {
       setVoiceState(voiceState);
     };
     discordSdk.subscribe('VOICE_STATE_UPDATE', updateVoiceState, {

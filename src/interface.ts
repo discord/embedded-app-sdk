@@ -31,12 +31,12 @@ export interface IDiscordSDK {
   close(code: RPCCloseCodes, message: string): void;
   subscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['updatePayload']>['data']) => unknown,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown,
     subscribeArgs?: MaybeZodObject<(typeof EventSchema)[K]>
   ): Promise<unknown>;
   unsubscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['updatePayload']>['data']) => unknown
+    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown
   ): Promise<unknown>;
   ready(): Promise<void>;
 }

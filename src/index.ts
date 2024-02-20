@@ -11,7 +11,7 @@ import PriceUtils from './utils/PriceUtils';
 import {DiscordSDKMock} from './mock';
 import {ISDKError} from './error';
 import {patchUrlMappings, attemptRemap} from './utils/patchUrlMappings';
-export type {GetEventListener} from './schema/events';
+export type {EventPayloadData} from './schema/events';
 
 const {Commands} = Common;
 export {
