@@ -35,7 +35,7 @@ export const IncomingPayload = zod
 export function parseIncomingPayload<K extends keyof typeof Events.EventSchema = keyof typeof Events.EventSchema>(
   payload: zod.infer<typeof IncomingPayload>
 ):
-  | zod.infer<(typeof Events.EventSchema)[K]['parser']>
+  | zod.infer<(typeof Events.EventSchema)[K]['updatePayload']>
   | zod.infer<typeof Responses.ResponseFrame>
   | zod.infer<typeof Events.ErrorEvent> {
   const incoming = IncomingPayload.parse(payload);
