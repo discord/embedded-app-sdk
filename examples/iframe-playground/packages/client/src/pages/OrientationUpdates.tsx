@@ -5,7 +5,7 @@ import {Common, Events, EventPayloadData} from '@discord/embedded-app-sdk';
 export default function OrientationUpdates() {
   const [orientationString, setOrientationString] = React.useState<string>('');
 
-  const updateOrientation = React.useCallback<EventPayloadData<'ORIENTATION_UPDATE'>>((update) => {
+  const updateOrientation = React.useCallback<(u: EventPayloadData<'ORIENTATION_UPDATE'>) => void>((update) => {
     const screenOrientation = update.screen_orientation;
     let orientationStr;
     switch (screenOrientation) {

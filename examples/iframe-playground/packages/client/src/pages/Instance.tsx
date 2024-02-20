@@ -1,13 +1,13 @@
 import {useState, useEffect} from 'react';
 import discordSdk from '../discordSdk';
-import {Events, Types} from '@discord/embedded-app-sdk';
+import {Events, EventPayloadData} from '@discord/embedded-app-sdk';
 
-type Response = Types.GetActivityInstanceConnectedParticipantsResponse;
+type UpdateEvent = EventPayloadData<'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE'>;
 
 export default function Instance() {
-  const [participants, setParticipants] = useState<Response['participants']>([]);
+  const [participants, setParticipants] = useState<UpdateEvent['participants']>([]);
   useEffect(() => {
-    const updateParticipants = (res: Response) => {
+    const updateParticipants = (res: UpdateEvent) => {
       setParticipants(res.participants);
     };
     discordSdk.commands.getInstanceConnectedParticipants().then(updateParticipants);
