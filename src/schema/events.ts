@@ -58,14 +58,14 @@ export const DispatchEventFrame = ReceiveFrame.extend({
 });
 
 export interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
-  updatePayload: Z;
+  payload: Z;
   // BAD CODE - this arg is being called at runtime, but it's only used to
   // enforce typescript. The perf hit is low and the DX with zod is worth it
   subscribeArgs?: Z;
 }
 
-export type GetEventListener<K extends keyof typeof EventSchema> = (
-  event: zod.infer<(typeof EventSchema)[K]['updatePayload']>['data']
+export type EventPayloadData<K extends keyof typeof EventSchema> = (
+  event: zod.infer<(typeof EventSchema)[K]['payload']>['data']
 ) => unknown;
 
 export const ErrorEvent = ReceiveFrame.extend({
@@ -250,18 +250,18 @@ export const InstanceConnectedParticipantsUpdate = makeEvent(Events.ACTIVITY_INS
 
 export function parseEventPayload<K extends keyof typeof EventSchema = keyof typeof EventSchema>(
   data: zod.infer<typeof EventFrame>
-): zod.infer<(typeof EventSchema)[K]['updatePayload']> {
+): zod.infer<(typeof EventSchema)[K]['payload']> {
   const event = data.evt;
   if (!(event in Events)) {
     throw new Error(`Unrecognized event type ${data.evt}`);
   }
   const eventSchema = EventSchema[event as Events];
-  return eventSchema.updatePayload.parse(data);
+  return eventSchema.payload.parse(data);
 }
 
 export const EventSchema = {
   [Events.READY]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.READY),
       data: zod.object({
         v: zod.number(),
@@ -282,7 +282,7 @@ export const EventSchema = {
     }),
   },
   [Events.GUILD_STATUS]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.GUILD_STATUS),
       data: zod.object({
         guild: Guild,
@@ -291,7 +291,7 @@ export const EventSchema = {
     }),
   },
   [Events.GUILD_CREATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.GUILD_CREATE),
       data: zod.object({
         id: zod.string(),
@@ -300,7 +300,7 @@ export const EventSchema = {
     }),
   },
   [Events.CHANNEL_CREATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CHANNEL_CREATE),
       data: zod.object({
         id: zod.string(),
@@ -310,7 +310,7 @@ export const EventSchema = {
     }),
   },
   [Events.VOICE_CHANNEL_SELECT]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_CHANNEL_SELECT),
       data: zod.object({
         channel_id: zod.string().nullable(),
@@ -319,13 +319,13 @@ export const EventSchema = {
     }),
   },
   [Events.VOICE_SETTINGS_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_SETTINGS_UPDATE),
       data: zod.object({}), // TODO - or - remove
     }),
   },
   [Events.VOICE_STATE_CREATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_CREATE),
       data: zod.object({
         voice_state: VoiceState,
@@ -341,7 +341,7 @@ export const EventSchema = {
     }),
   },
   [Events.VOICE_STATE_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_UPDATE),
       data: VoiceSettingsResponse,
     }),
@@ -350,13 +350,13 @@ export const EventSchema = {
     }),
   },
   [Events.VOICE_STATE_DELETE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_DELETE),
-      data: zod.object({}),
+      data: zod.object({}), // do we want this? is it even there?
     }),
   },
   [Events.VOICE_CONNECTION_STATUS]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_CONNECTION_STATUS),
       data: zod.object({
         state: zodCoerceUnhandledValue(VoiceConnectionStatusStateObject),
@@ -368,7 +368,7 @@ export const EventSchema = {
     }),
   },
   [Events.MESSAGE_CREATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_CREATE),
       data: zod.object({
         channel_id: zod.string(),
@@ -377,67 +377,67 @@ export const EventSchema = {
     }),
   },
   [Events.MESSAGE_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.MESSAGE_DELETE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_DELETE),
       data: zod.object({}),
     }),
   },
   [Events.SPEAKING_START]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_START),
       data: zod.object({}),
     }),
   },
   [Events.SPEAKING_STOP]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_STOP),
       data: zod.object({}),
     }),
   },
   [Events.NOTIFICATION_CREATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.NOTIFICATION_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.CAPTURE_SHORTCUT_CHANGE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CAPTURE_SHORTCUT_CHANGE),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_JOIN]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_JOIN_REQUEST]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN_REQUEST),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_PIP_MODE_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_PIP_MODE_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.ORIENTATION_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       screen_orientation: zodCoerceUnhandledValue(OrientationTypeObject),
       /**
        * @deprecated use screen_orientation instead
@@ -446,25 +446,25 @@ export const EventSchema = {
     }),
   },
   [Events.CURRENT_USER_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CURRENT_USER_UPDATE),
       data: zod.object({}),
     }),
   },
   [Events.ENTITLEMENT_CREATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ENTITLEMENT_CREATE),
       data: zod.object({}),
     }),
   },
   [Events.THERMAL_STATE_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.THERMAL_STATE_UPDATE),
       data: zod.object({thermal_state: ThermalState}),
     }),
   },
   [Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE]: {
-    updatePayload: DispatchEventFrame.extend({
+    payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE),
       data: zod.object({}),
     }),

@@ -54,7 +54,7 @@ export class DiscordSDKMock implements IDiscordSDK {
 
   async subscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['updatePayload']>['data']) => unknown,
+    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown,
     _subscribeArgs?: MaybeZodObject<(typeof EventSchema)[K]>
   ) {
     return await this.eventBus.on(event, listener);
@@ -62,7 +62,7 @@ export class DiscordSDKMock implements IDiscordSDK {
 
   async unsubscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['updatePayload']>['data']) => unknown
+    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown
   ): Promise<unknown> {
     return await this.eventBus.off(event, listener);
   }
