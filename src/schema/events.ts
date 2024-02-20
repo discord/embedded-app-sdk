@@ -86,58 +86,6 @@ export const OtherEvent = DispatchEventFrame.extend({
 
 export const EventFrame = zod.union([DispatchEventFrame, OtherEvent, ErrorEvent]);
 
-function makeEvent<N extends string, T extends Record<string, zod.ZodType<any, any>>>(name: N, data: T) {
-  return DispatchEventFrame.extend({
-    evt: zod.literal(name),
-    data: zod.object(data),
-  });
-}
-
-export const GuildStatus = makeEvent(Events.GUILD_STATUS, {
-  guild: Guild,
-  online: zod.number().optional(),
-});
-
-export const GuildCreate = makeEvent(Events.GUILD_CREATE, {
-  id: zod.string(),
-  name: zod.string(),
-});
-
-export const ChannelCreate = makeEvent(Events.CHANNEL_CREATE, {
-  id: zod.string(),
-  name: zod.string(),
-  type: zodCoerceUnhandledValue(ChannelTypesObject),
-});
-
-export const VoiceChannelSelect = makeEvent(Events.VOICE_CHANNEL_SELECT, {
-  channel_id: zod.string().nullable(),
-  guild_id: zod.string().nullable().optional(),
-});
-
-export const VoiceSettingsUpdate = makeEvent(Events.VOICE_STATE_UPDATE, {
-  data: VoiceSettingsResponse,
-});
-
-export const VoiceStateCreate = makeEvent(Events.VOICE_STATE_CREATE, {
-  voice_state: VoiceState,
-  user: User,
-  nick: zod.string(),
-  volume: zod.number(),
-  mute: zod.boolean(),
-  pan: zod.object({
-    left: zod.number(),
-    right: zod.number(),
-  }),
-});
-
-export const VoiceStateUpdate = VoiceStateCreate.extend({
-  evt: zod.literal(Events.VOICE_STATE_UPDATE),
-});
-
-export const VoiceStateDelete = VoiceStateCreate.extend({
-  evt: zod.literal(Events.VOICE_STATE_DELETE),
-});
-
 export const VoiceConnectionStatusStateObject = {
   UNHANDLED: -1,
   DISCONNECTED: 'DISCONNECTED',
@@ -151,102 +99,12 @@ export const VoiceConnectionStatusStateObject = {
   NO_ROUTE: 'NO_ROUTE',
   ICE_CHECKING: 'ICE_CHECKING',
 } as const;
-export const VoiceConnectionStatus = makeEvent(Events.VOICE_CONNECTION_STATUS, {
-  state: zodCoerceUnhandledValue(VoiceConnectionStatusStateObject),
-  hostname: zod.string(),
-  pings: zod.array(zod.number()),
-  average_ping: zod.number(),
-  last_ping: zod.number(),
-});
-
-export const MessageCreate = makeEvent(Events.MESSAGE_CREATE, {
-  channel_id: zod.string(),
-  message: Message,
-});
-
-export const MessageUpdate = MessageCreate.extend({
-  evt: zod.literal(Events.MESSAGE_UPDATE),
-});
-
-export const MessageDelete = MessageCreate.extend({
-  evt: zod.literal(Events.MESSAGE_DELETE),
-});
-
-export const StartSpeaking = makeEvent(Events.SPEAKING_START, {
-  user_id: zod.string(),
-});
-
-export const StopSpeaking = makeEvent(Events.SPEAKING_STOP, {
-  user_id: zod.string(),
-});
-
-export const NotificationCreate = makeEvent(Events.NOTIFICATION_CREATE, {
-  channel_id: zod.string(),
-  message: Message,
-  icon_url: zod.string(),
-  title: zod.string(),
-  body: zod.string(),
-});
-
-export const CaptureShortcutChange = makeEvent(Events.CAPTURE_SHORTCUT_CHANGE, {
-  shortcut: ShortcutKey,
-});
 
 export const ActivityJoinIntentObject = {
   UNHANDLED: -1,
   PLAY: 0,
   SPECTATE: 1,
 } as const;
-
-export const ActivityJoin = makeEvent(Events.ACTIVITY_JOIN, {
-  secret: zod.string(),
-  intent: zodCoerceUnhandledValue(ActivityJoinIntentObject).optional(),
-});
-
-export const ActivityJoinRequest = makeEvent(Events.ACTIVITY_JOIN_REQUEST, {
-  user: User,
-});
-
-export const ActivityPIPModeUpdate = makeEvent(Events.ACTIVITY_PIP_MODE_UPDATE, {
-  is_pip_mode: zod.boolean(),
-});
-
-export const ActivityLayoutModeUpdate = makeEvent(Events.ACTIVITY_LAYOUT_MODE_UPDATE, {
-  layout_mode: zodCoerceUnhandledValue(LayoutModeTypeObject),
-});
-
-export const OrientationUpdate = makeEvent(Events.ORIENTATION_UPDATE, {
-  screen_orientation: zodCoerceUnhandledValue(OrientationTypeObject),
-
-  /**
-   * @deprecated use screen_orientation instead
-   */
-  orientation: zod.nativeEnum(Orientation),
-});
-
-// For some god forsaken reason the user shape for this event doesnt match our existing event shapes, and is directly dumped into the
-// event
-export const CurrentUserUpdate = makeEvent(Events.CURRENT_USER_UPDATE, {
-  avatar: zod.string().optional().nullable(),
-  bot: zod.boolean(),
-  discriminator: zod.string(),
-  flags: zod.number().optional().nullable(),
-  id: zod.string(),
-  premium_type: zod.number().optional().nullable(),
-  username: zod.string(),
-});
-
-export const EntitlementCreate = makeEvent(Events.ENTITLEMENT_CREATE, {
-  entitlement: Entitlement,
-});
-
-export const ThermalStateUpdate = makeEvent(Events.THERMAL_STATE_UPDATE, {
-  thermal_state: ThermalState,
-});
-
-export const InstanceConnectedParticipantsUpdate = makeEvent(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE, {
-  participants: GetActivityInstanceConnectedParticipantsResponseSchema.shape.participants,
-});
 
 export function parseEventPayload<K extends keyof typeof EventSchema = keyof typeof EventSchema>(
   data: zod.infer<typeof EventFrame>
@@ -379,61 +237,88 @@ export const EventSchema = {
   [Events.MESSAGE_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_UPDATE),
-      data: zod.object({}),
+      data: zod.object({
+        channel_id: zod.string(),
+        message: Message,
+      }),
     }),
   },
   [Events.MESSAGE_DELETE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.MESSAGE_DELETE),
-      data: zod.object({}),
+      data: zod.object({
+        channel_id: zod.string(),
+        message: Message,
+      }),
     }),
   },
   [Events.SPEAKING_START]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_START),
-      data: zod.object({}),
+      data: zod.object({
+        user_id: zod.string(),
+      }),
     }),
   },
   [Events.SPEAKING_STOP]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_STOP),
-      data: zod.object({}),
+      data: zod.object({
+        user_id: zod.string(),
+      }),
     }),
   },
   [Events.NOTIFICATION_CREATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.NOTIFICATION_CREATE),
-      data: zod.object({}),
+      data: zod.object({
+        channel_id: zod.string(),
+        message: Message,
+        icon_url: zod.string(),
+        title: zod.string(),
+        body: zod.string(),
+      }),
     }),
   },
   [Events.CAPTURE_SHORTCUT_CHANGE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CAPTURE_SHORTCUT_CHANGE),
-      data: zod.object({}),
+      data: zod.object({
+        shortcut: ShortcutKey, // Probably deprecated
+      }),
     }),
   },
   [Events.ACTIVITY_JOIN]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN),
-      data: zod.object({}),
+      data: zod.object({
+        secret: zod.string(),
+        intent: zodCoerceUnhandledValue(ActivityJoinIntentObject).optional(),
+      }),
     }),
   },
   [Events.ACTIVITY_JOIN_REQUEST]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN_REQUEST),
-      data: zod.object({}),
+      data: zod.object({
+        user: User,
+      }),
     }),
   },
   [Events.ACTIVITY_PIP_MODE_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_PIP_MODE_UPDATE),
-      data: zod.object({}),
+      data: zod.object({
+        is_pip_mode: zod.boolean(),
+      }),
     }),
   },
   [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
-      data: zod.object({}),
+      data: zod.object({
+        layout_mode: zodCoerceUnhandledValue(LayoutModeTypeObject),
+      }),
     }),
   },
   [Events.ORIENTATION_UPDATE]: {
@@ -448,13 +333,21 @@ export const EventSchema = {
   [Events.CURRENT_USER_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CURRENT_USER_UPDATE),
-      data: zod.object({}),
+      data: zod.object({
+        avatar: zod.string().optional().nullable(),
+        bot: zod.boolean(),
+        discriminator: zod.string(),
+        flags: zod.number().optional().nullable(),
+        id: zod.string(),
+        premium_type: zod.number().optional().nullable(),
+        username: zod.string(),
+      }),
     }),
   },
   [Events.ENTITLEMENT_CREATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ENTITLEMENT_CREATE),
-      data: zod.object({}),
+      data: zod.object({entitlement: Entitlement}),
     }),
   },
   [Events.THERMAL_STATE_UPDATE]: {
@@ -466,7 +359,9 @@ export const EventSchema = {
   [Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE),
-      data: zod.object({}),
+      data: zod.object({
+        participants: GetActivityInstanceConnectedParticipantsResponseSchema.shape.participants,
+      }),
     }),
   },
 } satisfies Record<keyof typeof Events, EventArgs>;
