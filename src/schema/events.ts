@@ -64,9 +64,9 @@ export interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
   subscribeArgs?: Z;
 }
 
-export type EventPayloadData<K extends keyof typeof EventSchema> = (
-  event: zod.infer<(typeof EventSchema)[K]['payload']>['data']
-) => unknown;
+export type EventPayloadData<K extends keyof typeof EventSchema> = zod.infer<
+  (typeof EventSchema)[K]['payload']
+>['data'];
 
 export const ErrorEvent = ReceiveFrame.extend({
   evt: zod.literal(ERROR),
