@@ -117,6 +117,25 @@ export function parseEventPayload<K extends keyof typeof EventSchema = keyof typ
 }
 
 export const EventSchema = {
+  /**
+   * @description
+   * The READY event is emitted by Discord's RPC server in reply to a client
+   * initiating the RPC handshake. The event includes information about
+   * - the rpc server version
+   * - the discord client configuration
+   * - the (basic) user object
+   *
+   * Unlike other events, READY will only be omitted once, immediately after the
+   * Embedded App SDK is initialized
+   *
+   * # Supported Platforms
+   * | Web | iOS | Android |
+   * |-----|-----|---------|
+   * | ✅  | ✅  | ✅      |
+   *
+   * Required scopes: []
+   *
+   */
   [Events.READY]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.READY),
