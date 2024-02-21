@@ -16,7 +16,6 @@ import {
   VoiceState,
   Commands,
 } from './common';
-import {VoiceSettingsResponse} from './responses';
 import {GetActivityInstanceConnectedParticipantsResponseSchema} from '../generated/schemas';
 
 // ERROR is sent as evt but is a special case, so is excluded from Events enum
@@ -201,7 +200,17 @@ export const EventSchema = {
   [Events.VOICE_STATE_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_UPDATE),
-      data: VoiceSettingsResponse,
+      data: zod.object({
+        voice_state: VoiceState,
+        user: User,
+        nick: zod.string(),
+        volume: zod.number(),
+        mute: zod.boolean(),
+        pan: zod.object({
+          left: zod.number(),
+          right: zod.number(),
+        }),
+      }),
     }),
     subscribeArgs: zod.object({
       channel_id: zod.string(),
