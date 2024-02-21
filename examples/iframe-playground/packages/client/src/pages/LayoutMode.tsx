@@ -1,11 +1,11 @@
 import React from 'react';
 import discordSdk from '../discordSdk';
-import {Common} from '@discord/embedded-app-sdk';
+import {Common, EventPayloadData} from '@discord/embedded-app-sdk';
 
 export default function LayoutMode() {
   const [layoutModeString, setLayoutModeString] = React.useState<string>('');
 
-  const handleLayoutModeUpdate = React.useCallback((update: {layout_mode: number}) => {
+  const handleLayoutModeUpdate = React.useCallback((update: EventPayloadData<'ACTIVITY_LAYOUT_MODE_UPDATE'>) => {
     const layoutMode = update.layout_mode;
     let layoutModeStr = '';
     switch (layoutMode) {
@@ -31,9 +31,9 @@ export default function LayoutMode() {
   }, []);
 
   React.useEffect(() => {
-    discordSdk.subscribeToLayoutModeUpdatesCompat(handleLayoutModeUpdate);
+    discordSdk.subscribe('ACTIVITY_LAYOUT_MODE_UPDATE', handleLayoutModeUpdate);
     return () => {
-      discordSdk.unsubscribeFromLayoutModeUpdatesCompat(handleLayoutModeUpdate);
+      discordSdk.unsubscribe('ACTIVITY_LAYOUT_MODE_UPDATE', handleLayoutModeUpdate);
     };
   }, [handleLayoutModeUpdate]);
 

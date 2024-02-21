@@ -12,7 +12,7 @@ export default function VoiceState() {
     const {channelId} = discordSdk;
     if (!channelId) return;
 
-    const updateVoiceState: EventPayloadData<'VOICE_STATE_UPDATE'> = (voiceState) => {
+    const updateVoiceState = (voiceState: EventPayloadData<'VOICE_STATE_UPDATE'>) => {
       setVoiceState(voiceState);
     };
     discordSdk.subscribe('VOICE_STATE_UPDATE', updateVoiceState, {
