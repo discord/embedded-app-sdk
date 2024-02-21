@@ -5,8 +5,8 @@ import {Common, Events, EventPayloadData} from '@discord/embedded-app-sdk';
 export default function ThermalStates() {
   const [thermalStateString, setThermalStateString] = React.useState<string>('');
 
-  const updateThermalState = React.useCallback<EventPayloadData<'THERMAL_STATE_UPDATE'>>(
-    (update) => {
+  const updateThermalState = React.useCallback(
+    (update: EventPayloadData<'THERMAL_STATE_UPDATE'>) => {
       const thermalState = update.thermal_state;
       let state;
       switch (thermalState) {
