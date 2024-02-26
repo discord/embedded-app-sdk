@@ -1,5 +1,5 @@
 import {matchAndRewriteURL, MatchAndRewriteURLInputs} from '../url';
-import {attemptRemap} from '../networkShims';
+import {attemptRemap} from '../patchUrlMappings';
 
 describe('matchAndRewriteURL', () => {
   describe('will rewrite urls correctly', () => {
@@ -13,18 +13,32 @@ describe('matchAndRewriteURL', () => {
           result: 'https://123456789012345678.discordsays.com/',
         },
         {
-          originalURL: new URL('https://discord.com/test?foo=bar'),
+          originalURL: new URL('https://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
           result: 'https://123456789012345678.discordsays.com/test/?foo=bar',
         },
         {
-          originalURL: new URL('wss://discord.com/test?foo=bar'),
+          originalURL: new URL('https://discord.com/test?foo=bar'),
+          prefixHost: '123456789012345678.discordsays.com',
+          prefix: '/',
+          target: 'discord.com',
+          result: 'https://123456789012345678.discordsays.com/test?foo=bar',
+        },
+        {
+          originalURL: new URL('wss://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
           result: 'wss://123456789012345678.discordsays.com/test/?foo=bar',
+        },
+        {
+          originalURL: new URL('wss://discord.com/test?foo=bar'),
+          prefixHost: '123456789012345678.discordsays.com',
+          prefix: '/',
+          target: 'discord.com',
+          result: 'wss://123456789012345678.discordsays.com/test?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/foo/bar/?foo=bar'),
@@ -34,7 +48,7 @@ describe('matchAndRewriteURL', () => {
           result: 'wss://123456789012345678.discordsays.com/?foo=bar',
         },
         {
-          originalURL: new URL('wss://discord.com/foo/bar/test?foo=bar'),
+          originalURL: new URL('wss://discord.com/foo/bar/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com/foo/bar',
@@ -61,10 +75,24 @@ describe('matchAndRewriteURL', () => {
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
+          result: 'https://123456789012345678.discordsays.com/discord/test?foo=bar',
+        },
+        {
+          originalURL: new URL('https://discord.com/test/?foo=bar'),
+          prefixHost: '123456789012345678.discordsays.com',
+          prefix: '/discord',
+          target: 'discord.com',
           result: 'https://123456789012345678.discordsays.com/discord/test/?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/test?foo=bar'),
+          prefixHost: '123456789012345678.discordsays.com',
+          prefix: '/discord',
+          target: 'discord.com',
+          result: 'wss://123456789012345678.discordsays.com/discord/test?foo=bar',
+        },
+        {
+          originalURL: new URL('wss://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
@@ -105,7 +133,7 @@ describe('matchAndRewriteURL', () => {
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/foo/{parameter}',
           target: '{parameter}.discord.com',
-          result: 'https://123456789012345678.discordsays.com/foo/test/bar/',
+          result: 'https://123456789012345678.discordsays.com/foo/test/bar',
         },
         {
           originalURL: new URL('https://test1-hyphen.discord.com/test2-hyphen/'),
@@ -143,17 +171,35 @@ describe('matchAndRewriteURL', () => {
           {prefix: '/googleapis/{server}', target: '{server}.googleapis.com'},
         ],
       });
-      expect(url1.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url/?key=abc123');
+      expect(url1.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url?key=abc123');
 
-      // Same as the earlier assertion with url mapping order swapped
       const url2 = attemptRemap({
+        url: new URL('https://foo.googleapis.com/v1/test:url/?key=abc123'),
+        mappings: [
+          {prefix: '/url1/test-url', target: 'test-url.testing.com'},
+          {prefix: '/googleapis/{server}', target: '{server}.googleapis.com'},
+        ],
+      });
+      expect(url2.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url/?key=abc123');
+
+      // Same as the earlier assertions with url mapping order swapped
+      const url3 = attemptRemap({
+        url: new URL('https://foo.googleapis.com/v1/test:url/?key=abc123'),
+        mappings: [
+          {prefix: '/googleapis/{server}', target: '{server}.googleapis.com'},
+          {prefix: '/url1/test-url', target: 'test-url.testing.com'},
+        ],
+      });
+      expect(url3.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url/?key=abc123');
+
+      const url4 = attemptRemap({
         url: new URL('https://foo.googleapis.com/v1/test:url?key=abc123'),
         mappings: [
           {prefix: '/googleapis/{server}', target: '{server}.googleapis.com'},
           {prefix: '/url1/test-url', target: 'test-url.testing.com'},
         ],
       });
-      expect(url2.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url/?key=abc123');
+      expect(url4.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url?key=abc123');
     });
 
     it("Doesn't apply trailing slash to complete filenames", () => {

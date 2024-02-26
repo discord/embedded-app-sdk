@@ -18,7 +18,7 @@ This section explores features and user-flows that are common to activities. Rat
 - [Instance Management](/docs/common-patterns/instance-management.md)
 - [Local SDK Development](/docs/common-patterns/local-sdk-development.md)
 - [Logging](/docs/common-patterns/logging.md)
-- [Network Shims](/docs/common-patterns/network-shims.md)
+- [Patch URL Mappings](/docs/common-patterns/patch-url-mappings.md)
 - [postMessage Protocol](/docs/common-patterns/post-message-protocol.md)
 - [URL Mapping](/docs/common-patterns/url-mapping.md)
 - [Handling 429 Error Codes](/docs/common-patterns/handling-429-error-codes.md)
