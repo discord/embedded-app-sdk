@@ -1,4 +1,4 @@
-import {matchAndRewriteURL} from './url';
+import {absoluteURL, matchAndRewriteURL} from './url';
 
 export interface Mapping {
   prefix: string;
@@ -88,11 +88,17 @@ export function patchUrlMappings(
   if (patchSrcAttributes) {
     const hostUrl = new URL(`${window.location.protocol}//${window.location.host}`);
     const callback: MutationCallback = function (mutationsList) {
-      for (var mutation of mutationsList) {
-        // @ts-expect-error
-        if (mutation.attributeName === 'src' && !mutation.target.src.startsWith(hostUrl.toString())) {
+      for (const mutation of mutationsList) {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'src' &&
+          // @ts-expect-error
+          !mutation.target.src.startsWith(hostUrl.toString())
+        ) {
           // @ts-expect-error
           mutation.target.src = attemptRemap({url: new URL(mutation.target.src), mappings}).toString();
+        } else if (mutation.type === 'childList') {
+          mutation.addedNodes.forEach((node) => remapSrc(node, mappings));
         }
       }
     };
@@ -112,6 +118,18 @@ export function patchUrlMappings(
         const remappedNodeSrc = attemptRemap({url: new URL(nodeSrc), mappings}).toString();
         node.setAttribute('src', remappedNodeSrc);
       }
+    });
+  }
+}
+
+function remapSrc(node: Node, mappings: Mapping[]) {
+  if (node.hasChildNodes()) {
+    node.childNodes.forEach((child) => {
+      if (child instanceof HTMLElement && child.hasAttribute('src')) {
+        const url = new URL(absoluteURL(child.getAttribute('src') ?? ''));
+        child.setAttribute('src', attemptRemap({url, mappings}).toString());
+      }
+      remapSrc(child, mappings);
     });
   }
 }
