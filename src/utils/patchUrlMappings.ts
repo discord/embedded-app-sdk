@@ -18,7 +18,7 @@ interface PatchUrlMappingsConfig {
 
 export function patchUrlMappings(
   mappings: Mapping[],
-  {patchFetch = true, patchWebSocket = true, patchXhr = true, patchSrcAttributes = true}: PatchUrlMappingsConfig = {}
+  {patchFetch = true, patchWebSocket = true, patchXhr = true, patchSrcAttributes = false}: PatchUrlMappingsConfig = {}
 ) {
   if (patchFetch) {
     const fetchImpl = window.fetch;
