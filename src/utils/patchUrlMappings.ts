@@ -86,19 +86,12 @@ export function patchUrlMappings(
   }
 
   if (patchSrcAttributes) {
-    const hostUrl = new URL(`${window.location.protocol}//${window.location.host}`);
     const callback: MutationCallback = function (mutationsList) {
       for (const mutation of mutationsList) {
-        if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'src' &&
-          // @ts-expect-error
-          !mutation.target.src.startsWith(hostUrl.toString())
-        ) {
-          // @ts-expect-error
-          mutation.target.src = attemptRemap({url: new URL(mutation.target.src), mappings}).toString();
+        if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+          attemptSetNodeSrc(mutation.target, mappings);
         } else if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach((node) => remapSrc(node, mappings));
+          mutation.addedNodes.forEach((node) => recursivelyRemapChildNodes(node, mappings));
         }
       }
     };
@@ -112,25 +105,25 @@ export function patchUrlMappings(
     observer.observe(window.document, config);
 
     window.document.querySelectorAll('[src]').forEach((node) => {
-      // @ts-expect-error
-      const nodeSrc = String(node.src);
-      if (!(nodeSrc.startsWith('/') || nodeSrc.startsWith(hostUrl.toString()))) {
-        const remappedNodeSrc = attemptRemap({url: new URL(nodeSrc), mappings}).toString();
-        node.setAttribute('src', remappedNodeSrc);
-      }
+      attemptSetNodeSrc(node, mappings);
     });
   }
 }
 
-function remapSrc(node: Node, mappings: Mapping[]) {
+function recursivelyRemapChildNodes(node: Node, mappings: Mapping[]) {
   if (node.hasChildNodes()) {
     node.childNodes.forEach((child) => {
-      if (child instanceof HTMLElement && child.hasAttribute('src')) {
-        const url = new URL(absoluteURL(child.getAttribute('src') ?? ''));
-        child.setAttribute('src', attemptRemap({url, mappings}).toString());
-      }
-      remapSrc(child, mappings);
+      attemptSetNodeSrc(child, mappings);
+      recursivelyRemapChildNodes(child, mappings);
     });
+  }
+}
+
+function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
+  if (node instanceof HTMLElement && node.hasAttribute('src')) {
+    const url = new URL(absoluteURL(node.getAttribute('src') ?? ''));
+    if (url.host === window.location.host) return;
+    node.setAttribute('src', attemptRemap({url, mappings}).toString());
   }
 }
 
