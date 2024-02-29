@@ -11,7 +11,6 @@ import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, LayoutModeEventListeners, MaybeZodObject, SdkConfiguration} from './interface';
-import {initializeNetworkShims} from './utils/networkShims';
 
 enum Opcodes {
   HANDSHAKE = 0,
