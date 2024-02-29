@@ -63,8 +63,17 @@ export const User = zod.object({
   id: zod.string(),
   username: zod.string(),
   discriminator: zod.string(),
+  global_name: zod.string().optional().nullable(),
   avatar: zod.string().optional().nullable(),
-  publicFlags: zod.number().optional().nullable(),
+  avatar_decoration_data: zod
+    .object({
+      asset: zod.string(),
+      sku_id: zod.string().optional(),
+    })
+    .nullable(),
+  bot: zod.boolean(),
+  flags: zod.number().optional().nullable(),
+  premium_type: zod.number().optional().nullable(),
 });
 
 export const GuildMember = zod.object({

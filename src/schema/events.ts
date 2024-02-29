@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {Orientation} from '../Constants';
-import {DISPATCH} from './common';
+import {DISPATCH, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
   ChannelTypesObject,
@@ -10,10 +10,8 @@ import {
   OrientationTypeObject,
   LayoutModeTypeObject,
   ReceiveFramePayload as ReceiveFrame,
-  ShortcutKey,
   ThermalState,
   User,
-  VoiceState,
   Commands,
 } from './common';
 import {GetActivityInstanceConnectedParticipantsResponseSchema} from '../generated/schemas';
@@ -31,13 +29,9 @@ export enum Events {
   VOICE_STATE_UPDATE = 'VOICE_STATE_UPDATE',
   VOICE_STATE_DELETE = 'VOICE_STATE_DELETE',
   VOICE_CONNECTION_STATUS = 'VOICE_CONNECTION_STATUS',
-  MESSAGE_CREATE = 'MESSAGE_CREATE',
-  MESSAGE_UPDATE = 'MESSAGE_UPDATE',
-  MESSAGE_DELETE = 'MESSAGE_DELETE',
   SPEAKING_START = 'SPEAKING_START',
   SPEAKING_STOP = 'SPEAKING_STOP',
   NOTIFICATION_CREATE = 'NOTIFICATION_CREATE',
-  CAPTURE_SHORTCUT_CHANGE = 'CAPTURE_SHORTCUT_CHANGE',
   ACTIVITY_JOIN = 'ACTIVITY_JOIN',
   ACTIVITY_JOIN_REQUEST = 'ACTIVITY_JOIN_REQUEST',
   ACTIVITY_PIP_MODE_UPDATE = 'ACTIVITY_PIP_MODE_UPDATE',
@@ -203,33 +197,16 @@ export const EventSchema = {
   [Events.VOICE_STATE_CREATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_CREATE),
-      data: zod.object({
-        voice_state: VoiceState,
-        user: User,
-        nick: zod.string(),
-        volume: zod.number(),
-        mute: zod.boolean(),
-        pan: zod.object({
-          left: zod.number(),
-          right: zod.number(),
-        }),
-      }),
+      data: UserVoiceState,
+    }),
+    subscribeArgs: zod.object({
+      channel_id: zod.string(),
     }),
   },
   [Events.VOICE_STATE_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_UPDATE),
-      data: zod.object({
-        voice_state: VoiceState,
-        user: User,
-        nick: zod.string(),
-        volume: zod.number(),
-        mute: zod.boolean(),
-        pan: zod.object({
-          left: zod.number(),
-          right: zod.number(),
-        }),
-      }),
+      data: UserVoiceState,
     }),
     subscribeArgs: zod.object({
       channel_id: zod.string(),
@@ -238,7 +215,10 @@ export const EventSchema = {
   [Events.VOICE_STATE_DELETE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_DELETE),
-      data: zod.object({}), // do we want this? is it even there?
+      data: UserVoiceState,
+    }),
+    subscribeArgs: zod.object({
+      channel_id: zod.string(),
     }),
   },
   [Events.VOICE_CONNECTION_STATUS]: {
@@ -253,47 +233,32 @@ export const EventSchema = {
       }),
     }),
   },
-  [Events.MESSAGE_CREATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.MESSAGE_CREATE),
-      data: zod.object({
-        channel_id: zod.string(),
-        message: Message,
-      }),
-    }),
-  },
-  [Events.MESSAGE_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.MESSAGE_UPDATE),
-      data: zod.object({
-        channel_id: zod.string(),
-        message: Message,
-      }),
-    }),
-  },
-  [Events.MESSAGE_DELETE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.MESSAGE_DELETE),
-      data: zod.object({
-        channel_id: zod.string(),
-        message: Message,
-      }),
-    }),
-  },
   [Events.SPEAKING_START]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_START),
       data: zod.object({
+        lobby_id: zod.string().optional(),
+        channel_id: zod.string().optional(),
         user_id: zod.string(),
       }),
+    }),
+    subscribeArgs: zod.object({
+      lobby_id: zod.string().optional(),
+      channel_id: zod.string().optional(),
     }),
   },
   [Events.SPEAKING_STOP]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.SPEAKING_STOP),
       data: zod.object({
+        lobby_id: zod.string().optional(),
+        channel_id: zod.string().optional(),
         user_id: zod.string(),
       }),
+    }),
+    subscribeArgs: zod.object({
+      lobby_id: zod.string().optional(),
+      channel_id: zod.string().optional(),
     }),
   },
   [Events.NOTIFICATION_CREATE]: {
@@ -305,14 +270,6 @@ export const EventSchema = {
         icon_url: zod.string(),
         title: zod.string(),
         body: zod.string(),
-      }),
-    }),
-  },
-  [Events.CAPTURE_SHORTCUT_CHANGE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.CAPTURE_SHORTCUT_CHANGE),
-      data: zod.object({
-        shortcut: ShortcutKey, // Probably deprecated
       }),
     }),
   },
@@ -361,15 +318,7 @@ export const EventSchema = {
   [Events.CURRENT_USER_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CURRENT_USER_UPDATE),
-      data: zod.object({
-        avatar: zod.string().optional().nullable(),
-        bot: zod.boolean(),
-        discriminator: zod.string(),
-        flags: zod.number().optional().nullable(),
-        id: zod.string(),
-        premium_type: zod.number().optional().nullable(),
-        username: zod.string(),
-      }),
+      data: User,
     }),
   },
   [Events.ENTITLEMENT_CREATE]: {
