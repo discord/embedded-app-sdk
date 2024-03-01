@@ -308,11 +308,14 @@ export const EventSchema = {
   },
   [Events.ORIENTATION_UPDATE]: {
     payload: DispatchEventFrame.extend({
-      screen_orientation: zodCoerceUnhandledValue(OrientationTypeObject),
-      /**
-       * @deprecated use screen_orientation instead
-       */
-      orientation: zod.nativeEnum(Orientation),
+      evt: zod.literal(Events.ORIENTATION_UPDATE),
+      data: zod.object({
+        screen_orientation: zodCoerceUnhandledValue(OrientationTypeObject),
+        /**
+         * @deprecated use screen_orientation instead
+         */
+        orientation: zod.nativeEnum(Orientation),
+      }),
     }),
   },
   [Events.CURRENT_USER_UPDATE]: {
