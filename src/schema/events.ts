@@ -3,10 +3,7 @@ import {Orientation} from '../Constants';
 import {DISPATCH, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
-  ChannelTypesObject,
   Entitlement,
-  Guild,
-  Message,
   OrientationTypeObject,
   LayoutModeTypeObject,
   ReceiveFramePayload as ReceiveFrame,
@@ -20,21 +17,9 @@ import {GetActivityInstanceConnectedParticipantsResponseSchema} from '../generat
 export const ERROR = 'ERROR';
 export enum Events {
   READY = 'READY',
-  GUILD_STATUS = 'GUILD_STATUS',
-  GUILD_CREATE = 'GUILD_CREATE',
-  CHANNEL_CREATE = 'CHANNEL_CREATE',
-  VOICE_CHANNEL_SELECT = 'VOICE_CHANNEL_SELECT',
-  VOICE_SETTINGS_UPDATE = 'VOICE_SETTINGS_UPDATE',
-  VOICE_STATE_CREATE = 'VOICE_STATE_CREATE',
   VOICE_STATE_UPDATE = 'VOICE_STATE_UPDATE',
-  VOICE_STATE_DELETE = 'VOICE_STATE_DELETE',
-  VOICE_CONNECTION_STATUS = 'VOICE_CONNECTION_STATUS',
   SPEAKING_START = 'SPEAKING_START',
   SPEAKING_STOP = 'SPEAKING_STOP',
-  NOTIFICATION_CREATE = 'NOTIFICATION_CREATE',
-  ACTIVITY_JOIN = 'ACTIVITY_JOIN',
-  ACTIVITY_JOIN_REQUEST = 'ACTIVITY_JOIN_REQUEST',
-  ACTIVITY_PIP_MODE_UPDATE = 'ACTIVITY_PIP_MODE_UPDATE',
   ACTIVITY_LAYOUT_MODE_UPDATE = 'ACTIVITY_LAYOUT_MODE_UPDATE',
   ORIENTATION_UPDATE = 'ORIENTATION_UPDATE',
   CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE',
@@ -151,58 +136,6 @@ export const EventSchema = {
       }),
     }),
   },
-  [Events.GUILD_STATUS]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.GUILD_STATUS),
-      data: zod.object({
-        guild: Guild,
-        online: zod.number().optional(),
-      }),
-    }),
-  },
-  [Events.GUILD_CREATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.GUILD_CREATE),
-      data: zod.object({
-        id: zod.string(),
-        name: zod.string(),
-      }),
-    }),
-  },
-  [Events.CHANNEL_CREATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.CHANNEL_CREATE),
-      data: zod.object({
-        id: zod.string(),
-        name: zod.string(),
-        type: zodCoerceUnhandledValue(ChannelTypesObject),
-      }),
-    }),
-  },
-  [Events.VOICE_CHANNEL_SELECT]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.VOICE_CHANNEL_SELECT),
-      data: zod.object({
-        channel_id: zod.string().nullable(),
-        guild_id: zod.string().nullable().optional(),
-      }),
-    }),
-  },
-  [Events.VOICE_SETTINGS_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.VOICE_SETTINGS_UPDATE),
-      data: zod.object({}), // TODO - or - remove
-    }),
-  },
-  [Events.VOICE_STATE_CREATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.VOICE_STATE_CREATE),
-      data: UserVoiceState,
-    }),
-    subscribeArgs: zod.object({
-      channel_id: zod.string(),
-    }),
-  },
   [Events.VOICE_STATE_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.VOICE_STATE_UPDATE),
@@ -210,27 +143,6 @@ export const EventSchema = {
     }),
     subscribeArgs: zod.object({
       channel_id: zod.string(),
-    }),
-  },
-  [Events.VOICE_STATE_DELETE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.VOICE_STATE_DELETE),
-      data: UserVoiceState,
-    }),
-    subscribeArgs: zod.object({
-      channel_id: zod.string(),
-    }),
-  },
-  [Events.VOICE_CONNECTION_STATUS]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.VOICE_CONNECTION_STATUS),
-      data: zod.object({
-        state: zodCoerceUnhandledValue(VoiceConnectionStatusStateObject),
-        hostname: zod.string(),
-        pings: zod.array(zod.number()),
-        average_ping: zod.number(),
-        last_ping: zod.number(),
-      }),
     }),
   },
   [Events.SPEAKING_START]: {
@@ -259,43 +171,6 @@ export const EventSchema = {
     subscribeArgs: zod.object({
       lobby_id: zod.string().optional(),
       channel_id: zod.string().optional(),
-    }),
-  },
-  [Events.NOTIFICATION_CREATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.NOTIFICATION_CREATE),
-      data: zod.object({
-        channel_id: zod.string(),
-        message: Message,
-        icon_url: zod.string(),
-        title: zod.string(),
-        body: zod.string(),
-      }),
-    }),
-  },
-  [Events.ACTIVITY_JOIN]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ACTIVITY_JOIN),
-      data: zod.object({
-        secret: zod.string(),
-        intent: zodCoerceUnhandledValue(ActivityJoinIntentObject).optional(),
-      }),
-    }),
-  },
-  [Events.ACTIVITY_JOIN_REQUEST]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ACTIVITY_JOIN_REQUEST),
-      data: zod.object({
-        user: User,
-      }),
-    }),
-  },
-  [Events.ACTIVITY_PIP_MODE_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ACTIVITY_PIP_MODE_UPDATE),
-      data: zod.object({
-        is_pip_mode: zod.boolean(),
-      }),
     }),
   },
   [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
