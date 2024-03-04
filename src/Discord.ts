@@ -10,7 +10,7 @@ import {Platform, RPCCloseCodes} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
-import {IDiscordSDK, LayoutModeEventListeners, MaybeZodObjectArray, SdkConfiguration} from './interface';
+import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
 
 enum Opcodes {
   HANDSHAKE = 0,
@@ -60,13 +60,6 @@ export class DiscordSDK implements IDiscordSDK {
       reject: (error: unknown) => unknown;
     }
   > = new Map();
-
-  /**
-   * The key is the layout mode listener passed in by the public API for
-   * subscribeToLayoutModeUpdatesCompat, and the value is the corresponding
-   * listeners, created by the SDK, for layout mode updates and PIP mode updates.
-   */
-  private layoutModeUpdateListenerMap: Map<EventListener, LayoutModeEventListeners> = new Map();
 
   private getTransfer(payload: TSendCommandPayload): Transferable[] | undefined {
     switch (payload.cmd) {

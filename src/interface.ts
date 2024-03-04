@@ -43,8 +43,3 @@ export interface IDiscordSDK {
   ): Promise<unknown>;
   ready(): Promise<void>;
 }
-
-export interface LayoutModeEventListeners {
-  layoutModeListener: EventListener;
-  pipModeListener: EventListener;
-}
