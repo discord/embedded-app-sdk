@@ -134,3 +134,7 @@ Want to learn more about "what the heck is this library actually doing ™️"? 
 ## SDK development
 
 Developing a new feature or patching a bug on the SDK? Check out [this guide](/docs/common-patterns/local-sdk-development.md) to learn how to set up your local dev environment.
+
+## Discord Developer Terms of Service & Developer Policy
+
+Please note that while this SDK is licensed under the MIT License, the [Discord Developer Terms of Service](https://discord.com/developers/docs/policies-and-agreements/developer-terms-of-service) and [Discord Developer Policy](https://discord.com/developers/docs/policies-and-agreements/developer-policy) otherwise still apply to you and the applications you develop utilizing this SDK.

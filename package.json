@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Communicate with Discord via window.postMessage",
   "author": "Discord",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/discord/embedded-app-sdk/issues"
   },
