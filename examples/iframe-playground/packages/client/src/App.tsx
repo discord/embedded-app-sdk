@@ -20,7 +20,6 @@ import OrientationUpdates from './pages/OrientationUpdates';
 import LayoutMode from './pages/LayoutMode';
 import PlatformBehaviors from './pages/PlatformBehaviors';
 import URLMappingParameters from './pages/URLMappingParameters';
-import VoiceSettings from './pages/VoiceSettings';
 import VoiceState from './pages/VoiceState';
 import VisibilityListener from './pages/VisibilityListener';
 import WindowSizeTracker from './pages/WindowSizeTracker';
@@ -65,11 +64,6 @@ const routes: Record<string, AppRoute> = {
     path: '/guilds',
     name: 'Guilds',
     component: Guilds,
-  },
-  voiceSettings: {
-    path: '/voice-settings',
-    name: 'Voice Settings',
-    component: VoiceSettings,
   },
   voiceState: {
     path: '/voice-state',
