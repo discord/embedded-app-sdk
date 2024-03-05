@@ -7,6 +7,7 @@ import DesignSystemProvider from './components/DesignSystemProvider';
 
 import AvatarAndName from './pages/AvatarAndName';
 import CurrentGuild from './pages/CurrentGuild';
+import CurrentUser from './pages/CurrentUser';
 import EncourageHardwareAcceleration from './pages/EncourageHardwareAcceleration';
 import Guilds from './pages/Guilds';
 import Home from './pages/Home';
@@ -84,6 +85,11 @@ const routes: Record<string, AppRoute> = {
     path: '/current-guild',
     name: 'Current Guild',
     component: CurrentGuild,
+  },
+  currentUser: {
+    path: '/current-user',
+    name: 'Current User',
+    component: CurrentUser,
   },
   pipMode: {
     path: '/layout-mode',
