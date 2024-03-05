@@ -155,8 +155,8 @@ export const EventSchema = {
       }),
     }),
     subscribeArgs: zod.object({
-      lobby_id: zod.string().optional(),
-      channel_id: zod.string().optional(),
+      lobby_id: zod.string().nullable().optional(),
+      channel_id: zod.string().nullable().optional(),
     }),
   },
   [Events.SPEAKING_STOP]: {
@@ -169,8 +169,8 @@ export const EventSchema = {
       }),
     }),
     subscribeArgs: zod.object({
-      lobby_id: zod.string().optional(),
-      channel_id: zod.string().optional(),
+      lobby_id: zod.string().nullable().optional(),
+      channel_id: zod.string().nullable().optional(),
     }),
   },
   [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
