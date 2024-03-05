@@ -1,30 +1,64 @@
-import {useState, useEffect} from 'react';
+import * as React from 'react';
 import discordSdk from '../discordSdk';
-import {Events, EventPayloadData} from '@discord/embedded-app-sdk';
-
-type UpdateEvent = EventPayloadData<'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE'>;
+import {EventPayloadData} from '@discord/embedded-app-sdk';
 
 export default function Instance() {
-  const [participants, setParticipants] = useState<UpdateEvent['participants']>([]);
-  useEffect(() => {
-    const updateParticipants = (res: UpdateEvent) => {
+  const [participants, setParticipants] = React.useState<
+    EventPayloadData<'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE'>['participants']
+  >([]);
+  const [speakingParticipants, setSpeakingParticipants] = React.useState<string[]>([]); // Array of user ids who are currently speaking
+
+  React.useEffect(() => {
+    const updateParticipants = (res: EventPayloadData<'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE'>) => {
       setParticipants(res.participants);
     };
     discordSdk.commands.getInstanceConnectedParticipants().then(updateParticipants);
-    discordSdk.subscribe(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE, updateParticipants);
+    discordSdk.subscribe('ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE', updateParticipants);
 
     return () => {
-      discordSdk.unsubscribe(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE, updateParticipants);
+      discordSdk.unsubscribe('ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE', updateParticipants);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const addSpeakingParticipants = (res: EventPayloadData<'SPEAKING_START'>) => {
+      setSpeakingParticipants((s) => [...s, res.user_id]);
+    };
+    const removeSpeakingParticipants = (res: EventPayloadData<'SPEAKING_STOP'>) => {
+      setSpeakingParticipants((speakingParticipants) =>
+        speakingParticipants.filter((speakingParticipant) => speakingParticipant !== res.user_id)
+      );
+    };
+    discordSdk.subscribe('SPEAKING_START', addSpeakingParticipants, {channel_id: discordSdk.channelId});
+    discordSdk.subscribe('SPEAKING_STOP', removeSpeakingParticipants, {channel_id: discordSdk.channelId});
+
+    return () => {
+      discordSdk.unsubscribe('SPEAKING_START', addSpeakingParticipants, {channel_id: discordSdk.channelId});
+      discordSdk.unsubscribe('SPEAKING_STOP', removeSpeakingParticipants, {channel_id: discordSdk.channelId});
     };
   }, []);
   return (
-    <div>
-      <b>Participants:</b>
-      <ul>
+    <div style={{padding: 32}}>
+      <h2>Tracking instance participants and their speaking state</h2>
+      <br />
+      <p>This example tracks who is participating in the activity and whether or not they are speaking.</p>
+      <br />
+      <div style={{display: 'grid', gridTemplateColumns: '200px 1fr', gap: 8}}>
+        <div>
+          <b>Username</b>
+        </div>
+        <div>
+          <b>Speaking Status</b>
+        </div>
         {participants.map((user) => {
-          return <li key={user.id}>{user.nickname ?? user.global_name}</li>;
+          return (
+            <React.Fragment key={user.id}>
+              <div>{user.nickname ?? user.global_name}</div>
+              <div>{speakingParticipants.some((s) => s === user.id) ? 'Speaking' : 'Not Speaking'}</div>
+            </React.Fragment>
+          );
         })}
-      </ul>
+      </div>
     </div>
   );
 }
