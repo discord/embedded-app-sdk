@@ -15,9 +15,11 @@ export interface SdkConfiguration {
   readonly disableConsoleLogOverride: boolean;
 }
 
-export type MaybeZodObject<T extends EventArgs> = T['subscribeArgs'] extends NonNullable<EventArgs['subscribeArgs']>
-  ? zod.infer<T['subscribeArgs']>
-  : undefined;
+export type MaybeZodObjectArray<T extends EventArgs> = T['subscribeArgs'] extends NonNullable<
+  EventArgs['subscribeArgs']
+>
+  ? [zod.infer<T['subscribeArgs']>]
+  : [undefined?];
 
 export interface IDiscordSDK {
   readonly clientId: string;
@@ -32,11 +34,12 @@ export interface IDiscordSDK {
   subscribe<K extends keyof typeof EventSchema>(
     event: K,
     listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown,
-    subscribeArgs?: MaybeZodObject<(typeof EventSchema)[K]>
+    ...subscribeArgs: MaybeZodObjectArray<(typeof EventSchema)[K]>
   ): Promise<unknown>;
   unsubscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown
+    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown,
+    ...unsubscribeArgs: MaybeZodObjectArray<(typeof EventSchema)[K]>
   ): Promise<unknown>;
   ready(): Promise<void>;
 }

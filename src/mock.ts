@@ -6,7 +6,7 @@ import transform from 'lodash.transform';
 import {EventSchema} from './schema/events';
 import {Platform} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
-import {IDiscordSDK, MaybeZodObject} from './interface';
+import {IDiscordSDK, MaybeZodObjectArray} from './interface';
 import {ChannelTypesObject} from './schema/common';
 
 export class DiscordSDKMock implements IDiscordSDK {
@@ -55,14 +55,15 @@ export class DiscordSDKMock implements IDiscordSDK {
   async subscribe<K extends keyof typeof EventSchema>(
     event: K,
     listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown,
-    _subscribeArgs?: MaybeZodObject<(typeof EventSchema)[K]>
+    ..._subscribeArgs: MaybeZodObjectArray<(typeof EventSchema)[K]>
   ) {
     return await this.eventBus.on(event, listener);
   }
 
   async unsubscribe<K extends keyof typeof EventSchema>(
     event: K,
-    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown
+    listener: (event: zod.infer<(typeof EventSchema)[K]['payload']>['data']) => unknown,
+    ..._unsubscribeArgs: MaybeZodObjectArray<(typeof EventSchema)[K]>
   ): Promise<unknown> {
     return await this.eventBus.off(event, listener);
   }
