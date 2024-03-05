@@ -59,18 +59,6 @@ export const GetChannelsResponse = zod.object({
   channels: zod.array(Channel),
 });
 
-export const SetUserVoiceSettingsResponse = zod.object({
-  user_id: zod.string(),
-  pan: zod
-    .object({
-      left: zod.number(),
-      right: zod.number(),
-    })
-    .optional(),
-  volume: zod.number().optional(),
-  mute: zod.boolean().optional(),
-});
-
 export const NullableChannelResponse = GetChannelResponse.nullable();
 export const SelectVoiceChannelResponse = GetChannelResponse.nullable();
 export const GetSelectedVoiceChannelResponse = GetChannelResponse.nullable();
@@ -173,8 +161,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return GetEntitlementsResponse.parse(data);
     case Commands.SET_CONFIG:
       return SetConfigResponse.parse(data);
-    case Commands.SET_USER_VOICE_SETTINGS:
-      return SetUserVoiceSettingsResponse.parse(data);
     case Commands.START_PURCHASE:
       return StartPurchaseResponse.parse(data);
     case Commands.SUBSCRIBE:

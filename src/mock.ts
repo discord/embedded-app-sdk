@@ -141,16 +141,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       deaf: false,
       mute: false,
     }),
-  setUserVoiceSettings: () =>
-    Promise.resolve({
-      user_id: 'user_id',
-      mute: false,
-      pan: {
-        left: 1,
-        right: 1,
-      },
-      volume: 100,
-    }),
   openExternalLink: () => Promise.resolve(null),
   encourageHardwareAcceleration: () => Promise.resolve({enabled: true}),
   captureLog: () => Promise.resolve(null),

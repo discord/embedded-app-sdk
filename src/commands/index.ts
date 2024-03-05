@@ -17,7 +17,6 @@ import {openShareMomentDialog} from './openShareMomentDialog';
 import {setActivity, SetActivity} from './setActivity';
 import {setConfig} from './setConfig';
 import {setOrientationLockState} from './setOrientationLockState';
-import {setUserVoiceSettings} from './setUserVoiceSettings';
 import {startPremiumPurchase} from './startPremiumPurchase';
 import {startPurchase} from './startPurchase';
 import {userSettingsGetLocale} from './userSettingsGetLocale';
@@ -46,7 +45,6 @@ function commands(sendCommand: TSendCommand) {
     setActivity: setActivity(sendCommand),
     setConfig: setConfig(sendCommand),
     setOrientationLockState: setOrientationLockState(sendCommand),
-    setUserVoiceSettings: setUserVoiceSettings(sendCommand),
     startPremiumPurchase: startPremiumPurchase(sendCommand),
     startPurchase: startPurchase(sendCommand),
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
