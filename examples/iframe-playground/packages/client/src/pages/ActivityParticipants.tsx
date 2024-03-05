@@ -2,7 +2,7 @@ import * as React from 'react';
 import discordSdk from '../discordSdk';
 import {EventPayloadData} from '@discord/embedded-app-sdk';
 
-export default function Instance() {
+export default function ActivityParticipants() {
   const [participants, setParticipants] = React.useState<
     EventPayloadData<'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE'>['participants']
   >([]);

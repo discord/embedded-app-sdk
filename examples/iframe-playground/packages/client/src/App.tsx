@@ -29,7 +29,7 @@ import * as S from './AppStyles';
 import SafeAreas from './pages/SafeAreas';
 import ThermalStates from './pages/ThermalStates';
 import ActivityChannel from './pages/ActivityChannel';
-import Instance from './pages/Instance';
+import ActivityParticipants from './pages/ActivityParticipants';
 
 // Add contexts here
 export default function App(): React.ReactElement {
@@ -161,10 +161,10 @@ const routes: Record<string, AppRoute> = {
     name: 'Window Size Tracker',
     component: WindowSizeTracker,
   },
-  instance: {
-    path: '/instance',
-    name: 'Instance Debug',
-    component: Instance,
+  activityParticipants: {
+    path: '/activity-participants',
+    name: 'Activity Participants',
+    component: ActivityParticipants,
   },
 };
 
