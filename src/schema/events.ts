@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {Orientation} from '../Constants';
-import {DISPATCH} from './common';
+import {DISPATCH, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
   Entitlement,
@@ -134,6 +134,15 @@ export const EventSchema = {
           })
           .optional(),
       }),
+    }),
+  },
+  [Events.VOICE_STATE_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_STATE_UPDATE),
+      data: UserVoiceState,
+    }),
+    subscribeArgs: zod.object({
+      channel_id: zod.string(),
     }),
   },
   [Events.SPEAKING_START]: {
