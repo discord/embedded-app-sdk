@@ -166,7 +166,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.USER_SETTINGS_GET_LOCALE:
       return UserSettingsGetLocaleResponse.parse(data);
     // Empty Responses
-    case Commands.START_PREMIUM_PURCHASE:
     case Commands.OPEN_EXTERNAL_LINK:
     case Commands.SET_ORIENTATION_LOCK_STATE:
     case Commands.SET_CERTIFIED_DEVICES:
