@@ -49,41 +49,67 @@ If you're using `initializeNetworkShims` in your activity, you will need to migr
 - `patchUrlMappings` now includes a second argument where you can set specific configuration for each "shim". See usage in the example below
 
 ```ts
-import { patchUrlMappings } from '@discord/embedded-app-sdk';
+import {patchUrlMappings} from '@discord/embedded-app-sdk';
 
-patchUrlMappings([
-  target: 'google.com',
-  prefix: '/google'
-], {
-  patchFetch: true,        // Defaults to true
-  patchWebSocket: true,    // Defaults to true
-  patchXhr: true,          // Defaults to true
-  patchSrcAttributes: true // Defaults to false (potentially compute expensive for your UI)
-});
+patchUrlMappings(
+  [
+    {
+      target: 'google.com',
+      prefix: '/google',
+    },
+  ],
+  {
+    patchFetch: true, // Defaults to true
+    patchWebSocket: true, // Defaults to true
+    patchXhr: true, // Defaults to true
+    patchSrcAttributes: true, // Defaults to false (potentially compute expensive for your UI)
+  }
+);
 ```
 
-### Removing unused commands, events, and types
+### Removing unused commands and events
 
-The original SDK included several events, commands, and types which are either no longer relevant, unusable, or otherwise not something we want in the SDK.
+The original SDK included several events and commands which are either no longer relevant, unusable, or otherwise not something we want in the SDK.
 
 The following were removed or modified:
 
-- Events
-  TODO
-- Commands  
-  `subscribeToLayoutModeUpdatesCompat` and `unsubscribeFromLayoutModeUpdatesCompat` have been removed
-- Types
-  TODO
+- Removed Events
+  - `ACTIVITY_JOIN`
+    - If you are using this today, we encourage subscribing to the `ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE` event instead
+  - `ACTIVITY_SPECTATE`
+    - If you are using this today, we encourage subscribing to the `ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE` event instead
+  - `ACTIVITY_PIP_MODE_UPDATE`
+    - If you are using this today, we encourage subscribing to the `ACTIVITY_LAYOUT_MODE_UPDATE` event instead
+  - `CAPTURE_SHORTCUT_CHANGE`
+  - `GUILD_STATUS`
+  - `GUILD_CREATE`
+  - `CHANNEL_CREATE`
+  - `VOICE_CHANNEL_CREATE`
+  - `NOTIFICATION_CREATE`
+  - `ACTIVITY_JOIN_REQUEST`
+  - `VOICE_STATE_CREATE`
+  - `VOICE_STATE_DELETE`
+  - `VOICE_SETTINGS_UPDATE`
+  - `VOICE_CONNECTION_STATUS`
+- Removed Commands
+  - `getSelectedVoiceChannel`
+    We recommend using `getChannel` instead, where appropriate
+  - `subscribeToLayoutModeUpdatesCompat` and `unsubscribeFromLayoutModeUpdatesCompat`
+    - If you are using these today, we encourage subscribing to the `ACTIVITY_LAYOUT_MODE_UPDATE` event instead
+  - `setUserVoiceSettings`
+  - `setVoiceSettings`
+  - `getVoiceSettings`
+  - `startPremiumPurchase`
 
 # Step by Step Guide
 
 Each activity is implemented differently, but migrating to embedded-app-sdk from activity-iframe-sdk should be straightforward with the use of typescript. Here is a simple outline of how we expect the migration should occur.
 
-0. If you are upgrading from `activity-iframe-sdk` v1, pleaes review and implement the [activity-iframe-sdk v2 migration guide](/docs/common-patterns/activity-iframe-sdk-v2-migration.md) before following these steps.
+0. If you are upgrading from `activity-iframe-sdk` v1, please review and implement the [activity-iframe-sdk v2 migration guide](/docs/common-patterns/activity-iframe-sdk-v2-migration.md) before following these steps.
 1. Upgrade to 1.0.0 by updating `package.json` and installing (eg `npm install @discord/embedded-app-sdk`).
 2. Remove any code related to installing a private github package. This will most likely look like removing a `.npmrc` file or other references to `npm.pkg.github.com`
-3. Run typescript (`tsc`) and observe errors. Most of the errors will be related to usage of `subscribe`, as expected.
-4. Fix typescript errors. We expect most of not all typescript errors will be related to `subscribe`. The type `EventPayloadData<'YOUR_EVENT'>` will be your biggest helper here.
+3. Run typescript (`tsc`) and observe errors. Most of the errors will be related to usage of `subscribe`, or usage of removed commands and events, as expected.
+4. Fix typescript errors. We expect most of not all typescript errors will be related to `subscribe`. The type `EventPayloadData<'YOUR_EVENT'>` will be your biggest helper here. Remove usage of unsupported events and command, and migrate as necessary, per recommandations [above](#removing-unused-commands-and-events)
 5. Perform a basic test of key functionality.
 6. Profit from having type safety and the latest SDK updates from here on out!
 

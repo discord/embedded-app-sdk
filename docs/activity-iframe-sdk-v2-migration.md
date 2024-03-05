@@ -2,6 +2,8 @@
 
 Version 2.0.0 represents a breaking change to the shape of the SDK. This document is aimed to help developers migrate their activity code from a v1 release to v2.0.0 and beyond.
 
+If you are migrating from `@discord/activity-iframe-sdk` v2 to `@discord/embedded-app-sdk` v1 please see [this document](/docs/common-patterns/embedded-app-sdk-v1-migration.md) instead.
+
 # Command Migration
 
 The primary change to the SDK in 2.0.0 is a standardization of the command return shape. Previously, a command could return the "Paylod" or the "Data", and each command was different. For example, `authorize` would return "data" but `getChannelPermissions` would return a "Payload".
