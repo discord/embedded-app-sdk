@@ -19,7 +19,7 @@ export default function VoiceState() {
       channel_id: channelId,
     });
     return () => {
-      discordSdk.unsubscribe('VOICE_STATE_UPDATE', updateVoiceState);
+      discordSdk.unsubscribe('VOICE_STATE_UPDATE', updateVoiceState, {channel_id: channelId});
     };
   }, [location.search]);
 
