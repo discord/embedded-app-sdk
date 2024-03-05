@@ -146,9 +146,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return GetChannelResponse.parse(data);
     case Commands.GET_SELECTED_VOICE_CHANNEL:
       return GetSelectedVoiceChannelResponse.parse(data);
-    case Commands.GET_VOICE_SETTINGS:
-    case Commands.SET_VOICE_SETTINGS:
-      return VoiceSettingsResponse.parse(data);
     case Commands.SELECT_TEXT_CHANNEL:
       return SelectTextChannelResponse.parse(data);
     case Commands.SELECT_VOICE_CHANNEL:

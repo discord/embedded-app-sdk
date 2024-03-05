@@ -114,33 +114,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
   setConfig: () => Promise.resolve({use_interactive_pip: false}),
   getSelectedVoiceChannel: () => Promise.resolve(null),
   userSettingsGetLocale: () => Promise.resolve({locale: ''}),
-  getVoiceSettings: () =>
-    Promise.resolve({
-      input: {
-        device_id: 'default',
-        volume: 0,
-        available_devices: [{id: 'default', name: 'default'}],
-      },
-      output: {
-        device_id: 'default',
-        volume: 0,
-        available_devices: [{id: 'default', name: 'default'}],
-      },
-      mode: {
-        type: 'VOICE_ACTIVITY',
-        auto_threshold: false,
-        threshold: 0,
-        shortcut: [],
-        delay: 0,
-      },
-      automatic_gain_control: false,
-      echo_cancellation: false,
-      noise_suppression: false,
-      qos: false,
-      silence_warning: false,
-      deaf: false,
-      mute: false,
-    }),
   openExternalLink: () => Promise.resolve(null),
   encourageHardwareAcceleration: () => Promise.resolve({enabled: true}),
   captureLog: () => Promise.resolve(null),

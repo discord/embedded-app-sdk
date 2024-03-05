@@ -8,7 +8,6 @@ import {encourageHardwareAcceleration} from './encourageHardwareAcceleration';
 import {getEntitlements} from './getEntitlements';
 import {getSelectedVoiceChannel} from './getSelectedVoiceChannel';
 import {getSkus} from './getSkus';
-import {getVoiceSettings} from './getVoiceSettings';
 import {getChannelPermissions} from './getChannelPermissions';
 import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {openExternalLink} from './openExternalLink';
@@ -38,7 +37,6 @@ function commands(sendCommand: TSendCommand) {
     getPlatformBehaviors: getPlatformBehaviors(sendCommand),
     getSelectedVoiceChannel: getSelectedVoiceChannel(sendCommand),
     getSkus: getSkus(sendCommand),
-    getVoiceSettings: getVoiceSettings(sendCommand),
     openExternalLink: openExternalLink(sendCommand),
     openInviteDialog: openInviteDialog(sendCommand),
     openShareMomentDialog: openShareMomentDialog(sendCommand),
