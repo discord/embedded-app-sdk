@@ -111,7 +111,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
   getEntitlements: () => Promise.resolve({entitlements: []}),
   startPurchase: () => Promise.resolve([]),
   setConfig: () => Promise.resolve({use_interactive_pip: false}),
-  getSelectedVoiceChannel: () => Promise.resolve(null),
   userSettingsGetLocale: () => Promise.resolve({locale: ''}),
   openExternalLink: () => Promise.resolve(null),
   encourageHardwareAcceleration: () => Promise.resolve({enabled: true}),

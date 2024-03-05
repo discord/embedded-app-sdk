@@ -61,7 +61,6 @@ export const GetChannelsResponse = zod.object({
 
 export const NullableChannelResponse = GetChannelResponse.nullable();
 export const SelectVoiceChannelResponse = GetChannelResponse.nullable();
-export const GetSelectedVoiceChannelResponse = GetChannelResponse.nullable();
 export const SelectTextChannelResponse = GetChannelResponse.nullable();
 
 export const VoiceSettingsResponse = zod.object({
@@ -144,8 +143,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return GetPlatformBehaviorsResponse.parse(data);
     case Commands.GET_CHANNEL:
       return GetChannelResponse.parse(data);
-    case Commands.GET_SELECTED_VOICE_CHANNEL:
-      return GetSelectedVoiceChannelResponse.parse(data);
     case Commands.SELECT_TEXT_CHANNEL:
       return SelectTextChannelResponse.parse(data);
     case Commands.SELECT_VOICE_CHANNEL:
