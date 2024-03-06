@@ -62,7 +62,7 @@ async function setup() {
 
 ## SDK development
 
-Developing a new feature or patching a bug on the SDK? Check out [this guide](/docs/common-patterns/local-sdk-development.md) to learn how to set up your local dev environment.
+Developing a new feature or patching a bug on the SDK? Check out [this guide](/docs/local-sdk-development.md) to learn how to set up your local dev environment.
 
 ## Discord Developer Terms of Service & Developer Policy
 
