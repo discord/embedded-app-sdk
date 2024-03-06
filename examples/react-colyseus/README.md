@@ -25,11 +25,11 @@ We're going to manage and synchronize our embedded app's state via [Colyseus](ht
 
 ## Setting up your Discord Application
 
-Before we write any code, lets follow the instructions [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-1-create-a-new-discord-application) to make sure your Discord application is set up correctly.
+Before we write any code, lets follow the instructions [here](https://activities-preview.pages.dev/developers/docs/embedded-apps/getting-started#step-1-create-a-new-discord-application) to make sure your Discord application is set up correctly.
 
 ## Setting up your environment variables
 
-In order to run your app, you will need to create a `.env` file. Rename the file [/examples/react-colyseus/example.env](/examples/react-colyseus/example.env) to `.env` and fill it in with the appropriate OAuth2 variables. The OAuth2 variables can be found in the OAuth2 tab on the developer portal, as described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-2-find-your-oauth2-credentials)
+In order to run your app, you will need to create a `.env` file. Rename the file [/examples/react-colyseus/example.env](/examples/react-colyseus/example.env) to `.env` and fill it in with the appropriate OAuth2 variables. The OAuth2 variables can be found in the OAuth2 tab on the developer portal, as described [here](https://activities-preview.pages.dev/developers/docs/embedded-apps/getting-started#find-your-oauth2-credentials)
 
 ```.env
 # Example .env file
@@ -40,7 +40,7 @@ CLIENT_SECRET=PASTE_OAUTH2_CLIENT_SECRET_HERE
 
 ## Running your app locally
 
-As described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-10-running-your-application-inside-of-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
+As described [here](https://activities-preview.pages.dev/developers/docs/embedded-apps/getting-started#step-10-running-your-application-inside-of-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
 To run your app locally, run the following from this directory (/examples/react-colyseus)
 
 ```
@@ -49,7 +49,7 @@ pnpm dev
 pnpm tunnel # from another terminal
 ```
 
-Be sure to complete all the steps listed [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity) to ensure your development setup is working as expected.
+Be sure to complete all the steps listed [here](https://activities-preview.pages.dev/developers/docs/embedded-apps/getting-started) to ensure your development setup is working as expected.
 
 ## Where do you go from here?
 
