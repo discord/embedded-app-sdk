@@ -59,21 +59,8 @@ export const GetChannelsResponse = zod.object({
   channels: zod.array(Channel),
 });
 
-export const SetUserVoiceSettingsResponse = zod.object({
-  user_id: zod.string(),
-  pan: zod
-    .object({
-      left: zod.number(),
-      right: zod.number(),
-    })
-    .optional(),
-  volume: zod.number().optional(),
-  mute: zod.boolean().optional(),
-});
-
 export const NullableChannelResponse = GetChannelResponse.nullable();
 export const SelectVoiceChannelResponse = GetChannelResponse.nullable();
-export const GetSelectedVoiceChannelResponse = GetChannelResponse.nullable();
 export const SelectTextChannelResponse = GetChannelResponse.nullable();
 
 export const VoiceSettingsResponse = zod.object({
@@ -156,11 +143,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return GetPlatformBehaviorsResponse.parse(data);
     case Commands.GET_CHANNEL:
       return GetChannelResponse.parse(data);
-    case Commands.GET_SELECTED_VOICE_CHANNEL:
-      return GetSelectedVoiceChannelResponse.parse(data);
-    case Commands.GET_VOICE_SETTINGS:
-    case Commands.SET_VOICE_SETTINGS:
-      return VoiceSettingsResponse.parse(data);
     case Commands.SELECT_TEXT_CHANNEL:
       return SelectTextChannelResponse.parse(data);
     case Commands.SELECT_VOICE_CHANNEL:
@@ -173,8 +155,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return GetEntitlementsResponse.parse(data);
     case Commands.SET_CONFIG:
       return SetConfigResponse.parse(data);
-    case Commands.SET_USER_VOICE_SETTINGS:
-      return SetUserVoiceSettingsResponse.parse(data);
     case Commands.START_PURCHASE:
       return StartPurchaseResponse.parse(data);
     case Commands.SUBSCRIBE:
@@ -183,7 +163,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.USER_SETTINGS_GET_LOCALE:
       return UserSettingsGetLocaleResponse.parse(data);
     // Empty Responses
-    case Commands.START_PREMIUM_PURCHASE:
     case Commands.OPEN_EXTERNAL_LINK:
     case Commands.SET_ORIENTATION_LOCK_STATE:
     case Commands.SET_CERTIFIED_DEVICES:
