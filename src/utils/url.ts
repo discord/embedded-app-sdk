@@ -67,9 +67,5 @@ export function absoluteURL(
   protocol: string = window.location.protocol,
   host: string = window.location.host
 ): URL {
-  try {
-    return new URL(url);
-  } catch (ex) {
-    return new URL(url, `${protocol}//${host}`);
-  }
+  return new URL(url, `${protocol}//${host}`);
 }
