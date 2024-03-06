@@ -2,7 +2,7 @@
 
 Version 2.0.0 represents a breaking change to the shape of the SDK. This document is aimed to help developers migrate their activity code from a v1 release to v2.0.0 and beyond.
 
-If you are migrating from `@discord/activity-iframe-sdk` v2 to `@discord/embedded-app-sdk` v1 please see [this document](/docs/common-patterns/embedded-app-sdk-v1-migration.md) instead.
+If you are migrating from `@discord/activity-iframe-sdk` v2 to `@discord/embedded-app-sdk` v1 please see [this document](/docs/embedded-app-sdk-v1-migration.md) instead.
 
 # Command Migration
 

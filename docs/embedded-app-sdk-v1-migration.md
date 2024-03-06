@@ -1,6 +1,6 @@
 # embedded-app-sdk V1 Migration
 
-If you were previously using activity-iframe-sdk, this guide is for you. Think of `@discord/embedded-app-sdk` as the next version of `activity-iframe-sdk` with a few breaking changes. This document is aimed to help developers migrate their activity code from activity-iframe-sdk v2 to @discord/embedded-app-sdk v1.0.0 and beyond. If you are upgrading from activity-iframe-sdk v1, please first reference [this document](/docs/common-patterns/activity-iframe-sdk-v2-migration.md)
+If you were previously using activity-iframe-sdk, this guide is for you. Think of `@discord/embedded-app-sdk` as the next version of `activity-iframe-sdk` with a few breaking changes. This document is aimed to help developers migrate their activity code from activity-iframe-sdk v2 to @discord/embedded-app-sdk v1.0.0 and beyond. If you are upgrading from activity-iframe-sdk v1, please first reference [this document](/docs/activity-iframe-sdk-v2-migration.md)
 
 ## tldr;
 
@@ -105,7 +105,7 @@ The following were removed or modified:
 
 Each activity is implemented differently, but migrating to embedded-app-sdk from activity-iframe-sdk should be straightforward with the use of typescript. Here is a simple outline of how we expect the migration should occur.
 
-0. If you are upgrading from `activity-iframe-sdk` v1, please review and implement the [activity-iframe-sdk v2 migration guide](/docs/common-patterns/activity-iframe-sdk-v2-migration.md) before following these steps.
+0. If you are upgrading from `activity-iframe-sdk` v1, please review and implement the [activity-iframe-sdk v2 migration guide](/docs/activity-iframe-sdk-v2-migration.md) before following these steps.
 1. Upgrade to 1.0.0 by updating `package.json` and installing (eg `npm install @discord/embedded-app-sdk`).
 2. Remove any code related to installing a private github package. This will most likely look like removing a `.npmrc` file or other references to `npm.pkg.github.com`
 3. Run typescript (`tsc`) and observe errors. Most of the errors will be related to usage of `subscribe`, or usage of removed commands and events, as expected.
