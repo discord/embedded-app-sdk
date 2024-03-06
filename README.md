@@ -6,9 +6,6 @@
 
 This library enables communication between your Application and Discord. Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time website inside of Discord's UI via an embedded iframe.
 
-- [Installing this package](#installing-this-package)
-- [SDK development](#sdk-development)
-
 ## Installing this package
 
 TODO - remove `github:` prefix once public npm package is available
