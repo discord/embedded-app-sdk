@@ -67,9 +67,7 @@ export function absoluteURL(
   protocol: string = window.location.protocol,
   host: string = window.location.host
 ): URL {
-  if (url.startsWith('/')) {
-    return new URL(`${protocol}//${host}${url}`);
-  } else {
-    return new URL(url);
-  }
+  // If the first arg is a complete url, it will ignore the second arg
+  // This call structure lets us set relative urls to have a full url with the proper protocol and host
+  return new URL(url, `${protocol}//${host}`);
 }

@@ -48,6 +48,10 @@ describe('absoluteURL', () => {
         url: '/relative/path/to/something',
         expected: `${window.location.protocol}//${window.location.host}/relative/path/to/something`,
       },
+      {
+        url: 'foo/the/bar',
+        expected: `${window.location.protocol}//${window.location.host}/foo/the/bar`,
+      },
     ];
     for (const {url, protocol, host, expected} of TEST_CASES) {
       const result = absoluteURL(url, protocol, host);

@@ -27,7 +27,7 @@ export function patchUrlMappings(
       // If fetch has Request as input, we need to resolve any stream
       // before we create a new request with the mapped url
       if (input instanceof Request) {
-        const newUrl = attemptRemap({url: new URL(input.url), mappings});
+        const newUrl = attemptRemap({url: absoluteURL(input.url), mappings});
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {url, ...newInit} = (init ?? {}) as RequestInit & {url: any};
         Object.keys(Request.prototype).forEach((value) => {
@@ -56,14 +56,14 @@ export function patchUrlMappings(
       }
 
       // Assuming a generic url or string
-      const remapped = attemptRemap({url: input instanceof URL ? input : new URL(input), mappings});
+      const remapped = attemptRemap({url: input instanceof URL ? input : absoluteURL(input), mappings});
       return fetchImpl(remapped, init);
     };
   }
   if (patchWebSocket) {
     class WebSocketProxy extends WebSocket {
       constructor(url: string | URL, protocols?: string | string[]) {
-        const remapped = attemptRemap({url: url instanceof URL ? url : new URL(url), mappings});
+        const remapped = attemptRemap({url: url instanceof URL ? url : absoluteURL(url), mappings});
         super(remapped, protocols);
       }
     }
@@ -80,7 +80,7 @@ export function patchUrlMappings(
       username?: string | null,
       password?: string | null
     ) {
-      const remapped = attemptRemap({url: new URL(url), mappings});
+      const remapped = attemptRemap({url: absoluteURL(url), mappings});
       openImpl.apply(this, [method, remapped, async, username, password]);
     };
   }
@@ -121,7 +121,7 @@ function recursivelyRemapChildNodes(node: Node, mappings: Mapping[]) {
 
 function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
   if (node instanceof HTMLElement && node.hasAttribute('src')) {
-    const url = new URL(absoluteURL(node.getAttribute('src') ?? ''));
+    const url = absoluteURL(node.getAttribute('src') ?? '');
     if (url.host === window.location.host) return;
     node.setAttribute('src', attemptRemap({url, mappings}).toString());
   }
