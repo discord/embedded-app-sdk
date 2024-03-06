@@ -1,7 +1,7 @@
 # Embedded App SDK Examples
 
 <p align="center">
-  <img src="/docs/assets/discord-embedded-apps.svg" alt="Discord Embedded App SDK" width="500" />
+  <img src="/assets/discord-embedded-apps.svg" alt="Discord Embedded App SDK" width="500" />
 <p>
 
 ### [Discord Embedded App Starter](/examples/discord-embedded-app-starter)
