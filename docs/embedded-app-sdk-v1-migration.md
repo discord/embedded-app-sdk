@@ -93,7 +93,7 @@ The following were removed or modified:
   - `VOICE_CONNECTION_STATUS`
 - Removed Commands
   - `getSelectedVoiceChannel`
-    We recommend using `getChannel` instead, where appropriate
+    We recommend using `getChannel` instead, where appropriate. If you need access to the current channel's id, it can be accessed immediately by the SDK, directly at `discordSdk.channelId`
   - `subscribeToLayoutModeUpdatesCompat` and `unsubscribeFromLayoutModeUpdatesCompat`
     - If you are using these today, we encourage subscribing to the `ACTIVITY_LAYOUT_MODE_UPDATE` event instead
   - `setUserVoiceSettings`
