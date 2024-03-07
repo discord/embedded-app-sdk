@@ -27,11 +27,11 @@
     "test": "jest",
     "test:all": "pnpm test -r",
     "dev": "pnpm build --watch",
-    "build": "rollup --bundleConfigAsCjs -c rollup.config.mjs",
+    "build": "pnpm run prepare",
     "lint:ts": "tsc -b ./tsconfig-all.json",
     "lint": "pnpm eslint ./src",
     "lint:fix": "pnpm eslint --fix ./src ./examples/**/*.{ts,tsx}",
-    "prepare": "husky install"
+    "prepare": "husky install && rollup --bundleConfigAsCjs -c rollup.config.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
