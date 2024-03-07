@@ -21,7 +21,7 @@ npm install github:@discord/embedded-app-sdk
 To use the SDK, import it into your project and construct a new instance of the DiscordSDK class.
 
 Below is a minimal example of setting up the SDK.
-Visit [/examples/discord-embedded-app-starter](/examples/discord-embedded-app-starter/README.md) for a complete example application. See more info on environment variables (`YOUR_OAUTH2_CLIENT_ID`, etc...) [here](https://activities-preview.pages.dev/developers/docs/embedded-apps/getting-started#find-your-oauth2-credentials).
+Visit [/examples/discord-embedded-app-starter](/examples/discord-embedded-app-starter/README.md) for a complete example application. See more info on environment variables (`YOUR_OAUTH2_CLIENT_ID`, etc...) [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#find-your-oauth2-credentials).
 
 ```typescript
 import {DiscordSDK} from '@discord/embedded-app-sdk';
