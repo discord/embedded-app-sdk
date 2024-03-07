@@ -1,7 +1,7 @@
 {
   "name": "@discord/embedded-app-sdk",
   "version": "1.0.0",
-  "description": "Communicate with Discord via window.postMessage",
+  "description": "@discord/embedded-app-sdk enables you to build rich, multiplayer experiences inside Discord.",
   "author": "Discord",
   "license": "MIT",
   "bugs": {

@@ -4,7 +4,9 @@
   <img src="/assets/discord-embedded-apps.svg" alt="Discord Embedded App SDK" />
 <p>
 
-This library enables communication between your Application and Discord. Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time website inside of Discord's UI via an embedded iframe.
+### @discord/embedded-app-sdk enables you to build rich, multiplayer experiences inside Discord.
+
+Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time website inside of Discord's UI via an embedded iframe.
 
 ## Installing this package
 
