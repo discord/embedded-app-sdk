@@ -27,17 +27,18 @@ interface GuildsMembersRead {
 
 export default function AvatarAndName() {
   const auth = authStore.getState();
-  const [guildsMembersRead, setGuildsMembersRead] = React.useState<GuildsMembersRead | null>(null);
+  const [guildMember, setGuildMember] = React.useState<GuildsMembersRead | null>(null);
 
   React.useEffect(() => {
     if (auth == null) {
       return;
     }
+    // We store this in the auth object, but fetching it again to keep relevant patterns in one area
     DiscordAPI.request<GuildsMembersRead>(
       {method: RequestType.GET, endpoint: `/users/@me/guilds/${discordSdk.guildId}/member`},
       auth.access_token
     ).then((reply) => {
-      setGuildsMembersRead(reply);
+      setGuildMember(reply);
     });
   }, [auth]);
 
@@ -62,12 +63,12 @@ export default function AvatarAndName() {
     userId: auth.user.id,
     avatarHash: auth.user.avatar,
     guildId: discordSdk.guildId,
-    guildAvatarHash: guildsMembersRead?.avatar,
+    guildAvatarHash: guildMember?.avatar,
   });
 
   // Get the user's guild nickname. If none set, fall back to global_name, or username
   // Note - this name is note guaranteed to be unique
-  const name = guildsMembersRead?.nick ?? auth.user.global_name ?? auth.user.username;
+  const name = guildMember?.nick ?? auth.user.global_name ?? auth.user.username;
 
   return (
     <div style={{padding: 32, overflowX: 'auto'}}>
@@ -100,7 +101,7 @@ export default function AvatarAndName() {
         <br />
         <div>
           <p>Guild-specific user avatar and nickname</p>
-          {guildsMembersRead == null ? (
+          {guildMember == null ? (
             <p>...loading</p>
           ) : (
             <>
@@ -111,11 +112,11 @@ export default function AvatarAndName() {
           )}
         </div>
       </div>
-      {guildsMembersRead == null ? null : (
+      {guildMember == null ? null : (
         <>
           <br />
           <div>API response from {`/api/users/@me/guilds/${discordSdk.guildId}/member`}</div>
-          <ReactJsonView src={guildsMembersRead} />
+          <ReactJsonView src={guildMember} />
         </>
       )}
     </div>
