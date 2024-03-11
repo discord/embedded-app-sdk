@@ -53,44 +53,44 @@ Each activity is implemented differently, but migrating to v2 from v1 should be 
 5. Perform a basic test of key functionality.
 6. Profit from having standardized command shapes and better types from here on out!
 
-## IFrame Playground Example migration
+## SDK Playground Example migration
 
-As a real example, our `iframe-playground` example application migrated to 2.0.0 from v1.11.0 and this is a summary of all the changes required.
+As a real example, here are several examples' files migrated to 2.0.0 from v1.11.0 and this is a summary of all the changes required.
 
 ```diff
 examples/discord-activity-starter/packages/client/src/main.ts
  const {data: selectedVoiceChannel} = await discordSdk.commands.getSelectedVoiceChannel();
 + const selectedVoiceChannel = await discordSdk.commands.getSelectedVoiceChannel();
 
-examples/iframe-playground/packages/client/src/pages/CurrentGuild.tsx
+examples/sdk-playground/packages/client/src/pages/CurrentGuild.tsx
 - const {data} = await discordSdk.commands.getSelectedVoiceChannel();
 - const guildId = data?.guild_id;
 + const channel = await discordSdk.commands.getSelectedVoiceChannel();
 + const guildId = channel?.guild_id;
 
-examples/iframe-playground/packages/client/src/pages/EncourageHardwareAcceleration.tsx
+examples/sdk-playground/packages/client/src/pages/EncourageHardwareAcceleration.tsx
 - const {data} = await discordSdk.commands.encourageHardwareAcceleration();
 - setHWAccEnabled(data?.enabled ?? null);
 + const {enabled} = await discordSdk.commands.encourageHardwareAcceleration();
 + setHWAccEnabled(enabled === true);
 
-examples/iframe-playground/packages/client/src/pages/InAppPurchase.tsx
+examples/sdk-playground/packages/client/src/pages/InAppPurchase.tsx
 - const skusResp = await discordSdk.commands.getSkus();
 - setRpcSkus(skusResp.data as Sku[]);
 + const skus = await discordSdk.commands.getSkus();
 + setRpcSkus(skus);
 
-examples/iframe-playground/packages/client/src/pages/OpenInviteDialog.tsx
+examples/sdk-playground/packages/client/src/pages/OpenInviteDialog.tsx
 - const { data: {permissions} } = await discordSdk.commands.getChannelPermissions();
 + const {permissions} = await discordSdk.commands.getChannelPermissions();
 
-examples/iframe-playground/packages/client/src/pages/PlatformBehaviors.tsx
+examples/sdk-playground/packages/client/src/pages/PlatformBehaviors.tsx
 - const {data} = await discordSdk.commands.getPlatformBehaviors();
 - setPlatformBehaviors(data);
 + const behaviors = await discordSdk.commands.getPlatformBehaviors();
 + setPlatformBehaviors(behaviors);
 
-examples/iframe-playground/packages/client/src/pages/VoiceSettings.tsx
+examples/sdk-playground/packages/client/src/pages/VoiceSettings.tsx
 - const voiceSettingsResp = await discordSdk.commands.getVoiceSettings();
 - setVoiceSettings(voiceSettingsResp.data);
 + const voiceSettings = await discordSdk.commands.getVoiceSettings();

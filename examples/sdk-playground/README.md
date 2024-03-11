@@ -1,4 +1,4 @@
-# IFrame Playground
+# SDK Playground
 
 ## Tech Stack
 
@@ -28,7 +28,7 @@ Before we write any code, lets follow the instructions [here](https://activities
 ## Running your app locally
 
 As described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-4-running-your-app-locally-in-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
-To run your app locally, run the following from this directory (/examples/iframe-playground)
+To run your app locally, run the following from this directory (/examples/sdk-playground)
 
 ```
 pnpm install # only need to run this the first time

@@ -8,9 +8,9 @@
 
 This starter app will get you up and running quickly with the basic skeleton of an Embedded App using Node.js, React, and Vite.
 
-### [Iframe Playground](/examples/iframe-playground)
+### [SDK Playground](/examples/sdk-playground)
 
-This example implements the SDK commands and events available within the iframe while building your app.
+This example implements the SDK commands and events available within the application's iframe while building your app.
 
 ### [React Colysesus](/examples/react-colyseus)
 

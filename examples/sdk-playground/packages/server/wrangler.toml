@@ -1,4 +1,4 @@
-name = "iframe-playground"
+name = "sdk-playground"
 workers_dev = true
 compatibility_date = "2022-05-03"
 

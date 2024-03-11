@@ -345,6 +345,6 @@ Here is a brief guide to performing a test purchase.
 
 # Examples
 
-Check out our example implementation of IAP in our [IFrame Playground Example Application](https://github.com/discord/embedded-app-sdk/tree/decc849d4d7c7e7220f8d5306b2ef36756efde88/examples/iframe-playground).
+Check out our example implementation of IAP in our [SDK Playground Example Application](https://github.com/discord/embedded-app-sdk/tree/decc849d4d7c7e7220f8d5306b2ef36756efde88/examples/sdk-playground).
 
-The example implementation includes [client-side](https://github.com/discord/embedded-app-sdk/blob/decc849d4d7c7e7220f8d5306b2ef36756efde88/examples/iframe-playground/packages/client/src/pages/InAppPurchase.tsx) as well as [backend](https://github.com/discord/embedded-app-sdk/blob/decc849d4d7c7e7220f8d5306b2ef36756efde88/examples/iframe-playground/packages/server/src/handlers/iapHandler.ts) code. This example also follows best security practices explained [above](#A-Note-on-Security-and-Suggested-Approach).
+The example implementation includes [client-side](https://github.com/discord/embedded-app-sdk/blob/decc849d4d7c7e7220f8d5306b2ef36756efde88/examples/sdk-playground/packages/client/src/pages/InAppPurchase.tsx) as well as [backend](https://github.com/discord/embedded-app-sdk/blob/decc849d4d7c7e7220f8d5306b2ef36756efde88/examples/sdk-playground/packages/server/src/handlers/iapHandler.ts) code. This example also follows best security practices explained [above](#A-Note-on-Security-and-Suggested-Approach).

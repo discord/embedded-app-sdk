@@ -5,9 +5,9 @@
   "references": [
     // lib
     {"path": "."},
-    // iframe-playground
-    {"path": "./examples/iframe-playground/packages/client"},
-    {"path": "./examples/iframe-playground/packages/server"},
+    // sdk-playground
+    {"path": "./examples/sdk-playground/packages/client"},
+    {"path": "./examples/sdk-playground/packages/server"},
     // activity-starter
     {"path": "./examples/discord-embedded-app-starter/packages/client"},
     {"path": "./examples/discord-embedded-app-starter/packages/server"}
