@@ -3,6 +3,7 @@ import discordSdk from '../discordSdk';
 import ReactJsonView from '../components/ReactJsonView';
 import {DiscordAPI, RequestType} from '../DiscordAPI';
 import {authStore} from '../stores/authStore';
+import {getUserAvatarUri} from '../utils/getUserAvatarUri';
 
 interface GuildsMembersRead {
   roles: string[];
@@ -26,17 +27,18 @@ interface GuildsMembersRead {
 
 export default function AvatarAndName() {
   const auth = authStore.getState();
-  const [guildsMembersRead, setGuildsMembersRead] = React.useState<GuildsMembersRead | null>(null);
+  const [guildMember, setGuildMember] = React.useState<GuildsMembersRead | null>(null);
 
   React.useEffect(() => {
     if (auth == null) {
       return;
     }
+    // We store this in the auth object, but fetching it again to keep relevant patterns in one area
     DiscordAPI.request<GuildsMembersRead>(
       {method: RequestType.GET, endpoint: `/users/@me/guilds/${discordSdk.guildId}/member`},
       auth.access_token
     ).then((reply) => {
-      setGuildsMembersRead(reply);
+      setGuildMember(reply);
     });
   }, [auth]);
 
@@ -47,24 +49,26 @@ export default function AvatarAndName() {
   // Note: instead of doing this here, your app's server could retrieve this
   // data by using the user's OAuth token
 
-  // Get the user's profile avatar uri
-  // If none available, use a default avatar
-  const userAvatarSrc = auth.user.avatar
-    ? `https://cdn.discordapp.com/avatars/${auth.user.id}/${auth.user.avatar}.png?size=256`
-    : `https://cdn.discordapp.com/embed/avatars/${parseInt(auth.user.discriminator) % 5}.png`;
-  const username = `${auth.user.username}#${auth.user.discriminator}`;
+  const userAvatarUri = getUserAvatarUri({
+    userId: auth.user.id,
+    avatarHash: auth.user.avatar,
+    guildId: discordSdk.guildId,
+    guildAvatarHash: auth.guildMember?.avatar,
+  });
 
   // Get the user's guild-specific avatar uri
   // If none, fall back to the user profile avatar
   // If no main avatar, use a default avatar
-  const guildAvatarSrc = guildsMembersRead?.avatar
-    ? `https://cdn.discordapp.com/guilds/${discordSdk.guildId}/users/${auth.user.id}/avatars/${guildsMembersRead.avatar}.png?size=256`
-    : auth.user.avatar
-    ? `https://cdn.discordapp.com/avatars/${auth.user.id}/${auth.user.avatar}.png?size=256`
-    : `https://cdn.discordapp.com/embed/avatars/${parseInt(auth.user.discriminator) % 5}.png`;
+  const guildAvatarSrc = getUserAvatarUri({
+    userId: auth.user.id,
+    avatarHash: auth.user.avatar,
+    guildId: discordSdk.guildId,
+    guildAvatarHash: guildMember?.avatar,
+  });
 
-  // Get the user's guild nickname. If none set, use profile "name#discriminator"
-  const guildNickname = guildsMembersRead?.nick ?? `${auth.user.username}${auth.user.discriminator}`;
+  // Get the user's guild nickname. If none set, fall back to global_name, or username
+  // Note - this name is note guaranteed to be unique
+  const name = guildMember?.nick ?? auth.user.global_name ?? auth.user.username;
 
   return (
     <div style={{padding: 32, overflowX: 'auto'}}>
@@ -87,31 +91,32 @@ export default function AvatarAndName() {
         <br />
         <br />
         <div>
-          <p>User avatar and nickname</p>
-          <img alt="avatar" src={userAvatarSrc} />
-          <p>User Avatar url: "{userAvatarSrc}"</p>
-          <p>Username: "{username}"</p>
+          <p>User avatar, global name, and username</p>
+          <img alt="avatar" src={userAvatarUri} />
+          <p>User Avatar url: "{userAvatarUri}"</p>
+          <p>Global Name: "{auth.user.global_name}"</p>
+          <p>Unique username: "{auth.user.username}"</p>
         </div>
         <br />
         <br />
         <div>
           <p>Guild-specific user avatar and nickname</p>
-          {guildsMembersRead == null ? (
+          {guildMember == null ? (
             <p>...loading</p>
           ) : (
             <>
               <img alt="avatar" src={guildAvatarSrc} />
               <p>Guild Member Avatar url: "{guildAvatarSrc}"</p>
-              <p>Guild nickname: "{guildNickname}"</p>
+              <p>Guild nickname: "{name}"</p>
             </>
           )}
         </div>
       </div>
-      {guildsMembersRead == null ? null : (
+      {guildMember == null ? null : (
         <>
           <br />
           <div>API response from {`/api/users/@me/guilds/${discordSdk.guildId}/member`}</div>
-          <ReactJsonView src={guildsMembersRead} />
+          <ReactJsonView src={guildMember} />
         </>
       )}
     </div>
