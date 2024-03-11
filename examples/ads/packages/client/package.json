@@ -1,0 +1,19 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@discord/embedded-app-sdk": "workspace:@discord/embedded-app-sdk@*",
+    "video.js": "8.10.0",
+    "videojs-contrib-ads": "7.4.0",
+    "videojs-ima": "2.3.0"
+  },
+  "devDependencies": {
+    "vite": "^2.9.9",
+    "type-fest": "^2.16.0"
+  }
+}
