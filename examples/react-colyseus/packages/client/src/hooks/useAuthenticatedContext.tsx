@@ -6,9 +6,9 @@ import {GAME_NAME} from '../../../server/src/shared/Constants';
 
 import {discordSdk} from '../discordSdk';
 import {LoadingScreen} from '../components/LoadingScreen';
-import {fetchGuildsUserAvatarAndNickname} from '../utils/fetchGuildsUserAvatarAndNickname';
+import {getUserAvatarUri} from '../utils/getUserAvatarUri';
 
-import type {TAuthenticateResponse, TAuthenticatedContext} from '../types';
+import type {IGuildsMembersRead, TAuthenticateResponse, TAuthenticatedContext} from '../types';
 
 const AuthenticatedContext = React.createContext<TAuthenticatedContext>({
   user: {
@@ -28,8 +28,7 @@ const AuthenticatedContext = React.createContext<TAuthenticatedContext>({
     icon: null,
     description: '',
   },
-  nick: '',
-  avatarUri: '',
+  guildMember: null,
   client: undefined as unknown as Client,
   room: undefined as unknown as Room,
 });
@@ -107,7 +106,17 @@ function useAuthenticatedContextSetup() {
       });
 
       // Get guild specific nickname and avatar, and fallback to user name and avatar
-      const guildsReadInfo = await fetchGuildsUserAvatarAndNickname(newAuth);
+      const guildMember: IGuildsMembersRead | null = await fetch(
+        `/discord/api/users/@me/guilds/${discordSdk.guildId}/member`,
+        {
+          method: 'get',
+          headers: {Authorization: `Bearer ${access_token}`},
+        }
+      )
+        .then((j) => j.json())
+        .catch(() => {
+          return null;
+        });
 
       // Done with discord-specific setup
 
@@ -127,17 +136,31 @@ function useAuthenticatedContextSetup() {
         }
       }
 
+      // Get the user's guild-specific avatar uri
+      // If none, fall back to the user profile avatar
+      // If no main avatar, use a default avatar
+      const avatarUri = getUserAvatarUri({
+        userId: newAuth.user.id,
+        avatarHash: newAuth.user.avatar,
+        guildId: discordSdk.guildId,
+        guildAvatarHash: guildMember?.avatar,
+      });
+
+      // Get the user's guild nickname. If none set, fall back to global_name, or username
+      // Note - this name is note guaranteed to be unique
+      const name = guildMember?.nick ?? newAuth.user.global_name ?? newAuth.user.username;
+
       // The second argument has to include for the room as well as the current player
       const newRoom = await client.joinOrCreate<State>(GAME_NAME, {
         channelId: discordSdk.channelId,
         roomName,
         userId: newAuth.user.id,
-        name: guildsReadInfo.nick,
-        avatarUri: guildsReadInfo.avatarUri,
+        name,
+        avatarUri,
       });
 
       // Finally, we construct our authenticatedContext object to be consumed throughout the app
-      setAuth({...newAuth, ...guildsReadInfo, client, room: newRoom});
+      setAuth({...newAuth, guildMember, client, room: newRoom});
     };
 
     if (!settingUp.current) {
