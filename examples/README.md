@@ -4,7 +4,7 @@
   <img src="/assets/discord-embedded-apps.svg" alt="Discord Embedded App SDK" width="500" />
 <p>
 
-### [Discord Embedded App Starter](/examples/discord-embedded-app-starter)
+### [Discord Activity Starter](/examples/discord-activity-starter)
 
 This starter app will get you up and running quickly with the basic skeleton of an Embedded App using Node.js, React, and Vite.
 

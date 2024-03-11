@@ -22,7 +22,7 @@ Before we write any code, lets follow the instructions [here](https://activities
 
 ## Setting up your environment variables
 
-In this directory (`/examples/discord-embedded-app-starter`) we need to create a `.env` file with the OAuth2 variables, as described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#find-your-oauth2-credentials).
+In this directory (`/examples/discord-activity-starter`) we need to create a `.env` file with the OAuth2 variables, as described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#find-your-oauth2-credentials).
 
 ```env
 VITE_CLIENT_ID=123456789012345678
@@ -34,15 +34,15 @@ CLIENT_SECRET=abcdefghijklmnopqrstuvwxyzabcdef
 In order to add new environment variables, you will need to do the following:
 
 1. Add the environment key and value to `.env`
-2. Add the key to [/examples/discord-embedded-app-starter/packages/client/src/vite-env.d.ts](/examples/discord-embedded-app-starter/packages/client/src/vite-env.d.ts)
-3. Add the key to [/examples/discord-embedded-app-starter/packages/server/environment.d.ts](/examples/discord-embedded-app-starter/packages/server/environment.d.ts)
+2. Add the key to [/examples/discord-activity-starter/packages/client/src/vite-env.d.ts](/examples/discord-activity-starter/packages/client/src/vite-env.d.ts)
+3. Add the key to [/examples/discord-activity-starter/packages/server/environment.d.ts](/examples/discord-activity-starter/packages/server/environment.d.ts)
 
 This will ensure that you have type safety when consuming your environment variables
 
 ## Running your app locally
 
 As described [here](https://activities-preview.pages.dev/developers/docs/activities/building-an-activity#step-4-running-your-app-locally-in-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
-To run your app locally, run the following from this directory (/examples/discord-embedded-app-starter)
+To run your app locally, run the following from this directory (/examples/discord-activity-starter)
 
 ```
 pnpm install # only need to run this the first time

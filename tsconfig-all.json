@@ -9,8 +9,8 @@
     {"path": "./examples/sdk-playground/packages/client"},
     {"path": "./examples/sdk-playground/packages/server"},
     // activity-starter
-    {"path": "./examples/discord-embedded-app-starter/packages/client"},
-    {"path": "./examples/discord-embedded-app-starter/packages/server"}
+    {"path": "./examples/discord-activity-starter/packages/client"},
+    {"path": "./examples/discord-activity-starter/packages/server"}
     // nested-messages
     // {"path": "./examples/nested-messages"}
     // react-colyseus
