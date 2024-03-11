@@ -21,6 +21,6 @@ export function getUserAvatarUri({
     return `${cdn}/avatars/${userId}/${avatarHash}.png?size=${size}`;
   }
 
-  const defaultAvatarIndex = (Number(userId) >> 22) % 6;
+  const defaultAvatarIndex = Math.abs(Number(userId) >> 22) % 6;
   return `${cdn}/embed/avatars/${defaultAvatarIndex}.png?size=${size}`;
 }
