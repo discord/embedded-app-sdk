@@ -34,7 +34,8 @@
             "discriminator": {"type": "string"},
             "id": {"type": "string"},
             "avatar": {"type": ["string", "null"]},
-            "public_flags": {"type": "number"}
+            "public_flags": {"type": "number"},
+            "global_name": {"type": ["string", "null"]}
           },
           "required": ["username", "discriminator", "id", "public_flags"],
           "additionalProperties": false

@@ -25,6 +25,7 @@ export const AuthenticateResponseSchema = z.object({
     id: z.string(),
     avatar: z.union([z.string(), z.null()]).optional(),
     public_flags: z.number(),
+    global_name: z.union([z.string(), z.null()]).optional(),
   }),
   scopes: z.array(
     fallbackToDefault(
