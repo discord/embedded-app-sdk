@@ -130,6 +130,7 @@ function parseZodSchema(code) {
       // https://github.com/StefanTerdell/json-schema-to-zod/issues/67
       // @ts-ignore
       .replaceAll('.catchall(z.never())', '')
+      // Avoid strict so that we can be forwards compatible with new keys
       .replaceAll('.strict()', '')
       // For forwards compatibility, include an "unhandled" value (-1) for enums
       // which will be defaulted to if zod validation fails.
