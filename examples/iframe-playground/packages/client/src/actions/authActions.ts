@@ -1,7 +1,7 @@
 import {authStore} from '../stores/authStore';
 import discordSdk from '../discordSdk';
-import {fetchGuildsUserAvatarAndNickname} from '../utils/fetchGuildsUserAvatarAndNickname';
 import {type Types} from '@discord/embedded-app-sdk';
+import {IGuildsMembersRead} from '../types';
 
 export const start = async () => {
   const {user} = authStore.getState();
@@ -61,7 +61,14 @@ export const start = async () => {
   });
 
   // Get guild specific nickname and avatar, and fallback to user name and avatar
-  const guildsReadInfo = await fetchGuildsUserAvatarAndNickname(authResponse);
+  const guildMember = await fetch(`/discord/api/users/@me/guilds/${discordSdk.guildId}/member`, {
+    method: 'get',
+    headers: {Authorization: `Bearer ${access_token}`},
+  })
+    .then((j) => j.json<IGuildsMembersRead>())
+    .catch(() => {
+      return null;
+    });
 
   // Done with discord-specific setup
 
@@ -71,7 +78,7 @@ export const start = async () => {
       ...authResponse.user,
       id: new URLSearchParams(window.location.search).get('user_id') ?? authResponse.user.id,
     },
-    ...guildsReadInfo,
+    guildMember,
   };
 
   authStore.setState({

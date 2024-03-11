@@ -1,5 +1,5 @@
 import type {CommandResponseTypes} from '@discord/embedded-app-sdk';
-export type TAuthenticatedContext = CommandResponseTypes['authenticate'] & IGuildsReadInfo;
+export type TAuthenticatedContext = CommandResponseTypes['authenticate'] & {guildMember: IGuildsMembersRead | null};
 
 export interface IGuildsMembersRead {
   roles: string[];
@@ -19,12 +19,6 @@ export interface IGuildsMembersRead {
   };
   mute: boolean;
   deaf: boolean;
-}
-
-export interface IGuildsReadInfo {
-  nick: string | null;
-  /** We're going to take the user info and user's guild info to get *something* for the user's avatar image */
-  avatarUri: string;
 }
 
 // TODO: Can we reuse the existing enum from the SDK package?

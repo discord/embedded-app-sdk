@@ -8,7 +8,7 @@ export interface IColyseus {
   room: Room<State>;
   client: Client;
 }
-export type TAuthenticatedContext = TAuthenticateResponse & IGuildsReadInfo & IColyseus;
+export type TAuthenticatedContext = TAuthenticateResponse & {guildMember: IGuildsMembersRead | null} & IColyseus;
 
 export interface IGuildsMembersRead {
   roles: string[];
@@ -28,10 +28,4 @@ export interface IGuildsMembersRead {
   };
   mute: boolean;
   deaf: boolean;
-}
-
-export interface IGuildsReadInfo {
-  nick: string | null;
-  /** We're going to take the user info and user's guild info to get either the user's guild avatar image, the user's image, or the user's default avatar in the right color  */
-  avatarUri: string;
 }
