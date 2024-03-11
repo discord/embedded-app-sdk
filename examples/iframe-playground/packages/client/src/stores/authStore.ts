@@ -14,6 +14,5 @@ export const authStore = create<TAuthenticatedContext>(() => ({
     icon: null,
     description: '',
   },
-  nick: '',
-  avatarUri: '',
+  guildMember: null,
 }));
