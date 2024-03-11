@@ -31,7 +31,8 @@
     "lint:ts": "tsc -b ./tsconfig-all.json",
     "lint": "pnpm eslint ./src",
     "lint:fix": "pnpm eslint --fix ./src ./examples/**/*.{ts,tsx}",
-    "prepare": "husky install && rollup --bundleConfigAsCjs -c rollup.config.mjs"
+    "prepare": "husky install && rollup --bundleConfigAsCjs -c rollup.config.mjs",
+    "sync": "zx ./scripts/syncRPCSchema.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
