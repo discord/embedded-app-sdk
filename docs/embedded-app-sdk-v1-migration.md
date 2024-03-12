@@ -113,14 +113,14 @@ Each activity is implemented differently, but migrating to embedded-app-sdk from
 5. Perform a basic test of key functionality.
 6. Profit from having type safety and the latest SDK updates from here on out!
 
-## IFrame Playground Example migration
+## SDK Playground Example migration
 
-As a real example, our `iframe-playground` example application migrated to @discord/embedded-app-sdk 1.0.0 from @discord/activity-iframe-sdk. This is a summary of all the changes required.
+As a real example, our `sdk-playground` example application migrated to @discord/embedded-app-sdk 1.0.0 from @discord/activity-iframe-sdk. This is a summary of all the changes required.
 
 ### Migrate subscribeToLayoutModeUpdatesCompat command to instead subscribe to the ACTIVITY_LAYOUT_MODE_UPDATE event
 
 ```diff
-examples/iframe-playground/packages/client/src/pages/LayoutMode.tsx
+examples/sdk-playground/packages/client/src/pages/LayoutMode.tsx
 - import {Common} from '@discord/activity-iframe-sdk';
 + import {Common, EventPayloadData} from '@discord/embedded-app-sdk';
 
@@ -138,7 +138,7 @@ examples/iframe-playground/packages/client/src/pages/LayoutMode.tsx
 ### Migrate event subscriptions to define event shape
 
 ```diff
-examples/iframe-playground/packages/client/src/pages/Instance.tsx
+examples/sdk-playground/packages/client/src/pages/Instance.tsx
 - import {Events, Types} from '@discord/activity-iframe-sdk';
 + import {Events, EventPayloadData} from '@discord/embedded-app-sdk';
 

@@ -1,4 +1,4 @@
-name: iframe playground production deploy
+name: sdk playground production deploy
 on:
   push:
     branches: [main]
@@ -25,13 +25,13 @@ jobs:
       # create env file
       - name: create env file
         run: |
-          cd examples/iframe-playground
+          cd examples/sdk-playground
           echo "${{ secrets.ENV_FILE }}" > .env.production
 
-      # build iframe playground client
-      - name: build iframe-playground client
+      # build sdk playground client
+      - name: build sdk-playground client
         run: |
-          cd examples/iframe-playground/packages/client
+          cd examples/sdk-playground/packages/client
           pnpm build
 
       # deploy client
@@ -40,8 +40,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          preCommands: cd examples/iframe-playground/packages/client
-          command: pages publish --project-name=iframe-playground dist
+          preCommands: cd examples/sdk-playground/packages/client
+          command: pages publish --project-name=sdk-playground dist
 
       # deploy server
       - name: deploy server
@@ -50,6 +50,6 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           preCommands: |
-            cd examples/iframe-playground/packages/server
+            cd examples/sdk-playground/packages/server
             ./handle-wrangler-secrets.sh production remote
           command: publish src/index.ts --env production

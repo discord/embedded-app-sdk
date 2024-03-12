@@ -30,7 +30,7 @@ export default function InAppPurchase() {
   const skuIsAvailable: (sku: Sku) => boolean = (sku: Sku) => {
     const apiSku = apiSkus.find((apiSku) => apiSku.id == sku.id);
     // apiSkus are fetched from server and filtered for availability in iapHandler
-    // (examples/iframe-playground/packages/server/src/handlers/iapHandler.ts)
+    // (examples/sdk-playground/packages/server/src/handlers/iapHandler.ts)
     // as a result, we can use the presence of the sku from API as proxy for availability
     return apiSku != null;
   };
