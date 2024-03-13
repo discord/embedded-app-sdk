@@ -9,6 +9,7 @@ import {LoadingScreen} from '../components/LoadingScreen';
 import {getUserAvatarUri} from '../utils/getUserAvatarUri';
 
 import type {IGuildsMembersRead, TAuthenticateResponse, TAuthenticatedContext} from '../types';
+import {getUserDisplayName} from '../utils/getUserDisplayName';
 
 const AuthenticatedContext = React.createContext<TAuthenticatedContext>({
   user: {
@@ -148,7 +149,10 @@ function useAuthenticatedContextSetup() {
 
       // Get the user's guild nickname. If none set, fall back to global_name, or username
       // Note - this name is note guaranteed to be unique
-      const name = guildMember?.nick ?? newAuth.user.global_name ?? newAuth.user.username;
+      const name = getUserDisplayName({
+        guildMember,
+        user: newAuth.user,
+      });
 
       // The second argument has to include for the room as well as the current player
       const newRoom = await client.joinOrCreate<State>(GAME_NAME, {

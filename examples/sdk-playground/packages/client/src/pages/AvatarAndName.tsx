@@ -4,6 +4,7 @@ import ReactJsonView from '../components/ReactJsonView';
 import {DiscordAPI, RequestType} from '../DiscordAPI';
 import {authStore} from '../stores/authStore';
 import {getUserAvatarUri} from '../utils/getUserAvatarUri';
+import {getUserDisplayName} from '../utils/getUserDisplayName';
 
 interface GuildsMembersRead {
   roles: string[];
@@ -68,7 +69,7 @@ export default function AvatarAndName() {
 
   // Get the user's guild nickname. If none set, fall back to global_name, or username
   // Note - this name is note guaranteed to be unique
-  const name = guildMember?.nick ?? auth.user.global_name ?? auth.user.username;
+  const name = getUserDisplayName({guildMember, user: auth.user});
 
   return (
     <div style={{padding: 32, overflowX: 'auto'}}>
