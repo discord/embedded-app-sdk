@@ -8,6 +8,14 @@
 
 Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time website inside of Discord's UI via an embedded iframe.
 
+Read more about building Discord Activities with the Embedded App SDK on [https://activities-preview.pages.dev/developers/docs/activities/overview](https://discord.com/developers/docs/activities/overview).
+
+## Resources
+
+- **[Embedded App SDK Docs](https://activities-preview.pages.dev/developers/docs/developer-tools/embedded-app-sdk)** - Get familiar with the Embedded App SDK
+- **[Activity Examples](/examples/)** - Explore examples of Discord Activities
+- **[Technical chat on Discord](https://discord.com/invite/discord-developers)** - Join us and other devs at DDevs at `#activities-dev-help`
+
 ## Installing this package
 
 TODO - remove `github:` prefix once public npm package is available
