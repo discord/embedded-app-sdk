@@ -2,10 +2,8 @@ import * as React from 'react';
 import discordSdk from '../discordSdk';
 import {EventPayloadData} from '@discord/embedded-app-sdk';
 import {getUserDisplayName} from '../utils/getUserDisplayName';
-import {authStore} from '../stores/authStore';
 
 export default function ActivityParticipants() {
-  const auth = authStore.getState();
   const [participants, setParticipants] = React.useState<
     EventPayloadData<'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE'>['participants']
   >([]);
@@ -56,7 +54,7 @@ export default function ActivityParticipants() {
         {participants.map((user) => {
           return (
             <React.Fragment key={user.id}>
-              <div>{getUserDisplayName({guildMember: auth.guildMember, user: auth.user})}</div>
+              <div>{getUserDisplayName({guildMember: null, user})}</div>
               <div>{speakingParticipants.some((s) => s === user.id) ? 'Speaking' : 'Not Speaking'}</div>
             </React.Fragment>
           );
