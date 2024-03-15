@@ -4,9 +4,9 @@
   <img src="/assets/discord-embedded-apps.svg" alt="Discord Embedded App SDK" />
 <p>
 
-### @discord/embedded-app-sdk enables you to build rich, multiplayer experiences inside Discord.
+### The Embedded App SDK enables you to build rich, multiplayer experiences inside Discord.
 
-Whether launched via Discord's web app, desktop app, iOS, or Android, `@discord/embedded-app-sdk` provides a unified API that enables your application to integrate a real-time website inside of Discord's UI via an embedded iframe.
+Activities are multiplayer games and social experiences in Discord. An Activity is a web application hosted in an iframe that can run within the Discord client on desktop, web, or mobile. The Embedded App SDK handles the communication between Discord and your iframed application.
 
 Read more about building Discord Activities with the Embedded App SDK on [https://activities-preview.pages.dev/developers/docs/activities/overview](https://discord.com/developers/docs/activities/overview).
 
