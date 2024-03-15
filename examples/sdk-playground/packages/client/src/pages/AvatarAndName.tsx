@@ -3,7 +3,7 @@ import discordSdk from '../discordSdk';
 import ReactJsonView from '../components/ReactJsonView';
 import {DiscordAPI, RequestType} from '../DiscordAPI';
 import {authStore} from '../stores/authStore';
-import {getUserAvatarUri} from '../utils/getUserAvatarUri';
+import {getUserAvatarUrl} from '../utils/getUserAvatarUrl';
 import {getUserDisplayName} from '../utils/getUserDisplayName';
 
 interface GuildsMembersRead {
@@ -50,21 +50,17 @@ export default function AvatarAndName() {
   // Note: instead of doing this here, your app's server could retrieve this
   // data by using the user's OAuth token
 
-  const userAvatarUri = getUserAvatarUri({
-    userId: auth.user.id,
-    avatarHash: auth.user.avatar,
-    guildId: discordSdk.guildId,
-    guildAvatarHash: auth.guildMember?.avatar,
+  const userAvatarUrl = getUserAvatarUrl({
+    guildMember: null,
+    user: auth.user,
   });
 
-  // Get the user's guild-specific avatar uri
+  // Get the user's guild-specific avatar url
   // If none, fall back to the user profile avatar
   // If no main avatar, use a default avatar
-  const guildAvatarSrc = getUserAvatarUri({
-    userId: auth.user.id,
-    avatarHash: auth.user.avatar,
-    guildId: discordSdk.guildId,
-    guildAvatarHash: guildMember?.avatar,
+  const guildAvatarUrl = getUserAvatarUrl({
+    guildMember,
+    user: auth.user,
   });
 
   // Get the user's guild nickname. If none set, fall back to global_name, or username
@@ -93,8 +89,8 @@ export default function AvatarAndName() {
         <br />
         <div>
           <p>User avatar, global name, and username</p>
-          <img alt="avatar" src={userAvatarUri} />
-          <p>User Avatar url: "{userAvatarUri}"</p>
+          <img alt="avatar" src={userAvatarUrl} />
+          <p>User Avatar url: "{userAvatarUrl}"</p>
           <p>Global Name: "{auth.user.global_name}"</p>
           <p>Unique username: "{auth.user.username}"</p>
         </div>
@@ -106,8 +102,8 @@ export default function AvatarAndName() {
             <p>...loading</p>
           ) : (
             <>
-              <img alt="avatar" src={guildAvatarSrc} />
-              <p>Guild Member Avatar url: "{guildAvatarSrc}"</p>
+              <img alt="avatar" src={guildAvatarUrl} />
+              <p>Guild Member Avatar url: "{guildAvatarUrl}"</p>
               <p>Guild nickname: "{name}"</p>
             </>
           )}
