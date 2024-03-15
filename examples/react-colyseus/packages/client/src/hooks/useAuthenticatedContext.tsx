@@ -6,7 +6,7 @@ import {GAME_NAME} from '../../../server/src/shared/Constants';
 
 import {discordSdk} from '../discordSdk';
 import {LoadingScreen} from '../components/LoadingScreen';
-import {getUserAvatarUri} from '../utils/getUserAvatarUri';
+import {getUserAvatarUrl} from '../utils/getUserAvatarUrl';
 
 import type {IGuildsMembersRead, TAuthenticateResponse, TAuthenticatedContext} from '../types';
 import {getUserDisplayName} from '../utils/getUserDisplayName';
@@ -140,11 +140,9 @@ function useAuthenticatedContextSetup() {
       // Get the user's guild-specific avatar uri
       // If none, fall back to the user profile avatar
       // If no main avatar, use a default avatar
-      const avatarUri = getUserAvatarUri({
-        userId: newAuth.user.id,
-        avatarHash: newAuth.user.avatar,
-        guildId: discordSdk.guildId,
-        guildAvatarHash: guildMember?.avatar,
+      const avatarUri = getUserAvatarUrl({
+        guildMember,
+        user: newAuth.user,
       });
 
       // Get the user's guild nickname. If none set, fall back to global_name, or username
