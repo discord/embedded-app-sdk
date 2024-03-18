@@ -2,7 +2,7 @@
 
 We have two example projects, which can be used to test the latest SDK release, as well as new changes to the SDK.
 
-- [discord-application-starter](/examples/discord-application-starter) is a minimal application example
+- [discord-activity-starter](/examples/discord-activity-starter) is a minimal application example
 - [sdk-playground](/examples/sdk-playground) is a playground for testing any SDK functionality
 
 These projects consume this repo's root `@discord/embedded-app-sdk` directly via [pnpm workspaces](https://pnpm.io/workspaces)
