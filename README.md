@@ -18,10 +18,8 @@ Read more about building Discord Activities with the Embedded App SDK on [https:
 
 ## Installing this package
 
-TODO - remove `github:` prefix once public npm package is available
-
 ```shell
-npm install github:@discord/embedded-app-sdk
+npm install @discord/embedded-app-sdk
 ```
 
 ## Usage
