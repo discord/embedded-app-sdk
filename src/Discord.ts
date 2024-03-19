@@ -47,8 +47,8 @@ export class DiscordSDK implements IDiscordSDK {
   readonly guildId: string | null;
   readonly channelId: string | null;
   readonly configuration: SdkConfiguration;
+  readonly frameId: string;
 
-  private frameId: string;
   private eventBus = new EventEmitter();
   private source: Window | WindowProxy | null = null;
   private sourceOrigin: string = '';
