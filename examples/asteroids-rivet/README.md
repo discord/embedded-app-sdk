@@ -52,7 +52,7 @@ Deploy Succeeded https://asteroids-xxx.rivet.game/
 
 Using the URL of the successfully deployed game, you can update your activity's URL mappings to match like so:
 
-![Screenshot of the configured URL mappings](/assets/rivet-url-mappings.gif)
+![Screenshot of the configured URL mappings](/assets/rivet-url-mappings.png)
 
 **Important:** The other URL bindings are required for API requests to Rivet.
 
@@ -60,4 +60,4 @@ Using the URL of the successfully deployed game, you can update your activity's 
 
 Finally, you can follow the guide [here](https://discord.com/developers/docs/activities/building-an-activity#enable-developer-mode-in-your-client) on getting the activity running in Discord.
 
-![Screenshot of the Rivet Asteroids demo](/assets/rivet-asteroids.gif)
+![Screenshot of the Rivet Asteroids demo](/assets/rivet-asteroids.png)
