@@ -1,6 +1,6 @@
 # Rivet Asteroids Example
 
-This repo contains an example of a fully multiplayer game running as a Discord activity via [Rivet](rivet.gg)'s gaming infrastructure that you can get running in two commands.
+This repo contains an example of a fully multiplayer game running as a Discord activity via [Rivet](rivet.gg)'s gaming infrastructure that lets you host your game in just two commands.
 
 ## Client architecture
 
@@ -17,7 +17,7 @@ Before we write any code, lets follow the instructions [here](https://discord.co
 
 ## Setting up your environment variables
 
-In this directory (`/examples/discord-activity-starter`) we need to create a `.env` file with the OAuth2 variables, as described [here](https://discord.com/developers/docs/activities/building-an-activity#find-your-oauth2-credentials).
+In this directory (`/examples/asteroids-rivet`) we need to create a `.env` file with the OAuth2 variables, as described [here](https://discord.com/developers/docs/activities/building-an-activity#find-your-oauth2-credentials).
 
 ```env
 DISCORD_CLIENT_ID=123456789012345678
