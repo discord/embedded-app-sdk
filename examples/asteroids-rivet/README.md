@@ -1,6 +1,6 @@
 # Rivet Asteroids Example
 
-This repo contains an example of a fully multiplayer game running as a Discord activity via [Rivet](rivet.gg)'s gaming infrastructure that lets you host your game in just two commands.
+This repo contains an example of a fully multiplayer game running as a Discord activity via [Rivet](https://rivet.gg/)'s gaming infrastructure that lets you host your game in just two commands.
 
 ## Client architecture
 
