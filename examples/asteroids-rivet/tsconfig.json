@@ -3,12 +3,13 @@
         "target": "ES2018",
         "module": "CommonJS",
         "moduleResolution": "Node",
+        "esModuleInterop": true,
         "lib": ["ES6", "DOM"],
         "outDir": "dist/",
         "strictNullChecks": true,
         "paths": {
             "@shared/*": ["./shared/*"],
-            "@display/*": ["./client/display/*"],
+            "@display/*": ["./client/display/*"]
         }
     },
     "include": ["server/**/*.ts", "client/**/*.ts", "shared/**/*.ts"],
