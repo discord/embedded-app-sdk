@@ -54,7 +54,12 @@ Using the URL of the successfully deployed game, you can update your activity's 
 
 ![Screenshot of the configured URL mappings](/assets/rivet-url-mappings.png)
 
-**Important:** The other URL bindings are required for API requests to Rivet.
+-   **Important:** The other URL bindings are required for API requests to Rivet.
+-   More regions can be added by updating the `rivet.yaml` file and adding a new URL mapping in the config.
+    Note that this will not be required once
+    [this support request](https://discord.com/channels/613425648685547541/1219417813438173184) is resolved;
+    you will only need one URL mapping for lobby connections:
+    `/ws/{region}/{lobby} -> {lobby}.lobby.{region}.rivet.run`
 
 ### Playing Asteroids
 

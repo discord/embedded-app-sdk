@@ -3,6 +3,9 @@ engine:
 matchmaker:
   max_players: 32
   tier: "basic-1d2"
+  regions:
+    lax: {}
+    fra: {}
   game_modes:
     default:
       taggable: true      
