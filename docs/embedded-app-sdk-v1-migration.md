@@ -44,7 +44,7 @@ discordSdk.subscribe('SPEAKING_START', handleStartTalking, {channel_id: discordS
 If you're using `initializeNetworkShims` in your activity, you will need to migrate it to the new API `patchUrlMappings`. It's the same in spirit, but it has a few differences:
 
 - We have renamed `initializeNetworkShims` to `patchUrlMappings`
-- `patchUrlMappings` is now exported as a utility separate from the SDK. This allows you to initialize shims as soon as possible, seperate from SDK initialization
+- `patchUrlMappings` is now exported as a utility separate from the SDK. This allows you to initialize shims as soon as possible, separate from SDK initialization
 - `patchUrlMappings` now includes new functionality that can update html `src` attributes to adjust to your url mappings.
 - `patchUrlMappings` now includes a second argument where you can set specific configuration for each "shim". See usage in the example below
 
