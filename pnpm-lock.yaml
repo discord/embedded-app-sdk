@@ -84,6 +84,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^4.6.0
         version: 4.6.0(eslint@7.32.0)
+      eslint-plugin-ssr-friendly:
+        specifier: ^1.3.0
+        version: 1.3.0(eslint@7.32.0)
       husky:
         specifier: ^7.0.2
         version: 7.0.4
@@ -7371,6 +7374,15 @@ packages:
       semver: 6.3.1
       string.prototype.matchall: 4.0.10
     dev: false
+
+  /eslint-plugin-ssr-friendly@1.3.0(eslint@7.32.0):
+    resolution: {integrity: sha512-VOYl9OgK9mSVWxwl3pSTzNmBUMhPYjDGmxgyjSM9Agdve4GHjn0gAcCG/seg1taaW/aBWTkb7Aw4GIBsxVhL9Q==}
+    peerDependencies:
+      eslint: '>=0.8.0'
+    dependencies:
+      eslint: 7.32.0
+      globals: 13.24.0
+    dev: true
 
   /eslint-plugin-testing-library@5.11.1(eslint@8.55.0)(typescript@5.2.2):
     resolution: {integrity: sha512-5eX9e1Kc2PqVRed3taaLnAAqPZGEX75C+M/rXzUAI3wIg/ZxzUm1OVAwfe/O+vE+6YXOLetSe9g5GKD2ecXipw==}

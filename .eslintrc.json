@@ -107,6 +107,11 @@
         "import/export": "off",
         "import/named": "off"
       }
+    },
+    {
+      "files": "src/**/*.ts",
+      "plugins": ["ssr-friendly"],
+      "extends": ["plugin:ssr-friendly/recommended"]
     }
   ]
 }

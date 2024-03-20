@@ -19,19 +19,25 @@ enum Opcodes {
   HELLO = 3,
 }
 
-const ALLOWED_ORIGINS = new Set([
-  window.location.origin,
-  'https://discord.com',
-  'https://discordapp.com',
-  'https://ptb.discord.com',
-  'https://ptb.discordapp.com',
-  'https://canary.discord.com',
-  'https://canary.discordapp.com',
-  'https://staging.discord.co',
-  'http://localhost:3333',
-  'https://pax.discord.com',
-  'null',
-]);
+const ALLOWED_ORIGINS = new Set(getAllowedOrigins());
+
+function getAllowedOrigins(): string[] {
+  if (typeof window === 'undefined') return [];
+
+  return [
+    window.location.origin,
+    'https://discord.com',
+    'https://discordapp.com',
+    'https://ptb.discord.com',
+    'https://ptb.discordapp.com',
+    'https://canary.discord.com',
+    'https://canary.discordapp.com',
+    'https://staging.discord.co',
+    'http://localhost:3333',
+    'https://pax.discord.com',
+    'null',
+  ];
+}
 
 /**
  * The embedded application is running in an IFrame either within the main Discord client window or in a popout. The RPC server is always running in the main Discord client window. In either case, the referrer is the correct origin.
@@ -89,10 +95,17 @@ export class DiscordSDK implements IDiscordSDK {
     this.clientId = clientId;
     this.configuration = configuration ?? getDefaultSdkConfiguration();
 
-    window.addEventListener('message', this.handleMessage);
+    if (typeof window === 'undefined') {
+      this.frameId = '';
+      this.instanceId = '';
+      this.platform = Platform.DESKTOP;
+      this.guildId = null;
+      this.channelId = null;
+      return;
+    }
 
     // START Capture URL Query Params
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(this._getSearch());
 
     const frameId = urlParams.get('frame_id');
     if (!frameId) {
@@ -287,5 +300,8 @@ export class DiscordSDK implements IDiscordSDK {
       this.pendingCommands.get(parsed.nonce)?.resolve(parsed);
       this.pendingCommands.delete(parsed.nonce);
     }
+  }
+  _getSearch() {
+    return typeof window === 'undefined' ? '' : window.location.search;
   }
 }
