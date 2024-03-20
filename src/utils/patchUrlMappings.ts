@@ -20,6 +20,9 @@ export function patchUrlMappings(
   mappings: Mapping[],
   {patchFetch = true, patchWebSocket = true, patchXhr = true, patchSrcAttributes = false}: PatchUrlMappingsConfig = {}
 ) {
+  // Bail out if we're not in a browser
+  if (typeof window === 'undefined') return;
+
   if (patchFetch) {
     const fetchImpl = window.fetch;
     // fetch is a duplex, but this is consistent
