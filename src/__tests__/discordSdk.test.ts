@@ -5,16 +5,6 @@ import {Opcodes} from '../Discord';
 import {DiscordSDK, Events, Platform} from '../index';
 import {DISPATCH} from '../schema/common';
 
-let windowSpy: jest.SpyInstance<Window & typeof globalThis, []>;
-
-beforeEach(() => {
-  windowSpy = jest.spyOn(window, 'window', 'get');
-});
-
-afterEach(() => {
-  windowSpy.mockRestore();
-});
-
 describe('DiscordSDK', () => {
   it('Can be constructed and await a "ready" event', async () => {
     const frame_id = '1234';
