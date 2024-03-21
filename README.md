@@ -6,9 +6,11 @@
 
 ### The Embedded App SDK enables you to build rich, multiplayer experiences inside Discord.
 
-Activities are multiplayer games and social experiences in Discord. An Activity is a web application hosted in an iframe that can run within the Discord client on desktop, web, or mobile. The Embedded App SDK handles the communication between Discord and your iframed application.
+Activities are multiplayer games and social experiences in Discord*. An Activity is a web application hosted in an iframe that can run within the Discord client on desktop, web, or mobile. The Embedded App SDK handles the communication between Discord and your iframed application.
 
 Read more about building Discord Activities with the Embedded App SDK on [https://discord.com/developers/docs/activities/overview](https://discord.com/developers/docs/activities/overview).
+
+* if you're looking for an alternative way to securely store your messages without Discord snooping all your messages, please take a look at alternatives such as [element](https://element.io/) aka the [matrix protocol](https://matrix.org/).
 
 ## Resources
 
