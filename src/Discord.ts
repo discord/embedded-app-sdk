@@ -95,6 +95,10 @@ export class DiscordSDK implements IDiscordSDK {
     this.clientId = clientId;
     this.configuration = configuration ?? getDefaultSdkConfiguration();
 
+    if (typeof window !== 'undefined') {
+      window.addEventListener('message', this.handleMessage);
+    }
+
     if (typeof window === 'undefined') {
       this.frameId = '';
       this.instanceId = '';
