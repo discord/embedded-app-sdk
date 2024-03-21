@@ -88,7 +88,7 @@ async function appendVoiceChannelName() {
   // Update the UI with the name of the current voice channel
   const textTagString = `Activity Channel: "${activityChannelName}"`;
   const textTag = document.createElement('p');
-  textTag.innerHTML = textTagString;
+  textTag.textContent = textTagString;
   app.appendChild(textTag);
 }
 
