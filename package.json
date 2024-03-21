@@ -25,6 +25,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:dev": "jest --watch",
     "test:all": "pnpm test -r",
     "dev": "pnpm build --watch",
     "build": "pnpm run prepare",
