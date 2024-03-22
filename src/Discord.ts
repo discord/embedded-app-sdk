@@ -12,7 +12,7 @@ import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
 
-enum Opcodes {
+export enum Opcodes {
   HANDSHAKE = 0,
   FRAME = 1,
   CLOSE = 2,
