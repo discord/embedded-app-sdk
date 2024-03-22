@@ -85,6 +85,5 @@ describe('DiscordSDK', () => {
 
     // Verify "READY" event resolves
     await discordSdk.ready();
-    expect(true).toBe(true);
   });
 });
