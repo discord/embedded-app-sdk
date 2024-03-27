@@ -53,11 +53,11 @@ export class DiscordSDK implements IDiscordSDK {
   readonly guildId: string | null;
   readonly channelId: string | null;
   readonly configuration: SdkConfiguration;
+  readonly source: Window | WindowProxy | null = null;
+  readonly sourceOrigin: string = '';
 
   private frameId: string;
   private eventBus = new EventEmitter();
-  private source: Window | WindowProxy | null = null;
-  private sourceOrigin: string = '';
   private isReady: boolean;
   private pendingCommands: Map<
     string,

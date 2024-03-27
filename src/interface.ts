@@ -29,6 +29,8 @@ export interface IDiscordSDK {
   readonly configuration: SdkConfiguration;
   readonly channelId: string | null;
   readonly guildId: string | null;
+  readonly source: Window | WindowProxy | null;
+  readonly sourceOrigin: string;
 
   close(code: RPCCloseCodes, message: string): void;
   subscribe<K extends keyof typeof EventSchema>(
