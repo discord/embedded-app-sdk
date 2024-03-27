@@ -227,6 +227,13 @@ describe('matchAndRewriteURL', () => {
           target,
           result: 'https://123456789012345678.discordsays.com/path/to/files/a.b/c.html',
         },
+        {
+          originalURL: new URL('https://domain.com/file/scene.bundle'),
+          prefixHost,
+          prefix: '/',
+          target,
+          result: 'https://123456789012345678.discordsays.com/file/scene.bundle',
+        },
       ];
 
       for (const {result, ...rest} of TEST_CASES) {
