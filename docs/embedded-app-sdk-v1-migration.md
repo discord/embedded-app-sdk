@@ -106,7 +106,9 @@ The following were removed or modified:
 Each activity is implemented differently, but migrating to embedded-app-sdk from activity-iframe-sdk should be straightforward with the use of typescript. Here is a simple outline of how we expect the migration should occur.
 
 0. If you are upgrading from `activity-iframe-sdk` v1, please review and implement the [activity-iframe-sdk v2 migration guide](/docs/activity-iframe-sdk-v2-migration.md) before following these steps.
-1. Upgrade to 1.0.0 by updating `package.json` and installing (eg `npm install @discord/embedded-app-sdk`).
+1. Upgrade by uninstalling the old package and installing the new.
+  - `npm uninstall @discord-external/activity-iframe-sdk`
+  - `npm install @discord/embedded-app-sdk`
 2. Remove any code related to installing a private github package. This will most likely look like removing a `.npmrc` file or other references to `npm.pkg.github.com`
 3. Run typescript (`tsc`) and observe errors. Most of the errors will be related to usage of `subscribe`, or usage of removed commands and events, as expected.
 4. Fix typescript errors. We expect most of not all typescript errors will be related to `subscribe`. The type `EventPayloadData<'YOUR_EVENT'>` will be your biggest helper here. Remove usage of unsupported events and command, and migrate as necessary, per recommandations [above](#removing-unused-commands-and-events)
