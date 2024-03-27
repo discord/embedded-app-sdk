@@ -14,6 +14,9 @@ export class DiscordSDKMock implements IDiscordSDK {
   readonly platform = Platform.DESKTOP;
   readonly instanceId = '123456789012345678';
   readonly configuration = getDefaultSdkConfiguration();
+  readonly source: Window | WindowProxy | null = null;
+  readonly sourceOrigin: string = '';
+
   private frameId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
   private eventBus = new EventEmitter();
   public commands: IDiscordSDK['commands'];
