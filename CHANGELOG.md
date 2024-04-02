@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/discord/embedded-app-sdk/compare/v1.1.0...v1.1.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* remove unused frameId from mock ([#75](https://github.com/discord/embedded-app-sdk/issues/75)) ([facc2f3](https://github.com/discord/embedded-app-sdk/commit/facc2f3f96f6f56191d8f7311b6057f04eb8e02a))
+
 ## [1.1.0](https://github.com/discord/embedded-app-sdk/compare/v1.0.0...v1.1.0) (2024-04-01)
 
 
