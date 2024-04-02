@@ -1,4 +1,4 @@
-name: Package Publish
+name: NPM Package Publish
 
 on:
   release:
@@ -23,10 +23,6 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm build
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ github.token }}
-          registry: https://npm.pkg.github.com
       - id: 'secrets'
         uses: 'google-github-actions/get-secretmanager-secrets@v1'
         with:
