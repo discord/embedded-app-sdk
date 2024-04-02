@@ -3,6 +3,7 @@ name: NPM Package Publish
 on:
   release:
     types: [created]
+  workflow_dispatch:
 
 jobs:
   publish:
