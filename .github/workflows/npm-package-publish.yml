@@ -1,4 +1,4 @@
-name: Github Publish
+name: NPM Package Publish
 
 on:
   release:
@@ -7,6 +7,9 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,7 +23,11 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm build
-      - uses: JS-DevTools/npm-publish@v1
+      - id: 'secrets'
+        uses: 'google-github-actions/get-secretmanager-secrets@v1'
         with:
-          token: ${{ github.token }}
-          registry: https://npm.pkg.github.com
+          secrets: |-
+            NPM_TOKEN:discord-app-city-prd/embedded-app-sdk-npm-token
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.NPM_TOKEN }}
