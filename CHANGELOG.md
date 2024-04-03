@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/discord/embedded-app-sdk/compare/v1.1.3...v1.1.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* add back mock frame id ([#91](https://github.com/discord/embedded-app-sdk/issues/91)) ([81315eb](https://github.com/discord/embedded-app-sdk/commit/81315eb7e8f5f1577d51cd543c4c925e8d0406ad))
+
 ## [1.1.3](https://github.com/discord/embedded-app-sdk/compare/v1.1.2...v1.1.3) (2024-04-03)
 
 
