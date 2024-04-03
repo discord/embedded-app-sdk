@@ -34,6 +34,7 @@ jobs:
         with:
           secrets: |-
             NPM_TOKEN:discord-app-city-prd/embedded-app-sdk-deploy-token
-      - run: npm publish --access public
+      - name: Publish 🚀
+        run: pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.NPM_TOKEN }}
