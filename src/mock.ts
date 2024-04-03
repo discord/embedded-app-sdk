@@ -17,7 +17,6 @@ export class DiscordSDKMock implements IDiscordSDK {
   readonly source: Window | WindowProxy | null = null;
   readonly sourceOrigin: string = '';
 
-  private frameId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
   private eventBus = new EventEmitter();
   public commands: IDiscordSDK['commands'];
   readonly guildId: string | null;
