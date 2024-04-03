@@ -28,7 +28,7 @@ jobs:
         uses: 'google-github-actions/get-secretmanager-secrets@v1'
         with:
           secrets: |-
-            NPM_TOKEN:discord-app-city-prd/embedded-app-sdk-npm-token
+            NPM_TOKEN:discord-app-city-prd/embedded-app-sdk-deploy-token
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.NPM_TOKEN }}
