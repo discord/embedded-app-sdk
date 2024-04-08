@@ -59,7 +59,7 @@ export function matchAndRewriteURL({originalURL, prefix, prefixHost, target}: Ma
 export function absoluteURL(
   url: string,
   protocol: string = window.location.protocol,
-  host: string = window.location.host
+  host: string = window.location.host,
 ): URL {
   // If the first arg is a complete url, it will ignore the second arg
   // This call structure lets us set relative urls to have a full url with the proper protocol and host

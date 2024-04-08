@@ -85,7 +85,7 @@ export const ActivityJoinIntentObject = {
 } as const;
 
 export function parseEventPayload<K extends keyof typeof EventSchema = keyof typeof EventSchema>(
-  data: zod.infer<typeof EventFrame>
+  data: zod.infer<typeof EventFrame>,
 ): zod.infer<(typeof EventSchema)[K]['payload']> {
   const event = data.evt;
   if (!(event in Events)) {

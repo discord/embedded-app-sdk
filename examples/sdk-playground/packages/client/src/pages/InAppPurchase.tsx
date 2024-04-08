@@ -64,7 +64,7 @@ export default function InAppPurchase() {
   const getEntitlements = React.useCallback(async () => {
     setEntitlements([]);
     const entitlementsResp = await fetch(
-      `/api/iap/${applicationId}/entitlements/${user.id}?show_test=${showTestModeEntitlements ? 1 : 0}`
+      `/api/iap/${applicationId}/entitlements/${user.id}?show_test=${showTestModeEntitlements ? 1 : 0}`,
     );
     const entitlementsJSON = await entitlementsResp.json<{entitlements: Entitlement[]}>();
     setEntitlements(entitlementsJSON.entitlements);

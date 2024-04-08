@@ -40,7 +40,7 @@ async function uploadImageAttachment(imageURL: string): Promise<string> {
       body,
       stringifyBody: false,
     },
-    auth.access_token
+    auth.access_token,
   );
   return resp.attachment.url;
 }

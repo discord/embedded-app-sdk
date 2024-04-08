@@ -11,7 +11,7 @@ import {TSendCommand} from '../schema/types';
 export default function compatCommandFactory<
   Args extends any,
   FallbackArgs extends any,
-  Response extends zod.ZodTypeAny
+  Response extends zod.ZodTypeAny,
 >({
   sendCommand,
   cmd,

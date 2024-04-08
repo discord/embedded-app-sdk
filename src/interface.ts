@@ -15,11 +15,8 @@ export interface SdkConfiguration {
   readonly disableConsoleLogOverride: boolean;
 }
 
-export type MaybeZodObjectArray<T extends EventArgs> = T['subscribeArgs'] extends NonNullable<
-  EventArgs['subscribeArgs']
->
-  ? [zod.infer<T['subscribeArgs']>]
-  : [undefined?];
+export type MaybeZodObjectArray<T extends EventArgs> =
+  T['subscribeArgs'] extends NonNullable<EventArgs['subscribeArgs']> ? [zod.infer<T['subscribeArgs']>] : [undefined?];
 
 export interface IDiscordSDK {
   readonly clientId: string;

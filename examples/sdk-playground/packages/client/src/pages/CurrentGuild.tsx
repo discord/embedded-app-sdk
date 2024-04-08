@@ -24,7 +24,7 @@ export default function CurrentGuild() {
       }
       const guilds = await DiscordAPI.request<Guild[]>(
         {method: RequestType.GET, endpoint: `/users/@me/guilds`},
-        auth.access_token
+        auth.access_token,
       );
       const newGuild = guilds.find(({id}) => id === guildId) ?? null;
       setGuild(newGuild);

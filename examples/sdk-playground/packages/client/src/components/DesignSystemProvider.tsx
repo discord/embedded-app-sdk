@@ -117,7 +117,7 @@ export default function DesignSystemProvider({
         }
       }
     },
-    [storageKey]
+    [storageKey],
   );
 
   const handleMediaQuery = React.useCallback(
@@ -126,7 +126,7 @@ export default function DesignSystemProvider({
       setResolvedTheme(systemTheme);
       if (theme === 'system') changeTheme(systemTheme, false);
     },
-    [changeTheme, theme]
+    [changeTheme, theme],
   );
 
   // Ref hack to avoid adding handleMediaQuery as a dep
@@ -151,7 +151,7 @@ export default function DesignSystemProvider({
       changeTheme(newTheme);
       setThemeState(newTheme);
     },
-    [changeTheme]
+    [changeTheme],
   );
 
   // localStorage event handling
@@ -178,9 +178,9 @@ export default function DesignSystemProvider({
       theme && colorSchemes.includes(theme)
         ? theme
         : // If theme is system, use the resolved version
-        theme === 'system'
-        ? resolvedTheme || null
-        : null;
+          theme === 'system'
+          ? resolvedTheme || null
+          : null;
 
     // color-scheme tells browser how to render built-in elements like forms, scrollbars, etc.
     // if color-scheme is null, this will remove the property

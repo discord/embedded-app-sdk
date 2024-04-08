@@ -128,7 +128,7 @@ export class DiscordSDK implements IDiscordSDK {
       throw new Error('platform query param is not defined');
     } else if (platform !== Platform.DESKTOP && platform !== Platform.MOBILE) {
       throw new Error(
-        `Invalid query param "platform" of "${platform}". Valid values are "${Platform.DESKTOP}" or "${Platform.MOBILE}"`
+        `Invalid query param "platform" of "${platform}". Valid values are "${Platform.DESKTOP}" or "${Platform.MOBILE}"`,
       );
     }
     this.platform = platform;
@@ -206,7 +206,7 @@ export class DiscordSDK implements IDiscordSDK {
           frame_id: this.frameId,
         },
       ],
-      this.sourceOrigin
+      this.sourceOrigin,
     );
   }
 

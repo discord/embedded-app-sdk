@@ -33,7 +33,7 @@ export const IncomingPayload = zod
   .passthrough();
 
 export function parseIncomingPayload<K extends keyof typeof Events.EventSchema = keyof typeof Events.EventSchema>(
-  payload: zod.infer<typeof IncomingPayload>
+  payload: zod.infer<typeof IncomingPayload>,
 ):
   | zod.infer<(typeof Events.EventSchema)[K]['payload']>
   | zod.infer<typeof Responses.ResponseFrame>

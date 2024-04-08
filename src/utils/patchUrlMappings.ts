@@ -18,7 +18,7 @@ interface PatchUrlMappingsConfig {
 
 export function patchUrlMappings(
   mappings: Mapping[],
-  {patchFetch = true, patchWebSocket = true, patchXhr = true, patchSrcAttributes = false}: PatchUrlMappingsConfig = {}
+  {patchFetch = true, patchWebSocket = true, patchXhr = true, patchSrcAttributes = false}: PatchUrlMappingsConfig = {},
 ) {
   // Bail out if we're not in a browser
   if (typeof window === 'undefined') return;
@@ -81,7 +81,7 @@ export function patchUrlMappings(
       url: string,
       async: boolean,
       username?: string | null,
-      password?: string | null
+      password?: string | null,
     ) {
       const remapped = attemptRemap({url: absoluteURL(url), mappings});
       openImpl.apply(this, [method, remapped, async, username, password]);

@@ -20,13 +20,16 @@ interface UnhandledObject {
  * @param inputObject This object must include the key/value pair UNHANDLED = -1
  */
 export function zodCoerceUnhandledValue<T extends UnhandledObject>(inputObject: T) {
-  return zod.preprocess((arg: any) => {
-    const [objectKey] = Object.entries(inputObject).find(([, value]) => value === arg) ?? [];
-    if (arg != null && objectKey === undefined) {
-      return inputObject.UNHANDLED;
-    }
-    return arg as ValueOf<T>;
-  }, zod.string().or(zod.number()) as unknown as zod.ZodType<ValueOf<T>>);
+  return zod.preprocess(
+    (arg: any) => {
+      const [objectKey] = Object.entries(inputObject).find(([, value]) => value === arg) ?? [];
+      if (arg != null && objectKey === undefined) {
+        return inputObject.UNHANDLED;
+      }
+      return arg as ValueOf<T>;
+    },
+    zod.string().or(zod.number()) as unknown as zod.ZodType<ValueOf<T>>,
+  );
 }
 
 export interface ZodEffectOverlayType<T extends ZodTypeAny> extends zod.ZodEffects<T> {

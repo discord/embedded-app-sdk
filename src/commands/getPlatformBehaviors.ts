@@ -14,5 +14,5 @@ export const getPlatformBehaviors = (sendCommand: TSendCommand) =>
   commandFactory<void, typeof GetPlatformBehaviorsResponse>(
     sendCommand,
     Commands.GET_PLATFORM_BEHAVIORS,
-    GetPlatformBehaviorsResponse
+    GetPlatformBehaviorsResponse,
   );

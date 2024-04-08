@@ -10,5 +10,5 @@ export const getEntitlements = (sendCommand: TSendCommand) =>
   commandFactory<void, typeof GetEntitlementsResponse>(
     sendCommand,
     Commands.GET_ENTITLEMENTS_EMBEDDED,
-    GetEntitlementsResponse
+    GetEntitlementsResponse,
   );

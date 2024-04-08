@@ -28,7 +28,7 @@ export default function Guilds() {
         method: RequestType.GET,
         endpoint: '/users/@me/guilds',
       },
-      auth.access_token
+      auth.access_token,
     )
       .then((val) => {
         setGuilds(val);

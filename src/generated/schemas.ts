@@ -65,8 +65,8 @@ export const AuthenticateResponseSchema = z.object({
           'role_connections.write',
         ])
         .or(z.literal(-1))
-        .default(-1)
-    )
+        .default(-1),
+    ),
   ),
   expires: z.string(),
   application: z.object({
@@ -95,7 +95,7 @@ export const GetActivityInstanceConnectedParticipantsResponseSchema = z.object({
         .optional(),
       premium_type: z.union([z.number(), z.null()]).optional(),
       nickname: z.string().optional(),
-    })
+    }),
   ),
 });
 export type GetActivityInstanceConnectedParticipantsResponse = zInfer<

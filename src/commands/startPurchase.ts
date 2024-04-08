@@ -15,5 +15,5 @@ export const startPurchase = (sendCommand: TSendCommand) =>
   commandFactory<StartPurchaseInput, typeof StartPurchaseResponse>(
     sendCommand,
     Commands.START_PURCHASE,
-    StartPurchaseResponse
+    StartPurchaseResponse,
   );

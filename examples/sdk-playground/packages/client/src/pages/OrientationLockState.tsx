@@ -46,13 +46,13 @@ function getLockStateFromDropdownOption(dropdownOption: DropdownOptions): Orient
 
 export default function OrientationLockState() {
   const [defaultLockStateDropdownOption, setDefaultLockStateDropdownOption] = React.useState<NonNullDropdownOptions>(
-    DropdownOptions.UNLOCKED
+    DropdownOptions.UNLOCKED,
   );
   const [pipLockStateDropdownOption, setPipLockStateDropdownOption] = React.useState<DropdownOptions>(
-    DropdownOptions.UNDEFINED
+    DropdownOptions.UNDEFINED,
   );
   const [gridLockStateDropdownOption, setGridLockStateDropdownOption] = React.useState<DropdownOptions>(
-    DropdownOptions.UNDEFINED
+    DropdownOptions.UNDEFINED,
   );
 
   const onDefaultLockStateOptionSelected = React.useCallback((event: any) => {

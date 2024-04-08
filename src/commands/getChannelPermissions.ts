@@ -11,5 +11,5 @@ export const getChannelPermissions = (sendCommand: TSendCommand) =>
   commandFactory<void, typeof GetChannelPermissionsResponse>(
     sendCommand,
     Commands.GET_CHANNEL_PERMISSIONS,
-    GetChannelPermissionsResponse
+    GetChannelPermissionsResponse,
   );

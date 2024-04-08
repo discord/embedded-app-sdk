@@ -27,7 +27,7 @@ export default function ActivityParticipants() {
     };
     const removeSpeakingParticipants = (res: EventPayloadData<'SPEAKING_STOP'>) => {
       setSpeakingParticipants((speakingParticipants) =>
-        speakingParticipants.filter((speakingParticipant) => speakingParticipant !== res.user_id)
+        speakingParticipants.filter((speakingParticipant) => speakingParticipant !== res.user_id),
       );
     };
     discordSdk.subscribe('SPEAKING_START', addSpeakingParticipants, {channel_id: discordSdk.channelId});

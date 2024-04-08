@@ -29,7 +29,7 @@ export default function ThermalStates() {
 
       setThermalStateString(state);
     },
-    [setThermalStateString]
+    [setThermalStateString],
   );
 
   React.useEffect(() => {

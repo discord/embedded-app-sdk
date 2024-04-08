@@ -10,5 +10,5 @@ export const userSettingsGetLocale = (sendCommand: TSendCommand) =>
   commandFactory<void, typeof UserSettingsGetLocaleResponse>(
     sendCommand,
     Commands.USER_SETTINGS_GET_LOCALE,
-    UserSettingsGetLocaleResponse
+    UserSettingsGetLocaleResponse,
   );
