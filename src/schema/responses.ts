@@ -31,7 +31,7 @@ export const GetGuildsResponse = zod.object({
     zod.object({
       id: zod.string(),
       name: zod.string(),
-    })
+    }),
   ),
 });
 

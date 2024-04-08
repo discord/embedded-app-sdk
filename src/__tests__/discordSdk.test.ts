@@ -50,7 +50,7 @@ describe('DiscordSDK', () => {
           v: 1,
         },
       ],
-      '*'
+      '*',
     );
 
     // Verify instance variables
@@ -80,7 +80,7 @@ describe('DiscordSDK', () => {
           },
         ],
         origin: 'https://discord.com',
-      })
+      }),
     );
 
     // Verify "READY" event resolves

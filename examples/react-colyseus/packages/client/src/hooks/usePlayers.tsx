@@ -41,7 +41,7 @@ function usePlayersContextSetup() {
                 p[field] = value;
               });
               return p;
-            })
+            }),
           );
         };
       };

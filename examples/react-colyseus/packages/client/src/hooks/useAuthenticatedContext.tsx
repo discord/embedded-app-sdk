@@ -112,7 +112,7 @@ function useAuthenticatedContextSetup() {
         {
           method: 'get',
           headers: {Authorization: `Bearer ${access_token}`},
-        }
+        },
       )
         .then((j) => j.json())
         .catch(() => {

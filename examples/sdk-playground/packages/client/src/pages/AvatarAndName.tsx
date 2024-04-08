@@ -37,7 +37,7 @@ export default function AvatarAndName() {
     // We store this in the auth object, but fetching it again to keep relevant patterns in one area
     DiscordAPI.request<GuildsMembersRead>(
       {method: RequestType.GET, endpoint: `/users/@me/guilds/${discordSdk.guildId}/member`},
-      auth.access_token
+      auth.access_token,
     ).then((reply) => {
       setGuildMember(reply);
     });

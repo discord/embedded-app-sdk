@@ -10,5 +10,5 @@ export const encourageHardwareAcceleration = (sendCommand: TSendCommand) =>
   commandFactory<void, typeof EncourageHardwareAccelerationResponse>(
     sendCommand,
     Commands.ENCOURAGE_HW_ACCELERATION,
-    EncourageHardwareAccelerationResponse
+    EncourageHardwareAccelerationResponse,
   );
