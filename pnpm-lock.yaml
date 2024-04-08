@@ -366,8 +366,8 @@ importers:
         specifier: ^3.0.0
         version: 3.19.0
       '@testing-library/jest-dom':
-        specifier: ^5.16.2
-        version: 5.17.0
+        specifier: ^6.4.2
+        version: 6.4.2(@types/jest@27.5.2)(jest@27.5.1)
       '@testing-library/react':
         specifier: ^12.0.0
         version: 12.1.5(react-dom@18.2.0)(react@18.2.0)
@@ -1981,7 +1981,7 @@ packages:
     dependencies:
       '@colyseus/core': 0.14.36
       '@colyseus/schema': 1.0.46
-      uWebSockets.js: github.com/uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a
+      uWebSockets.js: git@github.com+uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -3988,17 +3988,35 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
-  /@testing-library/jest-dom@5.17.0:
-    resolution: {integrity: sha512-ynmNeT7asXyH3aSVv4vvX4Rb+0qjOhdNHnO/3vuZNqPmhDpV/+rCSGwQ7bLcmU2cJ4dvoheIO85LQj0IbJHEtg==}
-    engines: {node: '>=8', npm: '>=6', yarn: '>=1'}
+  /@testing-library/jest-dom@6.4.2(@types/jest@27.5.2)(jest@27.5.1):
+    resolution: {integrity: sha512-CzqH0AFymEMG48CpzXFriYYkOjk6ZGPCLMhW9e9jg3KMCn5OfJecF8GtGW7yGfR/IgCe3SX8BSwjdzI6BBbZLw==}
+    engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
+    peerDependencies:
+      '@jest/globals': '>= 28'
+      '@types/bun': latest
+      '@types/jest': '>= 28'
+      jest: '>= 28'
+      vitest: '>= 0.32'
+    peerDependenciesMeta:
+      '@jest/globals':
+        optional: true
+      '@types/bun':
+        optional: true
+      '@types/jest':
+        optional: true
+      jest:
+        optional: true
+      vitest:
+        optional: true
     dependencies:
       '@adobe/css-tools': 4.3.2
       '@babel/runtime': 7.23.6
-      '@types/testing-library__jest-dom': 5.14.9
+      '@types/jest': 27.5.2
       aria-query: 5.3.0
       chalk: 3.0.0
       css.escape: 1.5.1
-      dom-accessibility-api: 0.5.16
+      dom-accessibility-api: 0.6.3
+      jest: 27.5.1
       lodash: 4.17.21
       redent: 3.0.0
     dev: true
@@ -4387,12 +4405,6 @@ packages:
 
   /@types/stack-utils@2.0.3:
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
-
-  /@types/testing-library__jest-dom@5.14.9:
-    resolution: {integrity: sha512-FSYhIjFlfOpGSRyVoMBMuS3ws5ehFQODymf3vlI7U1K8c7PHwWwFY7VREfmsuzHSOnoKs/9/Y983ayOs7eRzqw==}
-    dependencies:
-      '@types/jest': 27.5.2
-    dev: true
 
   /@types/trusted-types@2.0.7:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -6524,6 +6536,10 @@ packages:
 
   /dom-accessibility-api@0.5.16:
     resolution: {integrity: sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg==}
+    dev: true
+
+  /dom-accessibility-api@0.6.3:
+    resolution: {integrity: sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w==}
     dev: true
 
   /dom-converter@0.2.0:
@@ -15220,8 +15236,8 @@ packages:
       yaml: 2.3.4
     dev: true
 
-  github.com/uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a:
-    resolution: {tarball: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a}
+  git@github.com+uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a:
+    resolution: {commit: 77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a, repo: git@github.com:uNetworking/uWebSockets.js.git, type: git}
     name: uWebSockets.js
     version: 19.2.0
     dev: false
