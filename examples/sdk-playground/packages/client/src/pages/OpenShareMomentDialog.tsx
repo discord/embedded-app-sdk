@@ -65,6 +65,7 @@ export default function OpenShareMomentDialog() {
   };
   return (
     <div style={{padding: 32}}>
+      <h1>Open Share Moment Dialog</h1>
       {Object.entries(NAME_TO_IMG).map(([name, {src, width, height}]) => {
         return (
           <img

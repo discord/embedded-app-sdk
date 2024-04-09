@@ -15,12 +15,11 @@ import InAppPurchase from './pages/InAppPurchase';
 import OpenExternalLink from './pages/OpenExternalLink';
 import OpenInviteDialog from './pages/OpenInviteDialog';
 import OpenShareMomentDialog from './pages/OpenShareMomentDialog';
-import OpenAttachmentUpload from './pages/OpenAttachmentUpload';
+import InitiateImageUpload from './pages/InitiateImageUpload';
 import OrientationLockState from './pages/OrientationLockState';
 import OrientationUpdates from './pages/OrientationUpdates';
 import LayoutMode from './pages/LayoutMode';
 import PlatformBehaviors from './pages/PlatformBehaviors';
-import URLMappingParameters from './pages/URLMappingParameters';
 import VoiceState from './pages/VoiceState';
 import VisibilityListener from './pages/VisibilityListener';
 import WindowSizeTracker from './pages/WindowSizeTracker';
@@ -30,6 +29,14 @@ import SafeAreas from './pages/SafeAreas';
 import ThermalStates from './pages/ThermalStates';
 import ActivityChannel from './pages/ActivityChannel';
 import ActivityParticipants from './pages/ActivityParticipants';
+import GetChannel from './pages/GetChannel';
+import GetChannelPermissions from './pages/GetChannelPermissions';
+import GetEntitlements from './pages/GetEntitlements';
+import GetInstanceConnectedParticipants from './pages/GetInstanceConnectedParticipants';
+import GetPlatformBehaviors from './pages/GetPlatformBehaviors';
+import GetSkus from './pages/GetSkus';
+import SetActivity from './pages/SetActivity';
+import UserSettingsGetLocale from './pages/UserSettingsGetLocale';
 
 // Add contexts here
 export default function App(): React.ReactElement {
@@ -56,6 +63,76 @@ const routes: Record<string, AppRoute> = {
     name: 'Home',
     component: Home,
   },
+  encourageHardwareAcceleration: {
+    path: '/encourage-hw-acc',
+    name: 'Encourage Hardware Acceleration',
+    component: EncourageHardwareAcceleration,
+  },
+  getChannel: {
+    path: '/get-channel',
+    name: 'Get Channel',
+    component: GetChannel,
+  },
+  getChannelPermissions: {
+    path: '/get-channel-permissions',
+    name: 'Get Channel Permissions',
+    component: GetChannelPermissions,
+  },
+  getEntitlements: {
+    path: '/get-entitlements',
+    name: 'Get Entitlements',
+    component: GetEntitlements,
+  },
+  getInstanceConnectedParticipants: {
+    path: '/get-instance-connected-participants',
+    name: 'Get Instance Connected Participants',
+    component: GetInstanceConnectedParticipants,
+  },
+  getPlatformBehaviors: {
+    path: '/get-platform-behaviors',
+    name: 'Get Platform Behaviors',
+    component: GetPlatformBehaviors,
+  },
+  getSkus: {
+    path: '/get-skus',
+    name: 'Get Skus',
+    component: GetSkus,
+  },
+  initiateImageUplaod: {
+    path: '/initiateImageUpload',
+    name: 'Initiate Image Upload',
+    component: InitiateImageUpload,
+  },
+  openExternalLink: {
+    path: '/open-external-link',
+    name: 'Open External Link',
+    component: OpenExternalLink,
+  },
+  openInviteDialog: {
+    path: '/open-invite-dialog',
+    name: 'Open Invite Dialog',
+    component: OpenInviteDialog,
+  },
+  openShareMomentDialog: {
+    path: '/open-share-moment-dialog',
+    name: 'Open Share Moment Dialog',
+    component: OpenShareMomentDialog,
+  },
+  setActivity: {
+    path: '/set-activity',
+    name: 'Set Activity',
+    component: SetActivity,
+  },
+  setOrientationLockState: {
+    path: '/set-orientation-lock-state',
+    name: 'Set Orientation Lock State',
+    component: OrientationLockState,
+  },
+  userSettingsGetLocale: {
+    path: '/user-settings-get-locale',
+    name: 'User Settings Get Locale',
+    component: UserSettingsGetLocale,
+  },
   avatarAndName: {
     path: '/avatar-and-name',
     name: 'Avatar and Name',
@@ -70,11 +147,6 @@ const routes: Record<string, AppRoute> = {
     path: '/voice-state',
     name: 'Voice State',
     component: VoiceState,
-  },
-  urlMappingParameters: {
-    path: '/url-mapping-parameters',
-    name: 'URL Mapping Parameters',
-    component: URLMappingParameters,
   },
   activityChannel: {
     path: '/activity-channel',
@@ -101,40 +173,10 @@ const routes: Record<string, AppRoute> = {
     name: 'Platform Behaviors',
     component: PlatformBehaviors,
   },
-  openExternalLink: {
-    path: '/open-external-link',
-    name: 'Open External Link',
-    component: OpenExternalLink,
-  },
-  encourageHardwareAcceleration: {
-    path: '/encourage-hw-acc',
-    name: 'Encourage Hardware Acceleration',
-    component: EncourageHardwareAcceleration,
-  },
-  setOrientationLockState: {
-    path: '/set-orientation-lock-state',
-    name: 'Orientation Lock State',
-    component: OrientationLockState,
-  },
   orientationUpdates: {
     path: '/orientation-updates',
     name: 'Orientation Updates',
     component: OrientationUpdates,
-  },
-  openInviteDialog: {
-    path: '/open-invite-dialog',
-    name: 'Open Invite Dialog',
-    component: OpenInviteDialog,
-  },
-  OpenShareMomentDialog: {
-    path: '/open-share-moment-dialog',
-    name: 'Open Share Moment Dialog',
-    component: OpenShareMomentDialog,
-  },
-  OpenAttachmentUpload: {
-    path: '/open-attachment-upload',
-    name: 'Open Attachment Upload',
-    component: OpenAttachmentUpload,
   },
   safeAreas: {
     path: '/safe-areas',
