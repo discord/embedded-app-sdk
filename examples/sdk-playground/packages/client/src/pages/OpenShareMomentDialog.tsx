@@ -36,7 +36,7 @@ async function uploadImageAttachment(imageURL: string): Promise<string> {
   const resp = await DiscordAPI.request<{attachment: {url: string}}>(
     {
       method: RequestType.POST,
-      endpoint: `/activities/${applicationId}/attachment`,
+      endpoint: `/applications/${applicationId}/attachment`,
       body,
       stringifyBody: false,
     },
