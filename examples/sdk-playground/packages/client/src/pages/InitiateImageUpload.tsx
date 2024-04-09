@@ -1,7 +1,7 @@
 import React from 'react';
 import discordSdk from '../discordSdk';
 
-export default function OpenAttachmentUpload() {
+export default function InitiateImageUpload() {
   const [imageUrl, setImageUrl] = React.useState<string>();
   const [awaitingInitiateImageUpload, setAwaitingInitiateImageUpload] = React.useState(false);
 
@@ -21,6 +21,7 @@ export default function OpenAttachmentUpload() {
 
   return (
     <div style={{padding: 32}}>
+      <h1>Initiate image upload</h1>
       <div>Awaiting initiateImageUpload? "{JSON.stringify(awaitingInitiateImageUpload)}"</div>
       <button onClick={doOpenAttachmentUpload}>Click to Open Attachment Upload Flow!</button>
       {imageUrl ? <img src={imageUrl} /> : null}

@@ -25,7 +25,7 @@ const global = globalCss({
     width: '100%',
     height: '100%',
     backgroundColor: '$slate1',
-    fontFamily: 'Roboto',
+    fontFamily: '"gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
   },
 });
 

@@ -36,6 +36,7 @@ export default function OpenInviteDialog() {
   };
   return (
     <div style={{padding: 32}}>
+      <h1>Open Invite Dialog</h1>
       <h2>{message}</h2>
       <button disabled={!hasPermissionToInvite} onClick={doOpenInviteDialog}>
         Click to Open Invite Dialog!
