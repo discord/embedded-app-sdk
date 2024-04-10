@@ -34,7 +34,7 @@ export const start = async () => {
       'guilds.members.read',
       // "messages.read",
       // "relationships.read",
-      // 'rpc.activities.write',
+      'rpc.activities.write',
       // "rpc.notifications.read",
       'rpc.voice.write',
       'rpc.voice.read',
