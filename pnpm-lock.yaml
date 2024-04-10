@@ -12,8 +12,8 @@ importers:
         specifier: ^4.6.6
         version: 4.6.9
       '@types/uuid':
-        specifier: ^8.3.1
-        version: 8.3.4
+        specifier: ^9.0.8
+        version: 9.0.8
       big-integer:
         specifier: 1.6.48
         version: 1.6.48
@@ -30,8 +30,8 @@ importers:
         specifier: ^4.8.0
         version: 4.8.0
       uuid:
-        specifier: ^8.3.2
-        version: 8.3.2
+        specifier: ^9.0.1
+        version: 9.0.1
       zod:
         specifier: ^3.9.8
         version: 3.22.4
@@ -4340,8 +4340,8 @@ packages:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
     dev: false
 
-  /@types/uuid@8.3.4:
-    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+  /@types/uuid@9.0.8:
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
     dev: false
 
   /@types/which@3.0.3:
