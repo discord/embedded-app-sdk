@@ -25,7 +25,6 @@
     "react-json-view": "^1.21.3",
     "react-router": "^6.16.0",
     "react-router-dom": "^6.16.0",
-    "react-scripts": "^5.0.1",
     "react-use": "^17.2.4",
     "web-vitals": "^2.1.4",
     "zustand": "4.1.4"
