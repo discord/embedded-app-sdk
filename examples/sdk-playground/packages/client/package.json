@@ -43,7 +43,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "type-fest": "^2.16.0",
     "typescript": "^5.2.2",
-    "vite": "^2.9.9"
+    "vite": "^5.2.8"
   },
   "eslintConfig": {
     "extends": "plugin:react-hooks/recommended"
