@@ -1087,7 +1087,7 @@ packages:
     dependencies:
       '@colyseus/core': 0.14.36
       '@colyseus/schema': 1.0.46
-      uWebSockets.js: github.com/uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a
+      uWebSockets.js: git@github.com+uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -9706,8 +9706,8 @@ packages:
       yaml: 2.3.4
     dev: true
 
-  github.com/uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a:
-    resolution: {tarball: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a}
+  git@github.com+uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a:
+    resolution: {commit: 77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a, repo: git@github.com:uNetworking/uWebSockets.js.git, type: git}
     name: uWebSockets.js
     version: 19.2.0
     dev: false
