@@ -1,8 +1,8 @@
-import ReactJsonViewOG from 'react-json-view';
-import type {ThemeObject, ReactJsonViewProps} from 'react-json-view';
+import {JSONTree} from 'react-json-tree';
+
 import {theme} from '../styled';
 
-const jsonTheme: ThemeObject = {
+const jsonTheme = {
   base00: theme.colors.slate1.computedValue, // background
   base01: theme.colors.slate12.computedValue, // idk
   base02: theme.colors.slate6.computedValue, // lines
@@ -21,6 +21,6 @@ const jsonTheme: ThemeObject = {
   base0F: theme.colors.slate12.computedValue, // int
 };
 
-export default function ReactJsonView(props: ReactJsonViewProps) {
-  return <ReactJsonViewOG theme={jsonTheme} {...props} />;
+export default function ReactJsonView({src}: {src: unknown}) {
+  return <JSONTree theme={jsonTheme} data={src} />;
 }
