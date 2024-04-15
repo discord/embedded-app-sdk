@@ -13,6 +13,9 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      # This is required to work around https://github.com/npm/cli/issues/2610 
+      # for the case of dependabot PRs. 
+      - run: git config url."https://".insteadOf ssh://
       - uses: pnpm/action-setup@v3
         with:
           version: latest
