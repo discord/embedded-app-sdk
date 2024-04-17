@@ -18,7 +18,7 @@
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.1",
     "http-proxy-middleware": "^2.0.6",
-    "nodemon": "^2.0.18"
+    "nodemon": "^3.1.0"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"
