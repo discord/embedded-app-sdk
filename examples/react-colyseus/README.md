@@ -44,7 +44,9 @@ As described [here](https://discord.com/developers/docs/activities/building-an-a
 To run your app locally, run the following from this directory (/examples/react-colyseus)
 
 ```
+cd path/to/embedded-app-sdk
 pnpm install # only need to run this the first time
+cd embedded-app-sd/examples/react-colyseus
 pnpm dev
 pnpm tunnel # from another terminal
 ```
