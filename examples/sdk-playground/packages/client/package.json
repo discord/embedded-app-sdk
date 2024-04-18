@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@discord/embedded-app-sdk": "workspace:@discord/embedded-app-sdk@*",
-    "@radix-ui/colors": "^0.1.7",
+    "@radix-ui/colors": "^3.0.0",
     "@radix-ui/react-scroll-area": "^1.0.1",
     "@stitches/react": "^1.2.1",
     "lodash": "^4.17.21",

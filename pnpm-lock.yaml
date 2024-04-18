@@ -323,8 +323,8 @@ importers:
         specifier: workspace:@discord/embedded-app-sdk@*
         version: link:../../../..
       '@radix-ui/colors':
-        specifier: ^0.1.7
-        version: 0.1.9
+        specifier: ^3.0.0
+        version: 3.0.0
       '@radix-ui/react-scroll-area':
         specifier: ^1.0.1
         version: 1.0.5(@types/react-dom@18.2.17)(@types/react@18.2.43)(react-dom@18.2.0)(react@18.2.0)
@@ -1087,7 +1087,7 @@ packages:
     dependencies:
       '@colyseus/core': 0.14.36
       '@colyseus/schema': 1.0.46
-      uWebSockets.js: github.com/uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a
+      uWebSockets.js: git@github.com+uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -2131,8 +2131,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
 
-  /@radix-ui/colors@0.1.9:
-    resolution: {integrity: sha512-Vxq944ErPJsdVepjEUhOLO9ApUVOocA63knc+V2TkJ09D/AVOjiMIgkca/7VoYgODcla0qbSIBjje0SMfZMbAw==}
+  /@radix-ui/colors@3.0.0:
+    resolution: {integrity: sha512-FUOsGBkHrYJwCSEtWRCIfQbZG7q1e6DgxCIOe1SUQzDe/7rXXeA47s8yCn6fuTNQAj1Zq4oTFi9Yjp3wzElcxg==}
     dev: false
 
   /@radix-ui/number@1.0.1:
@@ -9563,8 +9563,8 @@ packages:
       yaml: 2.3.4
     dev: true
 
-  github.com/uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a:
-    resolution: {tarball: https://codeload.github.com/uNetworking/uWebSockets.js/tar.gz/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a}
+  git@github.com+uNetworking/uWebSockets.js/77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a:
+    resolution: {commit: 77b1761c5a23ac6a5c2adf2bd808be0ae6b5000a, repo: git@github.com:uNetworking/uWebSockets.js.git, type: git}
     name: uWebSockets.js
     version: 19.2.0
     dev: false
