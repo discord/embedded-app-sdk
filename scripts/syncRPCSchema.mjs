@@ -114,7 +114,8 @@ async function main() {
     throw new Error('Unable to resolve prettier config');
   }
   prettierOpts.parser = 'typescript';
-  await fs.writeFile(path.join(genDir, 'schemas.ts'), prettier.format(output, prettierOpts));
+  const formattedCode = await prettier.format(output, prettierOpts);
+  await fs.writeFile(path.join(genDir, 'schemas.ts'), formattedCode);
 }
 
 function formatToken(name) {
