@@ -24,7 +24,6 @@
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.1",
     "express": "^4.19.2",
-    "http-proxy-middleware": "^2.0.6",
     "uwebsockets-express": "^1.2.2"
   },
   "devDependencies": {
