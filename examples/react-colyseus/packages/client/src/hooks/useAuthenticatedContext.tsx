@@ -8,7 +8,7 @@ import {discordSdk} from '../discordSdk';
 import {LoadingScreen} from '../components/LoadingScreen';
 import {getUserAvatarUrl} from '../utils/getUserAvatarUrl';
 
-import type {IGuildsMembersRead, TAuthenticateResponse, TAuthenticatedContext} from '../types';
+import type {IGuildsMembersRead, TAuthenticatedContext} from '../types';
 import {getUserDisplayName} from '../utils/getUserDisplayName';
 
 const AuthenticatedContext = React.createContext<TAuthenticatedContext>({
@@ -102,7 +102,7 @@ function useAuthenticatedContextSetup() {
       const {access_token} = await response.json();
 
       // Authenticate with Discord client (using the access_token)
-      const newAuth: TAuthenticateResponse = await discordSdk.commands.authenticate({
+      const newAuth = await discordSdk.commands.authenticate({
         access_token,
       });
 
