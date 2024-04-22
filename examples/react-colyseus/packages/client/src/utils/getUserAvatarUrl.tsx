@@ -4,7 +4,7 @@ import {Types} from '@discord/embedded-app-sdk';
 
 interface GetUserAvatarArgs {
   guildMember: IGuildsMembersRead | null;
-  user: Partial<Types.User>;
+  user: Partial<Types.User> & Pick<Types.User, 'id'>;
   cdn?: string;
   size?: number;
 }
