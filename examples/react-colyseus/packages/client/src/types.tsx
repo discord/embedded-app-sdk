@@ -1,14 +1,14 @@
-import type {AsyncReturnType} from 'type-fest';
-import {discordSdk} from './discordSdk';
+import type {CommandResponse} from '@discord/embedded-app-sdk';
 import {Client, Room} from 'colyseus.js';
 import {State} from '../../server/src/entities/State';
 
-export type TAuthenticateResponse = AsyncReturnType<typeof discordSdk.commands.authenticate>;
 export interface IColyseus {
   room: Room<State>;
   client: Client;
 }
-export type TAuthenticatedContext = TAuthenticateResponse & {guildMember: IGuildsMembersRead | null} & IColyseus;
+export type TAuthenticatedContext = CommandResponse<'authenticate'> & {
+  guildMember: IGuildsMembersRead | null;
+} & IColyseus;
 
 export interface IGuildsMembersRead {
   roles: string[];

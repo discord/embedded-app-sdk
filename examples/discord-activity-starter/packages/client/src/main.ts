@@ -1,8 +1,8 @@
+import type {CommandResponse} from '@discord/embedded-app-sdk';
 import './style.css';
 import {discordSdk} from './discordSdk';
-import type {AsyncReturnType} from 'type-fest';
 
-type Auth = AsyncReturnType<typeof discordSdk.commands.authenticate>;
+type Auth = CommandResponse<'authenticate'>;
 let auth: Auth;
 
 // Once setupDiscordSdk is complete, we can assert that "auth" is initialized
@@ -121,7 +121,7 @@ async function appendGuildAvatar() {
     guildImg.setAttribute(
       'src',
       // More info on image formatting here: https://discord.com/developers/docs/reference#image-formatting
-      `https://cdn.discordapp.com/icons/${currentGuild.id}/${currentGuild.icon}.webp?size=128`
+      `https://cdn.discordapp.com/icons/${currentGuild.id}/${currentGuild.icon}.webp?size=128`,
     );
     guildImg.setAttribute('width', '128px');
     guildImg.setAttribute('height', '128px');

@@ -56,6 +56,8 @@ export type CommandTypes = ReturnType<typeof commands>;
 export type CommandResponseTypes = {
   [Name in keyof CommandTypes]: Awaited<ReturnType<CommandTypes[Name]>>;
 };
+export type CommandResponse<K extends keyof CommandTypes> = Awaited<ReturnType<CommandTypes[K]>>;
 export type CommandInputTypes = {
   [Name in keyof CommandTypes]: Parameters<CommandTypes[Name]>;
 };
+export type CommandInput<K extends keyof CommandTypes> = Parameters<CommandTypes[K]>;

@@ -1,7 +1,7 @@
 import {DiscordSDK} from './Discord';
 import type {IDiscordSDK} from './interface';
 import type * as Types from './schema/types';
-import {CommandTypes, CommandResponseTypes, CommandInputTypes} from './commands';
+import {CommandTypes, CommandResponseTypes, CommandResponse, CommandInputTypes, CommandInput} from './commands';
 import {Events} from './schema/events';
 import * as Common from './schema/common';
 import * as Responses from './schema/responses';
@@ -31,4 +31,13 @@ export {
   patchUrlMappings,
   attemptRemap,
 };
-export type {IDiscordSDK, CommandTypes, CommandInputTypes, CommandResponseTypes, ISDKError, Types};
+export type {
+  IDiscordSDK,
+  CommandTypes,
+  CommandInput,
+  CommandInputTypes,
+  CommandResponse,
+  CommandResponseTypes,
+  ISDKError,
+  Types,
+};
