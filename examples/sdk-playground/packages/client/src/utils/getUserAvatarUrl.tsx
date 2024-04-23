@@ -4,7 +4,7 @@ import {Types} from '@discord/embedded-app-sdk';
 
 interface GetUserAvatarArgs {
   guildMember: IGuildsMembersRead | null;
-  user: Partial<Types.User>;
+  user: Partial<Types.User> & Pick<Types.User, 'id'>;
   cdn?: string;
   size?: number;
 }
@@ -22,6 +22,6 @@ export function getUserAvatarUrl({
     return `${cdn}/avatars/${user.id}/${user.avatar}.png?size=${size}`;
   }
 
-  const defaultAvatarIndex = Math.abs(Number(user.id) >> 22) % 6;
+  const defaultAvatarIndex = (BigInt(user.id) >> 22n) % 6n;
   return `${cdn}/embed/avatars/${defaultAvatarIndex}.png?size=${size}`;
 }
