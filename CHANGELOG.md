@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/discord/embedded-app-sdk/compare/v1.1.2...v1.2.0) (2024-04-23)
+
+
+### Features
+
+* add CommandInput and CommandResponse as types ([6f65ef3](https://github.com/discord/embedded-app-sdk/commit/6f65ef3c8c80c6aa603e9fc6fbc3d8f85dab9f72))
+
+
+### Bug Fixes
+
+* **deps:** update to uuid v9 ([#118](https://github.com/discord/embedded-app-sdk/issues/118)) ([a25bde1](https://github.com/discord/embedded-app-sdk/commit/a25bde13b3061590d549e4076f51b832f14507cc))
+
 ## [1.1.2](https://github.com/discord/embedded-app-sdk/compare/v1.1.1...v1.1.2) (2024-04-04)
 
 
