@@ -1,5 +1,5 @@
-import type {CommandResponseTypes} from '@discord/embedded-app-sdk';
-export type TAuthenticatedContext = CommandResponseTypes['authenticate'] & {guildMember: IGuildsMembersRead | null};
+import type {CommandResponse} from '@discord/embedded-app-sdk';
+export type TAuthenticatedContext = CommandResponse<'authenticate'> & {guildMember: IGuildsMembersRead | null};
 
 export interface IGuildsMembersRead {
   roles: string[];
