@@ -18,8 +18,8 @@ importers:
         specifier: 1.6.48
         version: 1.6.48
       decimal.js-light:
-        specifier: 2.5.0
-        version: 2.5.0
+        specifier: 2.5.1
+        version: 2.5.1
       eventemitter3:
         specifier: ^4.0.7
         version: 4.0.7
@@ -4166,8 +4166,8 @@ packages:
       ms: 2.1.2
       supports-color: 5.5.0
 
-  /decimal.js-light@2.5.0:
-    resolution: {integrity: sha512-b3VJCbd2hwUpeRGG3Toob+CRo8W22xplipNhP3tN7TSVB/cyMX71P1vM2Xjc9H74uV6dS2hDDmo/rHq8L87Upg==}
+  /decimal.js-light@2.5.1:
+    resolution: {integrity: sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==}
     dev: false
 
   /decimal.js@10.4.3:
