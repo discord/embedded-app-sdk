@@ -16,7 +16,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@colyseus/monitor": "^0.14.22",
+    "@colyseus/monitor": "^0.15.0",
     "@colyseus/schema": "^1.0.34",
     "@colyseus/uwebsockets-transport": "^0.14.28",
     "@colyseus/ws-transport": "^0.14.21",

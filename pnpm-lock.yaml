@@ -254,8 +254,8 @@ importers:
   examples/react-colyseus/packages/server:
     dependencies:
       '@colyseus/monitor':
-        specifier: ^0.14.22
-        version: 0.14.22
+        specifier: ^0.15.0
+        version: 0.15.6
       '@colyseus/schema':
         specifier: ^1.0.34
         version: 1.0.46
@@ -1043,8 +1043,8 @@ packages:
       - supports-color
     dev: false
 
-  /@colyseus/monitor@0.14.22:
-    resolution: {integrity: sha512-bApRiJLzdPUK/6wPZFrXaxMnSCOf+TYCN1leRlrG8UcEj/l9oZKeUk5uGej+uAzTRO6fOruQsEgBKMnBwvBNUQ==}
+  /@colyseus/monitor@0.15.6:
+    resolution: {integrity: sha512-+noCGTChr5spO9a3Nt/BPBDV8yly4FUgqkTDyMTAKB3SPWc7WWoi/nf3MlAXE8eKqVsCvbp8iYbdkmU2IrmiuA==}
     dependencies:
       express: 4.19.2
       node-os-utils: 1.3.7
@@ -8680,7 +8680,7 @@ packages:
   /superagent@3.8.3:
     resolution: {integrity: sha512-GLQtLMCoEIK4eDv6OGtkOoSMt3D+oq0y3dsxMuYuDvaNUvuT8eFBuLmfR0iYYzHC1e8hpzC6ZsxbuP6DIalMFA==}
     engines: {node: '>= 4.0'}
-    deprecated: Please upgrade to v7.0.2+ of superagent.  We have fixed numerous issues with streams, form-data, attach(), filesystem errors not bubbling up (ENOENT on attach()), and all tests are now passing.  See the releases tab for more information at <https://github.com/visionmedia/superagent/releases>.
+    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
     dependencies:
       component-emitter: 1.3.1
       cookiejar: 2.1.4
