@@ -20,7 +20,7 @@ jobs:
           token: ${{ github.token }}
           release-type: node
       # The logic below handles the npm publication:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # these if statements ensure that a publication only occurs when
         # a new release is created:
         if: ${{ steps.release.outputs.release_created }}
