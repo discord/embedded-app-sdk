@@ -19,7 +19,7 @@
     "@colyseus/monitor": "^0.14.22",
     "@colyseus/schema": "^1.0.34",
     "@colyseus/uwebsockets-transport": "^0.14.28",
-    "@colyseus/ws-transport": "^0.14.21",
+    "@colyseus/ws-transport": "^0.15.0",
     "colyseus": "^0.14.23",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.1",
