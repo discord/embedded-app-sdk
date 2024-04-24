@@ -121,7 +121,7 @@ importers:
         specifier: ^2.6.2
         version: 2.6.2
       typescript:
-        specifier: 5.2.2
+        specifier: ~5.2.2
         version: 5.2.2
       zx:
         specifier: ^7.2.3
@@ -152,7 +152,7 @@ importers:
         specifier: ^10.9.1
         version: 10.9.2(@types/node@20.12.7)(typescript@5.2.2)
       typescript:
-        specifier: ^5.2.2
+        specifier: ~5.2.2
         version: 5.2.2
 
   examples/discord-activity-starter/packages/client:
@@ -212,7 +212,7 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       typescript:
-        specifier: ^5.2.2
+        specifier: ~5.2.2
         version: 5.2.2
 
   examples/react-colyseus: {}
@@ -300,7 +300,7 @@ importers:
         specifier: ^10.9.1
         version: 10.9.2(@types/node@20.12.7)(typescript@5.2.2)
       typescript:
-        specifier: ^5.2.2
+        specifier: ~5.2.2
         version: 5.2.2
 
   examples/sdk-playground: {}
@@ -384,7 +384,7 @@ importers:
         specifier: ^4.6.0
         version: 4.6.0(eslint@8.57.0)
       typescript:
-        specifier: ^5.2.2
+        specifier: ~5.2.2
         version: 5.2.2
       vite:
         specifier: ^5.2.9
