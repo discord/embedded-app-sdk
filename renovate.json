@@ -4,5 +4,8 @@
     "config:recommended",
     ":disableDependencyDashboard",
     ":preserveSemverRanges"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**"
   ]
 }
