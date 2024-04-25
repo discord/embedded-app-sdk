@@ -344,8 +344,8 @@ importers:
         specifier: ^17.2.4
         version: 17.4.2(react-dom@18.2.0)(react@18.2.0)
       web-vitals:
-        specifier: ^2.1.4
-        version: 2.1.4
+        specifier: ^3.0.0
+        version: 3.5.2
       zustand:
         specifier: 4.1.4
         version: 4.1.4(react@18.2.0)
@@ -8631,8 +8631,8 @@ packages:
       makeerror: 1.0.12
     dev: true
 
-  /web-vitals@2.1.4:
-    resolution: {integrity: sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==}
+  /web-vitals@3.5.2:
+    resolution: {integrity: sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==}
     dev: false
 
   /webidl-conversions@3.0.1:
