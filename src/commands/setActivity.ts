@@ -11,9 +11,7 @@ export const SetActivity = Activity.pick({
   assets: true,
   party: true,
   secrets: true,
-  buttons: true,
   instance: true,
-  supported_platforms: true,
   type: true,
 })
   .extend({
