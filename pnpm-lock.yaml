@@ -351,8 +351,8 @@ importers:
         version: 4.1.4(react@18.2.0)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^3.0.0
-        version: 3.19.0
+        specifier: ^4.0.0
+        version: 4.20240405.0
       '@testing-library/jest-dom':
         specifier: ^6.4.2
         version: 6.4.2(@types/jest@29.5.12)(jest@29.7.0)
@@ -999,10 +999,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /@cloudflare/workers-types@3.19.0:
-    resolution: {integrity: sha512-0FRcsz7Ea3jT+gc5gKPIYciykm1bbAaTpygdzpCwGt0RL+V83zWnYN30NWDW4rIHj/FHtz+MIuBKS61C8l7AzQ==}
-    dev: true
 
   /@cloudflare/workers-types@4.20240405.0:
     resolution: {integrity: sha512-sEVOhyOgXUwfLkgHqbLZa/sfkSYrh7/zLmI6EZNibPaVPvAnAcItbNNl3SAlLyLKuwf8m4wAIAgu9meKWCvXjg==}
