@@ -7,5 +7,11 @@
   ],
   "ignorePaths": [
     "**/node_modules/**"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["colyseus"],
+      "groupName": "colyseus"
+    }
   ]
 }
