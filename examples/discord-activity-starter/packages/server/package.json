@@ -15,7 +15,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.1",
     "nodemon": "^3.1.0"
   },

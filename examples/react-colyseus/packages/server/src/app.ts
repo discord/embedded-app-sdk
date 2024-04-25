@@ -1,6 +1,5 @@
 import {MonitorOptions, monitor} from '@colyseus/monitor';
 import {Server} from 'colyseus';
-import fetch from 'cross-fetch';
 import dotenv from 'dotenv';
 import express, {Application, Request, Response} from 'express';
 import {createServer} from 'http';

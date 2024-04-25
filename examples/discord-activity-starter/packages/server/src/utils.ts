@@ -1,5 +1,3 @@
-import fetch from 'cross-fetch';
-
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -11,7 +9,7 @@ export function sleep(ms: number) {
 export async function fetchAndRetry(
   input: RequestInfo,
   init?: RequestInit | undefined,
-  nRetries: number = 3
+  nRetries: number = 3,
 ): Promise<Response> {
   try {
     // Make the request
