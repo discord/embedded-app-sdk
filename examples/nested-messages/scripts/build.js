@@ -1,6 +1,6 @@
 require('dotenv').config();
 const {build} = require('esbuild');
-const glob = require('glob');
+const {glob} = require('glob');
 const entryPoints = glob.globSync('./client/**/*.ts');
 
 // Inject .env variables
