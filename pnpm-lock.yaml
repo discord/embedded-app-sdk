@@ -347,8 +347,8 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4
       zustand:
-        specifier: 4.1.4
-        version: 4.1.4(react@18.2.0)
+        specifier: 4.5.2
+        version: 4.5.2(@types/react@18.2.43)(react@18.2.0)
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^3.0.0
@@ -9451,18 +9451,22 @@ packages:
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
-  /zustand@4.1.4(react@18.2.0):
-    resolution: {integrity: sha512-k2jVOlWo8p4R83mQ+/uyB8ILPO2PCJOf+QVjcL+1PbMCk1w5OoPYpAIxy9zd93FSfmJqoH6lGdwzzjwqJIRU5A==}
+  /zustand@4.5.2(@types/react@18.2.43)(react@18.2.0):
+    resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
-      immer: '>=9.0'
+      '@types/react': '>=16.8'
+      immer: '>=9.0.6'
       react: '>=16.8'
     peerDependenciesMeta:
+      '@types/react':
+        optional: true
       immer:
         optional: true
       react:
         optional: true
     dependencies:
+      '@types/react': 18.2.43
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
