@@ -29,7 +29,7 @@ function usePlayersContextSetup() {
   React.useEffect(() => {
     try {
       authenticatedContext.room.state.players.onAdd((player, _key) => {
-        setPlayers((players) => [...players, player]);
+        setPlayers((players) => [...players.filter((p) => p.userId !== player.userId), player]);
         function handlePropertyChange(field: string, value: unknown) {
           setPlayers((players) =>
             players.map((p) => {
