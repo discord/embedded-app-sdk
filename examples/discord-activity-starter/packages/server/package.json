@@ -20,6 +20,6 @@
     "nodemon": "^3.1.0"
   },
   "devDependencies": {
-    "npm-run-all2": "^5.0.0"
+    "npm-run-all2": "^6.0.0"
   }
 }
