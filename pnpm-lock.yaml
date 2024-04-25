@@ -223,8 +223,8 @@ importers:
         specifier: workspace:@discord/embedded-app-sdk@*
         version: link:../../../..
       colyseus.js:
-        specifier: ^0.14.13
-        version: 0.14.13
+        specifier: ^0.15.0
+        version: 0.15.18
       eslint:
         specifier: ^8.18.0
         version: 8.55.0
@@ -1064,6 +1064,11 @@ packages:
 
   /@colyseus/schema@1.0.46:
     resolution: {integrity: sha512-0cgirRomXDuDlppgJPXDLzsWw8/ZHwJEnndgzyX9hOCoFHJyFIyOYoKIV4eVPtKNQm6l6rGax1rE2LId4ujr4g==}
+    hasBin: true
+    dev: false
+
+  /@colyseus/schema@2.0.30:
+    resolution: {integrity: sha512-BURK3ppTLyi3D0ldfv/Gwn5O1lxR+VRJiEL7KAMj6CovvEA74Y4eRL7nXvQxZU7fsUph9Ag7v39SarMrXvH6DA==}
     hasBin: true
     dev: false
 
@@ -3854,15 +3859,17 @@ packages:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
     dev: true
 
-  /colyseus.js@0.14.13:
-    resolution: {integrity: sha512-2z1jgOfozQ02gLG5RtTHpk9VZur2b7U4KI9NNldjOZmfc2DZeKejdcKchBTwiDcSwwJQQ4SSOfVUhOcBMILDqA==}
+  /colyseus.js@0.15.18:
+    resolution: {integrity: sha512-/yLsqN0d0D1N2dhTlJkP80Z/YtKZU6MEaevu0q02V0qppQ/I53zzVqnDnaGAE1R/6NLB1I2Ry5+0l/tevnKDrw==}
     engines: {node: '>= 12.x'}
     dependencies:
-      '@colyseus/schema': 1.0.46
+      '@colyseus/schema': 2.0.30
       httpie: 2.0.0-next.13
-      nanoevents: 5.1.13
-      notepack.io: 2.3.0
       tslib: 2.6.2
+      ws: 8.15.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /colyseus@0.14.23:
@@ -7254,11 +7261,6 @@ packages:
       stylis: 4.3.0
     dev: false
 
-  /nanoevents@5.1.13:
-    resolution: {integrity: sha512-JFAeG9fp0QZnRoESHjkbVFbZ9BkOXkkagUVwZVo/pkSX+Fq1VKlY+5og/8X9CYc6C7vje/CV+bwJ5M2X0+IY9Q==}
-    engines: {node: '>=6.0.0'}
-    dev: false
-
   /nanoid@2.1.11:
     resolution: {integrity: sha512-s/snB+WGm6uwi0WjsZdaVcuf3KJXlfGl2LcxgwkEwJF0D/BWzVWAZW/XY4bFaiR7s0Jk3FPvlnepg1H1b1UwlA==}
     dev: false
@@ -9371,7 +9373,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: true
 
   /xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}
