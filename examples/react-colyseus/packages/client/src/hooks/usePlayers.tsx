@@ -28,27 +28,32 @@ function usePlayersContextSetup() {
 
   React.useEffect(() => {
     try {
-      authenticatedContext.room.state.players.onAdd = function (player, _key) {
+      authenticatedContext.room.state.players.onAdd((player, _key) => {
         setPlayers((players) => [...players, player]);
-        player.onChange = function (changes) {
+        function handlePropertyChange(field: string, value: unknown) {
           setPlayers((players) =>
             players.map((p) => {
               if (p.userId !== player.userId) {
                 return p;
               }
-              changes.forEach(({field, value}) => {
-                // @ts-expect-error
-                p[field] = value;
-              });
+              // @ts-expect-error
+              p[field] = value;
               return p;
             }),
           );
-        };
-      };
+        }
 
-      authenticatedContext.room.state.players.onRemove = function (player, _key) {
+        // there is likely a more clever way to do this
+        player.listen('avatarUri', (value) => handlePropertyChange('avatarUri', value));
+        player.listen('name', (value) => handlePropertyChange('name', value));
+        player.listen('sessionId', (value) => handlePropertyChange('sessionId', value));
+        player.listen('talking', (value) => handlePropertyChange('talking', value));
+        player.listen('userId', (value) => handlePropertyChange('userId', value));
+      });
+
+      authenticatedContext.room.state.players.onRemove((player, _key) => {
         setPlayers((players) => [...players.filter((p) => p.userId !== player.userId)]);
-      };
+      });
 
       authenticatedContext.room.onLeave((code) => {
         console.log("You've been disconnected.", code);
