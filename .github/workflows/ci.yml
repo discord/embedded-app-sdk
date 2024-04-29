@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
         with:
-          version: 8.15.1
+          version: 9.0.6
       - uses: actions/setup-node@v4
         with:
           node-version: 20
