@@ -17,7 +17,7 @@ export async function initializeSdk(): Promise<DiscordSDK> {
     response_type: 'code',
     state: '',
     prompt: 'none',
-    scope: ['identify', 'rpc.activities.write', 'rpc.voice.read'],
+    scope: ['identify', 'applications.commands', 'rpc.activities.write', 'rpc.voice.read'],
   });
 
   // Retrieve an access_token from your embedded app's server

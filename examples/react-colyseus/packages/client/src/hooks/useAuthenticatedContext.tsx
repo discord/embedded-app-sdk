@@ -67,6 +67,10 @@ function useAuthenticatedContextSetup() {
         prompt: 'none',
         // More info on scopes here: https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
         scope: [
+          // Add the required applications.commands scope for user-installable apps.
+          // https://discord.com/developers/docs/tutorials/developing-a-user-installable-app#configuring-default-install-settings-adding-default-install-settings
+          'applications.commands',
+
           // "applications.builds.upload",
           // "applications.builds.read",
           // "applications.store.update",
