@@ -41,8 +41,9 @@ jobs:
           packageManager: pnpm
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          preCommands: cd examples/sdk-playground/packages/client
+          workingDirectory: examples/sdk-playground/packages/client
           command: pages publish --project-name=sdk-playground dist
+          wranglerVersion: '3.52.0'
 
       # deploy server
       - name: deploy server
@@ -54,4 +55,6 @@ jobs:
           preCommands: |
             cd examples/sdk-playground/packages/server
             ./handle-wrangler-secrets.sh production remote
+          workingDirectory: examples/sdk-playground/packages/server
           command: publish src/index.ts --env production
+          wranglerVersion: '3.52.0'
