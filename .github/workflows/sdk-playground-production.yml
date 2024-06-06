@@ -38,6 +38,8 @@ jobs:
       - name: deploy client
         uses: cloudflare/wrangler-action@v3.6.1
         with:
+          node-version: 20
+          cache: pnpm
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           preCommands: cd examples/sdk-playground/packages/client
@@ -48,6 +50,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3.6.1
         with:
           node-version: 20
+          cache: pnpm
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           preCommands: |
