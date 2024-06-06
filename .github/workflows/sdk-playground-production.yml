@@ -52,9 +52,7 @@ jobs:
           packageManager: pnpm
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          preCommands: |
-            cd examples/sdk-playground/packages/server
-            ./handle-wrangler-secrets.sh production remote
+          preCommands: ./handle-wrangler-secrets.sh production remote
           workingDirectory: examples/sdk-playground/packages/server
           command: publish src/index.ts --env production
           wranglerVersion: '3.52.0'
