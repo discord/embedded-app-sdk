@@ -16,7 +16,7 @@
     "esbuild": "0.21.3",
     "eventemitter3": "^5.0.0",
     "express": "^4.19.2",
-    "uuid": "^9.0.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "glob": "^10.3.12",
