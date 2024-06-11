@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {Orientation} from '../Constants';
-import {DISPATCH, UserVoiceState} from './common';
+import {DISPATCH, GuildMember, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
   Entitlement,
@@ -23,6 +23,7 @@ export enum Events {
   ACTIVITY_LAYOUT_MODE_UPDATE = 'ACTIVITY_LAYOUT_MODE_UPDATE',
   ORIENTATION_UPDATE = 'ORIENTATION_UPDATE',
   CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE',
+  CURRENT_GUILD_MEMBER_UPDATE = 'CURRENT_GUILD_MEMBER_UPDATE',
   ENTITLEMENT_CREATE = 'ENTITLEMENT_CREATE',
   THERMAL_STATE_UPDATE = 'THERMAL_STATE_UPDATE',
   ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
@@ -197,6 +198,15 @@ export const EventSchema = {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CURRENT_USER_UPDATE),
       data: User,
+    }),
+  },
+  [Events.CURRENT_GUILD_MEMBER_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.CURRENT_GUILD_MEMBER_UPDATE),
+      data: GuildMember,
+    }),
+    subscribeArgs: zod.object({
+      guild_id: zod.string(),
     }),
   },
   [Events.ENTITLEMENT_CREATE]: {
