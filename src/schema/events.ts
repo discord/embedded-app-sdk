@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {Orientation} from '../Constants';
-import {DISPATCH, GuildMember, UserVoiceState} from './common';
+import {DISPATCH, GuildMemberRPC, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
   Entitlement,
@@ -203,7 +203,7 @@ export const EventSchema = {
   [Events.CURRENT_GUILD_MEMBER_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.CURRENT_GUILD_MEMBER_UPDATE),
-      data: GuildMember,
+      data: GuildMemberRPC,
     }),
     subscribeArgs: zod.object({
       guild_id: zod.string(),
