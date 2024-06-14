@@ -47,6 +47,10 @@ export function matchAndRewriteURL({originalURL, prefix, prefixHost, target}: Ma
 
   // Append the original path
   newURL.pathname += newURL.pathname === '/' ? originalURL.pathname.slice(1) : originalURL.pathname;
+  // prepend /.proxy/ to path if using discord activities proxy
+  if (newURL.hostname.includes('discordsays.com') || newURL.hostname.includes('discordsez.com')) {
+    newURL.pathname = '/.proxy' + newURL.pathname;
+  }
   // Remove the target's path from the new url path
   newURL.pathname = newURL.pathname.replace(targetURL.pathname, '');
   // Add a trailing slash if original url had it, and if it doesn't already have one or if matches filename regex
