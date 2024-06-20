@@ -11,7 +11,7 @@
   "dependencies": {
     "@discord/embedded-app-sdk": "workspace:@discord/embedded-app-sdk@*",
     "colyseus.js": "^0.15.18",
-    "eslint": "^8.18.0",
+    "eslint": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
