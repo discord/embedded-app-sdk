@@ -131,9 +131,13 @@ function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
 }
 
 export function attemptRemap({url, mappings}: RemapInput): URL {
+  const newURL = new URL(url.toString());
+  if (newURL.hostname.includes('discordsays.com') || newURL.hostname.includes('discordsez.com')) {
+    newURL.pathname = '/.proxy' + newURL.pathname;
+  }
   for (const mapping of mappings) {
     const mapped = matchAndRewriteURL({
-      originalURL: url,
+      originalURL: newURL,
       prefix: mapping.prefix,
       target: mapping.target,
       prefixHost: window.location.host,
@@ -142,5 +146,5 @@ export function attemptRemap({url, mappings}: RemapInput): URL {
       return mapped;
     }
   }
-  return url;
+  return newURL;
 }

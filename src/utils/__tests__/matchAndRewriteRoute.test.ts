@@ -202,6 +202,14 @@ describe('matchAndRewriteURL', () => {
       expect(url4.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url?key=abc123');
     });
 
+    it('Applies the /.proxy/ mapping without any mappings', () => {
+      const url = attemptRemap({
+        url: new URL('https://1234567890.discordsays.com/api/token'),
+        mappings: [],
+      });
+      expect(url.toString()).toEqual('https://1234567890.discordsays.com/.proxy/api/token');
+    });
+
     it("Doesn't apply trailing slash to complete filenames", () => {
       const prefixHost = '123456789012345678.discordsays.com';
       const target = 'domain.com';
