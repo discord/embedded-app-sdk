@@ -208,6 +208,12 @@ describe('matchAndRewriteURL', () => {
         mappings: [],
       });
       expect(url.toString()).toEqual('https://1234567890.discordsays.com/.proxy/api/token');
+
+      const base = attemptRemap({
+        url: new URL('https://1234567890.discordsays.com/'),
+        mappings: [],
+      });
+      expect(base.toString()).toEqual('https://1234567890.discordsays.com/.proxy/');
     });
 
     it("Doesn't apply trailing slash to complete filenames", () => {
