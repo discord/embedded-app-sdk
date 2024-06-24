@@ -1,6 +1,5 @@
 import * as zod from 'zod';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
-import {AuthenticateResponseSchema} from '../generated/schemas';
 
 // DISPATCH is sent as cmd but is a special case, so is excluded from Commands enum
 export const DISPATCH = 'DISPATCH';
@@ -46,13 +45,6 @@ export const ReceiveFramePayload = zod
     nonce: zod.string(),
   })
   .passthrough();
-
-export const ScopesObject = {
-  ...AuthenticateResponseSchema.shape.scopes.element.overlayType._def.innerType.options[0].Values,
-  UNHANDLED: -1,
-} as const;
-
-export const Scopes = zodCoerceUnhandledValue(ScopesObject);
 
 export const User = zod.object({
   id: zod.string(),
