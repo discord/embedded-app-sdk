@@ -51,6 +51,7 @@ export type VoiceSettingsMode = zod.infer<typeof Common.VoiceSettingsMode>;
 export type VoiceSettingsIO = zod.infer<typeof Common.VoiceSettingsIO>;
 export type CertifiedDevice = zod.infer<typeof Common.CertifiedDevice>;
 
+export type ScopesObject = typeof Common.ScopesObject;
 export type StatusObject = typeof Common.StatusObject;
 export type PermissionOverwriteTypeEnum = typeof Common.PermissionOverwriteTypeObject;
 export type ChannelTypesObject = typeof Common.ChannelTypesObject;

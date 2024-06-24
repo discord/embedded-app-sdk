@@ -1,11 +1,12 @@
-import {Commands} from '../schema/common';
+import * as zod from 'zod';
+import {Commands, Scopes} from '../schema/common';
 import {AuthorizeResponse} from '../schema/responses';
-import {OAuthScopes, TSendCommand} from '../schema/types';
+import {TSendCommand} from '../schema/types';
 import {commandFactory} from '../utils/commandFactory';
 
 export interface AuthorizeInput {
   client_id: string;
-  scope: OAuthScopes[];
+  scope: Array<zod.infer<typeof Scopes>>;
   response_type?: 'code' | 'token';
   code_challenge?: string;
   state?: string;
