@@ -47,6 +47,8 @@ export const ReceiveFramePayload = zod
   })
   .passthrough();
 
+// TODO afgiel -- next breaking change release
+// remove Scopes and ScopesObject in favor of Types.OAuthScopes
 export const ScopesObject = {
   ...AuthenticateResponseSchema.shape.scopes.element.overlayType._def.innerType.options[0].Values,
   UNHANDLED: -1,
