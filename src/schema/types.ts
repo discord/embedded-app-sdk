@@ -85,6 +85,7 @@ export type OAuthScopes =
   | 'rpc.voice.read'
   | 'rpc.activities.write'
   | 'webhook.incoming'
+  | 'applications.commands'
   | 'applications.builds.upload'
   | 'applications.builds.read'
   | 'applications.store.update'
