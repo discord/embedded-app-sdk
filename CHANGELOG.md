@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0](https://github.com/discord/embedded-app-sdk/compare/v1.2.0...v1.3.0) (2024-06-25)
+
+
+### Features
+
+* add applications.commands to OAuthScopes and use the type in authorize command ([#223](https://github.com/discord/embedded-app-sdk/issues/223)) ([d4d319d](https://github.com/discord/embedded-app-sdk/commit/d4d319d96377d6bfe1b082b7399ce51872e2e2a4))
+
+
+### Bug Fixes
+
+* **deps:** unpin big-integer and decimal.js-light ([#156](https://github.com/discord/embedded-app-sdk/issues/156)) ([860cd87](https://github.com/discord/embedded-app-sdk/commit/860cd874dc7ea21beec58a8adbf81661b910e80d))
+* **deps:** update dependency @types/uuid to v10 ([#221](https://github.com/discord/embedded-app-sdk/issues/221)) ([46cf04e](https://github.com/discord/embedded-app-sdk/commit/46cf04e89a21194eb15425d64a1ad3b1f25461a7))
+* **deps:** update dependency esbuild to v0.21.3 ([#198](https://github.com/discord/embedded-app-sdk/issues/198)) ([08e77ef](https://github.com/discord/embedded-app-sdk/commit/08e77ef4d80215611c87c5b981533890f8ee19e0))
+* **deps:** update dependency eventemitter3 to v5 ([#187](https://github.com/discord/embedded-app-sdk/issues/187)) ([2aa5971](https://github.com/discord/embedded-app-sdk/commit/2aa5971600d339e24aa0648358546b705600b095))
+* **deps:** update dependency uuid to v10 ([#217](https://github.com/discord/embedded-app-sdk/issues/217)) ([c7ffadf](https://github.com/discord/embedded-app-sdk/commit/c7ffadf83f927f8c671b0a8cb9424edcdb1101ec))
+* remove unavailable options from "setActivity" command ([#193](https://github.com/discord/embedded-app-sdk/issues/193)) ([e70decc](https://github.com/discord/embedded-app-sdk/commit/e70deccc7a473eda53f90d2c643e241dfe683b5b))
+
 ## [1.2.0](https://github.com/discord/embedded-app-sdk/compare/v1.1.2...v1.2.0) (2024-04-23)
 
 
