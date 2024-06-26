@@ -82,6 +82,21 @@ export const GuildMember = zod.object({
   mute: zod.boolean(),
 });
 
+export const GuildMemberRPC = zod.object({
+  user_id: zod.string(),
+  nick: zod.string().optional().nullable(),
+  guild_id: zod.string(),
+  avatar: zod.string().optional().nullable(),
+  avatar_decoration_data: zod
+    .object({
+      asset: zod.string(),
+      sku_id: zod.string().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
+  color_string: zod.string().optional().nullable(),
+});
+
 export const Emoji = zod.object({
   id: zod.string(),
   name: zod.string().optional().nullable(),
