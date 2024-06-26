@@ -19,3 +19,7 @@ This example uses Node.js, React, and [Colyseus](https://colyseus.io/), a multip
 ### [Nested Messages](/examples/nested-messages)
 
 This example implements an Embedded App using a nested framework like a game engine. When using a game engine, you need to send messages between a parent iframe and the nested framework.
+
+### [Asteroids Rivet](/examples/asteroids-rivet)
+
+This example uses Node.js, Socket.io, and [Rivet](https://rivet.gg/), a game-hosting service, to guide the user through an end-to-end deployment of a multiplayer game to Discord.
