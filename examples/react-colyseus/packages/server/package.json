@@ -30,7 +30,7 @@
     "@types/node": "^20.12.7",
     "nodemon": "^3.1.0",
     "npm-run-all2": "^6.0.0",
-    "rimraf": "^5.0.0",
+    "rimraf": "^6.0.0",
     "ts-node": "^10.9.1",
     "typescript": "~5.5.0"
   }
