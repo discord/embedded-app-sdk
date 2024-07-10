@@ -65,7 +65,7 @@ export const start = async () => {
   });
 
   // Get guild specific nickname and avatar, and fallback to user name and avatar
-  const guildMember = await fetch(`/discord/api/users/@me/guilds/${discordSdk.guildId}/member`, {
+  const guildMember = await fetch(`https://discord.com/api/users/@me/guilds/${discordSdk.guildId}/member`, {
     method: 'get',
     headers: {Authorization: `Bearer ${access_token}`},
   })
