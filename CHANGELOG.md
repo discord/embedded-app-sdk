@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/discord/embedded-app-sdk/compare/v1.3.0...v1.4.0) (2024-07-10)
+
+
+### Features
+
+* add UPDATE_CURRENT_GUILD_MEMBER sdk hook and playground page ([#218](https://github.com/discord/embedded-app-sdk/issues/218)) ([d25deb2](https://github.com/discord/embedded-app-sdk/commit/d25deb298a03c69371b4a0deef7db20279b7e2a8))
+* rewrite requests through /.proxy/ using patchUrlMappings  ([#222](https://github.com/discord/embedded-app-sdk/issues/222)) ([44787c5](https://github.com/discord/embedded-app-sdk/commit/44787c52a9611c0dcb9214d7deb49942687011bc))
+
+
+### Bug Fixes
+
+* **deps:** update dependency esbuild to ^0.23.0 ([#226](https://github.com/discord/embedded-app-sdk/issues/226)) ([63bf436](https://github.com/discord/embedded-app-sdk/commit/63bf436e763c001dc03a02969576aceff9b9425d))
+
 ## [1.3.0](https://github.com/discord/embedded-app-sdk/compare/v1.2.0...v1.3.0) (2024-06-25)
 
 
