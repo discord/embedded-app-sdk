@@ -6,9 +6,7 @@
   "scripts": {
     "test": "$npm_execpath run tsc",
     "dev": "vite --mode dev",
-    "dev-proxy": "vite --mode dev-proxy",
     "staging": "vite --mode staging",
-    "staging-proxy": "vite --mode staging-proxy",
     "build": "tsc && vite build",
     "build-staging": "tsc && vite build --mode staging",
     "preview": "vite preview",
