@@ -49,7 +49,9 @@ async function setupDiscordSdk() {
   });
 
   // Retrieve an access_token from your activity's server
-  const response = await fetch('/api/token', {
+  // /.proxy/ is prepended here in compliance with CSP
+  // see https://discord.com/developers/docs/activities/development-guides#construct-a-full-url
+  const response = await fetch('/.proxy/api/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
