@@ -16,6 +16,8 @@ interface PatchUrlMappingsConfig {
   patchSrcAttributes?: boolean;
 }
 
+const PROXY_PREFIX = '/.proxy';
+
 export function patchUrlMappings(
   mappings: Mapping[],
   {patchFetch = true, patchWebSocket = true, patchXhr = true, patchSrcAttributes = false}: PatchUrlMappingsConfig = {},
@@ -132,8 +134,11 @@ function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
 
 export function attemptRemap({url, mappings}: RemapInput): URL {
   const newURL = new URL(url.toString());
-  if (newURL.hostname.includes('discordsays.com') || newURL.hostname.includes('discordsez.com')) {
-    newURL.pathname = '/.proxy' + newURL.pathname;
+  if (
+    (newURL.hostname.includes('discordsays.com') || newURL.hostname.includes('discordsez.com')) &&
+    !newURL.pathname.startsWith(PROXY_PREFIX)
+  ) {
+    newURL.pathname = PROXY_PREFIX + newURL.pathname;
   }
   for (const mapping of mappings) {
     const mapped = matchAndRewriteURL({

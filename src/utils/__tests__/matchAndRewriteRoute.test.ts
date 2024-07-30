@@ -216,6 +216,20 @@ describe('matchAndRewriteURL', () => {
       expect(base.toString()).toEqual('https://1234567890.discordsays.com/.proxy/');
     });
 
+    it("Doesn't apply /.proxy/ if it already prepends the path", () => {
+      const noPrepend = attemptRemap({
+        url: new URL('https://1234567890.discordsays.com/.proxy/api/token'),
+        mappings: [],
+      });
+      expect(noPrepend.toString()).toEqual('https://1234567890.discordsays.com/.proxy/api/token');
+
+      const prepend = attemptRemap({
+        url: new URL('https://1234567890.discordsays.com/path/before/.proxy/api/token'),
+        mappings: [],
+      });
+      expect(prepend.toString()).toEqual('https://1234567890.discordsays.com/.proxy/path/before/.proxy/api/token');
+    });
+
     it("Doesn't apply trailing slash to complete filenames", () => {
       const prefixHost = '123456789012345678.discordsays.com';
       const target = 'domain.com';
