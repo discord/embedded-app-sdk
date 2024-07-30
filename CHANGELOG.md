@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/discord/embedded-app-sdk/compare/v1.4.0...v1.4.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* do not prepend PROXY_PREFIX if already prepends path ([#237](https://github.com/discord/embedded-app-sdk/issues/237)) ([c564b2d](https://github.com/discord/embedded-app-sdk/commit/c564b2dc26ee0f9d687bc22364d2e6677c49eff8))
+* prepend /.proxy to discord-starter-activity token fetch ([#233](https://github.com/discord/embedded-app-sdk/issues/233)) ([6e2cd1d](https://github.com/discord/embedded-app-sdk/commit/6e2cd1dda417b1790faae0d777d557ddfddf4c8f))
+
 ## [1.4.0](https://github.com/discord/embedded-app-sdk/compare/v1.3.0...v1.4.0) (2024-07-10)
 
 
