@@ -67,7 +67,7 @@ From this SKU Management Page, all SKUs for the Application wil be listed. If no
 
 ![create-sku](/assets/create-sku.png)
 
-Once the SKU is created, you should select a price. The "Price" dropdown will give you an option to select a price tier and currency price overrides can be chosen with the "Price Override" menu.
+Once the SKU is created, you should select a price. The "Price" dropdown will give you an option to select a price tier.
 
 ![publish-sku](/assets/publish-sku.png)
 
@@ -295,41 +295,6 @@ const handleEntitlementCreate = () => {
   // refetch entitlements from server
 };
 discordSdk.subscribe('ENTITLEMENT_CREATE', handleEntitlementCreate);
-```
-
-## Per-User Discounts
-
-You may want to give discounts to specific users who are early adopters, make many purchases, or participate in events. Per-User Discounts are available via HTTP API and give developers the option to create a discount for a particular user for the next purchase of a particular SKU for some time period.
-
-### `HTTP PUT /api/store/skus/{sku.id}/discounts/{user.id}`
-
-Creates a discount for the given user on their next purchase of the given SKU. You should call this endpoint from your backend server just before calling `START_PURCHASE` for the SKU you wish to discount. The user will then see a discounted price for that SKU at time of payment. The discount is automatically consumed after successful purchase or if the TTL expires.
-
-| Name          | Type | Description                                                                            |
-| ------------- | ---- | -------------------------------------------------------------------------------------- |
-| `percent_off` | int  | the percentage to discount - max of 100, min of 1                                      |
-| `ttl?`        | int  | the time to live for the discount, in seconds - max of 3600, min of 60, default of 600 |
-
-```
-curl -X PUT https://discord.com/api/v6/store/skus/461618229171141643/discounts/53908232522183999 \
--H "Authorization: Bot <token>" \
--H "Accept: application/json" \
--H "Content-type: application/json" \
--d '{"percent_off": 10, "ttl": 600}'
-
-// Returns 204 No Content
-```
-
-### `HTTP DELETE /api//store/skus/{sku.id}/discounts/{user.id}`
-
-Deletes the currently active discount on the given SKU for the given user. You do not need to call this after a user has made a discounted purchase; successful discounted purchases will automatically remove the discount for that user for subsequent purchases.
-
-```
-curl -X DELETE https://discord.com/api/v6/store/skus/461618229171141643/discounts/53908232522183999 \
--H "Authorization: Bearer <token>" \
--H "Accept: application/json"
-
-// Returns 204 No Content
 ```
 
 ## Test Purchases
