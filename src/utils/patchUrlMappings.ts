@@ -116,6 +116,7 @@ export function patchUrlMappings(
 }
 
 function recursivelyRemapChildNodes(node: Node, mappings: Mapping[]) {
+  attemptSetNodeSrc(node, mappings);
   if (node.hasChildNodes()) {
     node.childNodes.forEach((child) => {
       attemptSetNodeSrc(child, mappings);
