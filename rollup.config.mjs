@@ -1,7 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
-import {nodeResolve} from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
 import {join} from 'path';
+import pkg from './package.json';
 
 const srcDir = join(__dirname, 'src');
 const outDir = 'output';
@@ -42,13 +41,21 @@ function buildConfig(format) {
         return `[name].${ext}`;
       },
     },
+    external: [
+      // All dependencies are external (aka imported from node_modules)
+      ...Object.keys(pkg.dependencies),
+    ],
+    onwarn(warning, warn) {
+      // Throw an error on unresolved dependencies (not listed in package json)
+      if (warning.code === 'UNRESOLVED_IMPORT')
+        throw new Error(`${warning.message}.
+  Make sure this dependency is listed in the package.json
+      `);
+
+      // Use default for everything else
+      warn(warning);
+    },
     plugins: [
-      // i dont want to include the node modules
-      // but it's causing issues
-      nodeResolve({
-        preferBuiltins: false,
-      }),
-      commonjs(),
       typescript({
         declaration: true,
         outDir: outDir,
