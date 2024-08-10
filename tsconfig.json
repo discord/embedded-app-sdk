@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "rootDir": "src",
     // TODO: Enable this check. It is stricter.
     // https://app.asana.com/0/1202090529698493/1205406173366739/f

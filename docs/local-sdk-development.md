@@ -11,3 +11,4 @@ To test changes to the SDK, locally, with either of these projects, you must do 
 
 1. From terminal, navigate to the root of either project's directory, (i.e. examples/discord-application-start or examples/sdk-playground)
 2. Start up the example's web server with `pnpm dev`.
+3. Start up the SDK's development pipeline with `pnpm dev`.

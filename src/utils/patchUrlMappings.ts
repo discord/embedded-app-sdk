@@ -116,6 +116,8 @@ export function patchUrlMappings(
 }
 
 function recursivelyRemapChildNodes(node: Node, mappings: Mapping[]) {
+  attemptSetNodeSrc(node, mappings);
+
   if (node.hasChildNodes()) {
     node.childNodes.forEach((child) => {
       attemptSetNodeSrc(child, mappings);
@@ -128,7 +130,28 @@ function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
   if (node instanceof HTMLElement && node.hasAttribute('src')) {
     const url = absoluteURL(node.getAttribute('src') ?? '');
     if (url.host === window.location.host) return;
-    node.setAttribute('src', attemptRemap({url, mappings}).toString());
+
+    if (node.tagName.toLowerCase() === 'script') {
+      // Scripts are a special case, and need to be wholly recreated since
+      // modifying a script tag doesn't refetch.
+      attemptRecreateScriptNode(node, {url, mappings});
+    } else {
+      node.setAttribute('src', attemptRemap({url, mappings}).toString());
+    }
+  }
+}
+
+function attemptRecreateScriptNode(node: HTMLElement, {url, mappings}: RemapInput) {
+  const newUrl = attemptRemap({url, mappings});
+  if (url.toString() !== newUrl.toString()) {
+    const newNode = document.createElement(node.tagName);
+    newNode.innerHTML = node.innerHTML;
+    for (const attr of node.attributes) {
+      newNode.setAttribute(attr.name, attr.value);
+    }
+    newNode.setAttribute('src', attemptRemap({url, mappings}).toString());
+    node.after(newNode);
+    node.remove();
   }
 }
 
