@@ -7,9 +7,9 @@
     "start": "npm-run-all build start:dev",
     "start:dev": "node ./dist/app.js",
     "start:prod": "NODE_ENV=production PORT=3000 node ./dist/app.js",
-    "dev": "nodemon --watch src -e ts,ejs --exec $npm_execpath start",
+    "dev": "nodemon --watch src -e ts,ejs --exec \"npm start\"",
     "build": "npm-run-all build:clean build:tsc",
-    "build:clean": "rimraf dist/*",
+    "build:clean": "rimraf dist",
     "build:tsc": "tsc",
     "debug:start": "npm-run-all build debug:start:prod",
     "debug:start:prod": "node --nolazy --inspect-brk=9229 ./dist/app.js"
