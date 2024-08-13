@@ -96,7 +96,10 @@ export function patchUrlMappings(
         if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
           attemptSetNodeSrc(mutation.target, mappings);
         } else if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach((node) => recursivelyRemapChildNodes(node, mappings));
+          mutation.addedNodes.forEach((node) => {
+            attemptSetNodeSrc(node, mappings);
+            recursivelyRemapChildNodes(node, mappings);
+          });
         }
       }
     };
@@ -128,7 +131,30 @@ function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
   if (node instanceof HTMLElement && node.hasAttribute('src')) {
     const url = absoluteURL(node.getAttribute('src') ?? '');
     if (url.host === window.location.host) return;
-    node.setAttribute('src', attemptRemap({url, mappings}).toString());
+
+    if (node.tagName.toLowerCase() === 'script') {
+      // Scripts are a special case, and need to be wholly recreated since
+      // modifying a script tag doesn't refetch.
+      attemptRecreateScriptNode(node, {url, mappings});
+    } else {
+      node.setAttribute('src', attemptRemap({url, mappings}).toString());
+    }
+  }
+}
+
+function attemptRecreateScriptNode(node: HTMLElement, {url, mappings}: RemapInput) {
+  const newUrl = attemptRemap({url, mappings});
+  if (url.toString() !== newUrl.toString()) {
+    // Note: Script tags cannot be duplicated via `node.clone()` because their internal 'already started'
+    // state prevents the new one from being fetched. We must manually recreate the duplicate tag instead.
+    const newNode = document.createElement(node.tagName);
+    newNode.innerHTML = node.innerHTML;
+    for (const attr of node.attributes) {
+      newNode.setAttribute(attr.name, attr.value);
+    }
+    newNode.setAttribute('src', attemptRemap({url, mappings}).toString());
+    node.after(newNode);
+    node.remove();
   }
 }
 
