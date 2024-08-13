@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/discord/embedded-app-sdk/compare/v1.4.1...v1.4.2) (2024-08-13)
+
+
+### Bug Fixes
+
+* **patchUrlMappings:** recreate script elements when patching their src attribute ([#242](https://github.com/discord/embedded-app-sdk/issues/242)) ([b915ebf](https://github.com/discord/embedded-app-sdk/commit/b915ebf06620b0af758aeeed51a312bde7c42e74))
+
 ## [1.4.1](https://github.com/discord/embedded-app-sdk/compare/v1.4.0...v1.4.1) (2024-07-30)
 
 
