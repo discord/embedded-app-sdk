@@ -1,6 +1,6 @@
 /**
  * This file is generated.
- * Run "pnpm sync" to regenerate file.
+ * Run "npm run sync" to regenerate file.
  * @generated
  */
 import {z, infer as zInfer} from 'zod';
