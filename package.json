@@ -29,9 +29,9 @@
     "test:all": "pnpm test -r",
     "dev": "pnpm build --watch",
     "build": "pnpm run prepare",
-    "lint:ts": "tsc -b ./tsconfig-all.json",
+    "lint:ts": "tsc",
     "lint": "pnpm eslint ./src",
-    "lint:fix": "pnpm eslint --fix ./src ./examples/**/*.{ts,tsx}",
+    "lint:fix": "pnpm eslint --fix ./src",
     "prepare": "husky && rollup --bundleConfigAsCjs -c rollup.config.mjs",
     "sync": "zx ./scripts/syncRPCSchema.mjs"
   },
@@ -80,6 +80,7 @@
     "prettier": "^3.2.5",
     "rollup": "^4.14.1",
     "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
     "typescript": "~5.5.0",
     "zx": "^8.0.0"
