@@ -5,10 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch via pnpm",
+      "name": "Launch via npm",
       "request": "launch",
       "runtimeArgs": ["test"],
-      "runtimeExecutable": "pnpm",
+      "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
     }

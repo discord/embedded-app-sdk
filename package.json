@@ -26,12 +26,11 @@
   "scripts": {
     "test": "jest",
     "test:dev": "jest --watch",
-    "test:all": "pnpm test -r",
-    "dev": "pnpm build --watch",
-    "build": "pnpm run prepare",
+    "dev": "npm run build --watch",
+    "build": "npm run prepare",
     "lint:ts": "tsc",
-    "lint": "pnpm eslint ./src",
-    "lint:fix": "pnpm eslint --fix ./src",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src",
     "prepare": "husky && rollup --bundleConfigAsCjs -c rollup.config.mjs",
     "sync": "zx ./scripts/syncRPCSchema.mjs"
   },

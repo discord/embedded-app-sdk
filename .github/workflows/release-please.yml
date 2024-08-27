@@ -26,19 +26,14 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         with:
           ref: main
-      - uses: pnpm/action-setup@v2
-        if: ${{ steps.release.outputs.release_created }}
-        with:
-          version: latest
       - uses: actions/setup-node@v4
         if: ${{ steps.release.outputs.release_created }}
         with:
           node-version: 20
-          cache: pnpm
           registry-url: 'https://registry.npmjs.org'
-      - run: pnpm install
+      - run: npm install
         if: ${{ steps.release.outputs.release_created }}
-      - run: pnpm build
+      - run: npm run build
         if: ${{ steps.release.outputs.release_created }}
       - id: auth
         if: ${{ steps.release.outputs.release_created }}
@@ -54,6 +49,6 @@ jobs:
             NPM_TOKEN:discord-app-city-prd/embedded-app-sdk-deploy-token
       - name: Publish 🚀
         if: ${{ steps.release.outputs.release_created }}
-        run: pnpm publish --access public --no-git-checks
+        run: npm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.NPM_TOKEN }}
