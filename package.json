@@ -26,7 +26,7 @@
   "scripts": {
     "test": "jest",
     "test:dev": "jest --watch",
-    "dev": "npm run build --watch",
+    "dev": "npm run prepare -- --watch",
     "build": "npm run prepare",
     "lint:ts": "tsc",
     "lint": "eslint ./src",
