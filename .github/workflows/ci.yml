@@ -7,26 +7,40 @@ on:
     branches: [main]
 
 jobs:
-  test-ci:
-    name: test-ci
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9.0.6
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-      - name: install deps
-        run: pnpm install
-      - name: build sdk
-        run: pnpm build
-      - name: lint
-        run: pnpm lint
-      - name: check ts
-        run: pnpm lint:ts
-      - name: test
-        run: pnpm test:all
+      - run: npm install
+      - run: npm run build
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run lint
+  tsc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run lint:ts
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm test
+  

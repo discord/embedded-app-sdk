@@ -34,8 +34,8 @@ function buildConfig(format) {
         if (chunk.facadeModuleId.includes('node_modules/')) {
           const name = chunk.name
             .replaceAll('node_modules/', 'lib/')
-            // Also remove the .pnpm prefix if present
-            .replace('.pnpm/', '');
+            // Also remove the .npm prefix if present
+            .replace('.npm/', '');
           return `${name}.${ext}`;
         }
 
