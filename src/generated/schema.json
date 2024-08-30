@@ -51,6 +51,7 @@
               "guilds",
               "guilds.join",
               "guilds.members.read",
+              "guilds.channels.read",
               "gdm.join",
               "bot",
               "rpc",
@@ -85,7 +86,8 @@
               "dm_channels.messages.write",
               "gateway.connect",
               "account.global_name.update",
-              "payment_sources.country_code"
+              "payment_sources.country_code",
+              "sdk.social_layer"
             ]
           }
         },
