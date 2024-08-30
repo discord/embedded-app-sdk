@@ -9,7 +9,7 @@ const defaultBranch = 'main';
 const branch = argv.branch ?? defaultBranch;
 let jsonSchemaPath = argv.path;
 if (jsonSchemaPath == null) {
-  throw new Error('Expected --path argument.\nThis should point to the generated JSON Schema.');
+  throw new Error('Expected -- --path argument.\nThis should point to the generated JSON Schema file.\nExample command below:\nnpm run sync -- --path path/to/monorepo/discord_common/js/packages/rpc-schema/generated/schema.json');
 }
 // Resolve absolute path
 jsonSchemaPath = path.resolve(jsonSchemaPath);
