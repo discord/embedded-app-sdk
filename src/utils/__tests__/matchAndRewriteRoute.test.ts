@@ -61,6 +61,36 @@ describe('matchAndRewriteURL', () => {
       }
     });
 
+    it('matches base even if remapped twice', () => {
+      const TEST_CASES: Array<MatchAndRewriteURLInputs & {result: string}> = [
+        {
+          originalURL: new URL('https://discord.com'),
+          prefixHost: '123456789012345678.discordsays.com',
+          prefix: '/',
+          target: 'discord.com',
+          result: 'https://123456789012345678.discordsays.com/.proxy/',
+        },
+        {
+          originalURL: new URL('wss://discord.com'),
+          prefixHost: '123456789012345678.discordsays.com',
+          prefix: '/',
+          target: 'discord.com',
+          result: 'wss://123456789012345678.discordsays.com/.proxy/',
+        },
+      ];
+      for (const {result, ...rest} of TEST_CASES) {
+        const resultURL = matchAndRewriteURL(rest);
+        if (!(resultURL instanceof URL)) {
+          throw new Error('URL expected');
+        }
+        const result2URL = matchAndRewriteURL({
+          ...rest,
+          originalURL: resultURL,
+        });
+        expect(result2URL?.toString()).toEqual(result);
+      }
+    });
+
     it('matches non-base paths and doesnt mangle rest of path', () => {
       const TEST_CASES: Array<MatchAndRewriteURLInputs & {result: string}> = [
         {

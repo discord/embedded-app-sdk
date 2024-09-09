@@ -1,4 +1,4 @@
-import {absoluteURL, matchAndRewriteURL} from './url';
+import {absoluteURL, matchAndRewriteURL, PROXY_PREFIX} from './url';
 
 export interface Mapping {
   prefix: string;
@@ -15,8 +15,6 @@ interface PatchUrlMappingsConfig {
   patchXhr?: boolean;
   patchSrcAttributes?: boolean;
 }
-
-const PROXY_PREFIX = '/.proxy';
 
 export function patchUrlMappings(
   mappings: Mapping[],
@@ -162,6 +160,7 @@ export function attemptRemap({url, mappings}: RemapInput): URL {
   const newURL = new URL(url.toString());
   if (
     (newURL.hostname.includes('discordsays.com') || newURL.hostname.includes('discordsez.com')) &&
+    // Only apply proxy prefix once
     !newURL.pathname.startsWith(PROXY_PREFIX)
   ) {
     newURL.pathname = PROXY_PREFIX + newURL.pathname;
