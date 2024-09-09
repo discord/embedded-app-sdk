@@ -37,6 +37,7 @@ export const AuthenticateResponseSchema = z.object({
           'guilds',
           'guilds.join',
           'guilds.members.read',
+          'guilds.channels.read',
           'gdm.join',
           'bot',
           'rpc',
@@ -72,6 +73,7 @@ export const AuthenticateResponseSchema = z.object({
           'gateway.connect',
           'account.global_name.update',
           'payment_sources.country_code',
+          'sdk.social_layer',
         ])
         .or(z.literal(-1))
         .default(-1),
