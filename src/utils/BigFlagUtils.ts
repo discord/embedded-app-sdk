@@ -21,7 +21,7 @@ function checkBrowserSupportsBigInt(): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     BigInt;
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
