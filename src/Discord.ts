@@ -198,23 +198,19 @@ export class DiscordSDK implements IDiscordSDK {
   }
 
   private handshake() {
-    try {
-      this.source?.postMessage(
-        [
-          Opcodes.HANDSHAKE,
-          {
-            v: 1,
-            encoding: 'json',
-            client_id: this.clientId,
-            frame_id: this.frameId,
-            sdk_version: this.sdkVersion,
-          },
-        ],
-        this.sourceOrigin,
-      );
-    } catch (e) {
-      return;
-    }
+    this.source?.postMessage(
+      [
+        Opcodes.HANDSHAKE,
+        {
+          v: 1,
+          encoding: 'json',
+          client_id: this.clientId,
+          frame_id: this.frameId,
+          sdk_version: this.sdkVersion,
+        },
+      ],
+      this.sourceOrigin,
+    );
   }
 
   private addOnReadyListener() {
