@@ -11,6 +11,7 @@ import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
+import {version as sdkVersion} from '../package.json';
 
 export enum Opcodes {
   HANDSHAKE = 0,
@@ -57,6 +58,7 @@ export class DiscordSDK implements IDiscordSDK {
   readonly sourceOrigin: string = '';
 
   private frameId: string;
+  private sdkVersion = sdkVersion;
   private eventBus = new EventEmitter();
   private isReady: boolean;
   private pendingCommands: Map<
@@ -196,18 +198,23 @@ export class DiscordSDK implements IDiscordSDK {
   }
 
   private handshake() {
-    this.source?.postMessage(
-      [
-        Opcodes.HANDSHAKE,
-        {
-          v: 1,
-          encoding: 'json',
-          client_id: this.clientId,
-          frame_id: this.frameId,
-        },
-      ],
-      this.sourceOrigin,
-    );
+    try {
+      this.source?.postMessage(
+        [
+          Opcodes.HANDSHAKE,
+          {
+            v: 1,
+            encoding: 'json',
+            client_id: this.clientId,
+            frame_id: this.frameId,
+            sdk_version: this.sdkVersion,
+          },
+        ],
+        this.sourceOrigin,
+      );
+    } catch (e) {
+      return;
+    }
   }
 
   private addOnReadyListener() {
