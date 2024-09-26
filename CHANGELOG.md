@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/discord/embedded-app-sdk/compare/v1.4.2...v1.4.3) (2024-09-20)
+
+
+### Bug Fixes
+
+* prevent multiple remappings from applying the .proxy path twice ([#252](https://github.com/discord/embedded-app-sdk/issues/252)) ([1c63d30](https://github.com/discord/embedded-app-sdk/commit/1c63d3043bd7ad79ee2b753a2765e01e97fa566c))
+
 ## [1.4.2](https://github.com/discord/embedded-app-sdk/compare/v1.4.1...v1.4.2) (2024-08-13)
 
 
