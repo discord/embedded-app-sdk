@@ -6,12 +6,13 @@ import commands, {Commands} from './commands';
 import {v4 as uuidv4} from 'uuid';
 import {SDKError} from './error';
 import {EventSchema, ERROR, Events as RPCEvents} from './schema/events';
-import {Platform, RPCCloseCodes} from './Constants';
+import {Platform, RPCCloseCodes, HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
 import {version as sdkVersion} from '../package.json';
+import semver from 'semver';
 
 export enum Opcodes {
   HANDSHAKE = 0,
@@ -47,12 +48,21 @@ function getRPCServerSource(): [Window, string] {
   return [window.parent.opener ?? window.parent, !!document.referrer ? document.referrer : '*'];
 }
 
+interface HandshakePayload {
+  v: number;
+  encoding: string;
+  client_id: string;
+  frame_id: string;
+  sdk_version?: string;
+}
+
 export class DiscordSDK implements IDiscordSDK {
   readonly clientId: string;
   readonly instanceId: string;
   readonly platform: Platform;
   readonly guildId: string | null;
   readonly channelId: string | null;
+  readonly mobileVersion: string | null = null;
   readonly configuration: SdkConfiguration;
   readonly source: Window | WindowProxy | null = null;
   readonly sourceOrigin: string = '';
@@ -137,6 +147,8 @@ export class DiscordSDK implements IDiscordSDK {
 
     this.guildId = urlParams.get('guild_id');
     this.channelId = urlParams.get('channel_id');
+
+    this.mobileVersion = urlParams.get('mobile_version');
     // END Capture URL Query Params
 
     [this.source, this.sourceOrigin] = getRPCServerSource();
@@ -198,19 +210,19 @@ export class DiscordSDK implements IDiscordSDK {
   }
 
   private handshake() {
-    this.source?.postMessage(
-      [
-        Opcodes.HANDSHAKE,
-        {
-          v: 1,
-          encoding: 'json',
-          client_id: this.clientId,
-          frame_id: this.frameId,
-          sdk_version: this.sdkVersion,
-        },
-      ],
-      this.sourceOrigin,
-    );
+    const handshakePayload: HandshakePayload = {
+      v: 1,
+      encoding: 'json',
+      client_id: this.clientId,
+      frame_id: this.frameId,
+    };
+    if (
+      this.platform === Platform.DESKTOP ||
+      (this.mobileVersion != null && semver.gt(this.mobileVersion, HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION))
+    ) {
+      handshakePayload['sdk_version'] = this.sdkVersion;
+    }
+    this.source?.postMessage([Opcodes.HANDSHAKE, handshakePayload], this.sourceOrigin);
   }
 
   private addOnReadyListener() {
