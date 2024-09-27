@@ -61,13 +61,13 @@ export class DiscordSDK implements IDiscordSDK {
   readonly platform: Platform;
   readonly guildId: string | null;
   readonly channelId: string | null;
+  readonly sdkVersion: string = sdkVersion;
   readonly mobileAppVersion: string | null = null;
   readonly configuration: SdkConfiguration;
   readonly source: Window | WindowProxy | null = null;
   readonly sourceOrigin: string = '';
 
   private frameId: string;
-  private sdkVersion = sdkVersion;
   private eventBus = new EventEmitter();
   private isReady: boolean;
   private pendingCommands: Map<

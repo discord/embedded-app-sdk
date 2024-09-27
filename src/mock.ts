@@ -16,6 +16,8 @@ export class DiscordSDKMock implements IDiscordSDK {
   readonly configuration = getDefaultSdkConfiguration();
   readonly source: Window | WindowProxy | null = null;
   readonly sourceOrigin: string = '';
+  readonly sdkVersion = 'mock';
+  readonly mobileAppVersion = 'unknown';
 
   private frameId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
   private eventBus = new EventEmitter();

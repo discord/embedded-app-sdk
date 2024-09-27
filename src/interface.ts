@@ -22,6 +22,8 @@ export interface IDiscordSDK {
   readonly clientId: string;
   readonly instanceId: string;
   readonly platform: Platform;
+  readonly mobileAppVersion: string | null;
+  readonly sdkVersion: string;
   readonly commands: ReturnType<typeof commands>;
   readonly configuration: SdkConfiguration;
   readonly channelId: string | null;
