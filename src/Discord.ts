@@ -12,7 +12,6 @@ import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
 import {version as sdkVersion} from '../package.json';
-import semver from 'semver';
 
 export enum Opcodes {
   HANDSHAKE = 0,
@@ -62,7 +61,7 @@ export class DiscordSDK implements IDiscordSDK {
   readonly platform: Platform;
   readonly guildId: string | null;
   readonly channelId: string | null;
-  readonly mobileVersion: string | null = null;
+  readonly mobileAppVersion: string | null = null;
   readonly configuration: SdkConfiguration;
   readonly source: Window | WindowProxy | null = null;
   readonly sourceOrigin: string = '';
@@ -148,7 +147,7 @@ export class DiscordSDK implements IDiscordSDK {
     this.guildId = urlParams.get('guild_id');
     this.channelId = urlParams.get('channel_id');
 
-    this.mobileVersion = urlParams.get('mobile_version');
+    this.mobileAppVersion = urlParams.get('mobile_app_version');
     // END Capture URL Query Params
 
     [this.source, this.sourceOrigin] = getRPCServerSource();
@@ -209,6 +208,17 @@ export class DiscordSDK implements IDiscordSDK {
     }
   }
 
+  private parseMajorMobileVersion(): number | null {
+    if (this.mobileAppVersion && this.mobileAppVersion.includes('.')) {
+      try {
+        return parseInt(this.mobileAppVersion.split('.')[0]);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+
   private handshake() {
     const handshakePayload: HandshakePayload = {
       v: 1,
@@ -216,9 +226,10 @@ export class DiscordSDK implements IDiscordSDK {
       client_id: this.clientId,
       frame_id: this.frameId,
     };
+    const majorMobileVersion = this.parseMajorMobileVersion();
     if (
       this.platform === Platform.DESKTOP ||
-      (this.mobileVersion != null && semver.gt(this.mobileVersion, HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION))
+      (majorMobileVersion != null && majorMobileVersion >= HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION)
     ) {
       handshakePayload['sdk_version'] = this.sdkVersion;
     }

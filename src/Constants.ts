@@ -37,4 +37,4 @@ export const Permissions = Object.freeze({
   ADMINISTRATOR: BigFlagUtils.getFlag(3),
 });
 
-export const HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION = '250.5';
+export const HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION = 250;
