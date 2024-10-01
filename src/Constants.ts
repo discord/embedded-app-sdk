@@ -36,3 +36,6 @@ export const Permissions = Object.freeze({
   CREATE_INSTANT_INVITE: BigFlagUtils.getFlag(0),
   ADMINISTRATOR: BigFlagUtils.getFlag(3),
 });
+
+export const UNKNOWN_VERSION_NUMBER = -1;
+export const HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION = 250;

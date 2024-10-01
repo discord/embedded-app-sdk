@@ -4,6 +4,7 @@
 import {Opcodes} from '../Discord';
 import {DiscordSDK, Events, Platform} from '../index';
 import {DISPATCH} from '../schema/common';
+import {version as sdkVersion} from '../../package.json';
 
 describe('DiscordSDK', () => {
   it('Can be constructed and await a "ready" event', async () => {
@@ -48,6 +49,7 @@ describe('DiscordSDK', () => {
           encoding: 'json',
           frame_id: frame_id,
           v: 1,
+          sdk_version: sdkVersion,
         },
       ],
       '*',
