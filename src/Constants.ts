@@ -35,6 +35,7 @@ export enum Platform {
 export const Permissions = Object.freeze({
   CREATE_INSTANT_INVITE: BigFlagUtils.getFlag(0),
   ADMINISTRATOR: BigFlagUtils.getFlag(3),
+  MANAGE_GUILD: BigFlagUtils.getFlag(5),
 });
 
 export const UNKNOWN_VERSION_NUMBER = -1;
