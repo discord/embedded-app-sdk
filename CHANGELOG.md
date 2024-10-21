@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/discord/embedded-app-sdk/compare/v1.6.0...v1.6.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* bump flag numbers to correct value ([#270](https://github.com/discord/embedded-app-sdk/issues/270)) ([61f4381](https://github.com/discord/embedded-app-sdk/commit/61f4381fa159a5d715c0db6f9be043702d54bcf3))
+
 ## [1.6.0](https://github.com/discord/embedded-app-sdk/compare/v1.5.0...v1.6.0) (2024-10-21)
 
 
