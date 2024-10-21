@@ -81,8 +81,8 @@ export const Permissions = Object.freeze({
   CREATE_EVENTS: BigFlagUtils.getFlag(44),
   USE_EXTERNAL_SOUNDS: BigFlagUtils.getFlag(45),
   SEND_VOICE_MESSAGES: BigFlagUtils.getFlag(46),
-  SEND_POLLS: BigFlagUtils.getFlag(47),
-  USE_EXTERNAL_APPS: BigFlagUtils.getFlag(48),
+  SEND_POLLS: BigFlagUtils.getFlag(49),
+  USE_EXTERNAL_APPS: BigFlagUtils.getFlag(50),
 });
 
 export const UNKNOWN_VERSION_NUMBER = -1;
