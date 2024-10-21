@@ -5,7 +5,7 @@
 
 ### Features
 
-* add MANAGE_GUILD to Constants.Permissions ([#268](https://github.com/discord/embedded-app-sdk/issues/268)) ([17a2012](https://github.com/discord/embedded-app-sdk/commit/17a2012812384bc6298babebfc619ea17a438b89))
+* extend Constants.Permissions to include all permission flags ([#268](https://github.com/discord/embedded-app-sdk/issues/268)) ([17a2012](https://github.com/discord/embedded-app-sdk/commit/17a2012812384bc6298babebfc619ea17a438b89))
 
 ## [1.5.0](https://github.com/discord/embedded-app-sdk/compare/v1.4.3...v1.5.0) (2024-10-01)
 
