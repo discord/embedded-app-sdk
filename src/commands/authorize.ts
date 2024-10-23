@@ -6,7 +6,7 @@ import {commandFactory} from '../utils/commandFactory';
 export interface AuthorizeInput {
   client_id: string;
   scope: OAuthScopes[];
-  response_type?: 'code' | 'token';
+  response_type?: 'code';
   code_challenge?: string;
   state?: string;
   prompt?: 'none';
