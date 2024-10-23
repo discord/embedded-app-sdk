@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/discord/embedded-app-sdk/compare/v1.6.1...v1.6.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* **authorize:** remove token response type ([#273](https://github.com/discord/embedded-app-sdk/issues/273)) ([f45973b](https://github.com/discord/embedded-app-sdk/commit/f45973babc63dcd33281370b2db969c4cb1b38ca))
+
 ## [1.6.1](https://github.com/discord/embedded-app-sdk/compare/v1.6.0...v1.6.1) (2024-10-21)
 
 
