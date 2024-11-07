@@ -41,6 +41,15 @@ export const Li = styled(Link, {
   },
 });
 
+export const Input = styled('input', {
+  padding: '8px',
+  marginBottom: '8px',
+  width: '100%',
+  border: '1px solid',
+  borderColor: '$slate12',
+  borderRadius: '4px',
+});
+
 export const SiteWrapper = styled('div', {
   display: 'flex',
   height: '100%',

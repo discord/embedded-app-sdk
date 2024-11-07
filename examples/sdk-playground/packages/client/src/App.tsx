@@ -38,6 +38,8 @@ import GetPlatformBehaviors from './pages/GetPlatformBehaviors';
 import GetSkus from './pages/GetSkus';
 import SetActivity from './pages/SetActivity';
 import UserSettingsGetLocale from './pages/UserSettingsGetLocale';
+import Search from './components/Search';
+import {useState} from 'react';
 
 // Add contexts here
 export default function App(): React.ReactElement {
@@ -218,6 +220,8 @@ const routes: Record<string, AppRoute> = {
 
 function RootedApp(): React.ReactElement {
   const location = useLocation();
+  const [query, setQuery] = useState('');
+
   return (
     <S.SiteWrapper>
       <Scrollable.Root
@@ -228,13 +232,16 @@ function RootedApp(): React.ReactElement {
           '@small': {height: '200px', width: '100%'},
           '@xsmall': {height: 0, width: '100%'},
         }}>
+        <Search onQueryChanged={setQuery} />
         <Scrollable.Viewport>
           <S.Ul>
-            {Object.values(routes).map((r) => (
-              <S.Li as={Link} to={r.path} key={r.path} selected={location.pathname === r.path}>
-                <p>{r.name}</p>
-              </S.Li>
-            ))}
+            {Object.values(routes)
+              .filter((r) => r.name.toLowerCase().includes(query.toLowerCase()))
+              .map((r) => (
+                <S.Li as={Link} to={r.path} key={r.path} selected={location.pathname === r.path}>
+                  <p>{r.name}</p>
+                </S.Li>
+              ))}
           </S.Ul>
         </Scrollable.Viewport>
         <Scrollable.Scrollbar orientation="vertical">
