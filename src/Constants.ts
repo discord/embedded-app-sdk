@@ -86,4 +86,4 @@ export const Permissions = Object.freeze({
 });
 
 export const UNKNOWN_VERSION_NUMBER = -1;
-export const HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION = 250;
+export const HANDSHAKE_SDK_VERSION_MINIMUM_MOBILE_VERSION = 250;
