@@ -9,7 +9,7 @@ import {EventSchema, ERROR, Events as RPCEvents} from './schema/events';
 import {
   Platform,
   RPCCloseCodes,
-  HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION,
+  HANDSHAKE_SDK_VERSION_MINIMUM_MOBILE_VERSION,
   UNKNOWN_VERSION_NUMBER,
 } from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
@@ -232,7 +232,7 @@ export class DiscordSDK implements IDiscordSDK {
       frame_id: this.frameId,
     };
     const majorMobileVersion = this.parseMajorMobileVersion();
-    if (this.platform === Platform.DESKTOP || majorMobileVersion >= HANDSHAKE_SDK_VERSION_MINIUM_MOBILE_VERSION) {
+    if (this.platform === Platform.DESKTOP || majorMobileVersion >= HANDSHAKE_SDK_VERSION_MINIMUM_MOBILE_VERSION) {
       handshakePayload['sdk_version'] = this.sdkVersion;
     }
     this.source?.postMessage([Opcodes.HANDSHAKE, handshakePayload], this.sourceOrigin);
