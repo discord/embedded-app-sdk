@@ -66,6 +66,7 @@ export class DiscordSDK implements IDiscordSDK {
   readonly platform: Platform;
   readonly guildId: string | null;
   readonly channelId: string | null;
+  readonly locationId: string | null;
   readonly sdkVersion: string = sdkVersion;
   readonly mobileAppVersion: string | null = null;
   readonly configuration: SdkConfiguration;
@@ -121,6 +122,7 @@ export class DiscordSDK implements IDiscordSDK {
       this.platform = Platform.DESKTOP;
       this.guildId = null;
       this.channelId = null;
+      this.locationId = null;
       return;
     }
 
@@ -151,6 +153,7 @@ export class DiscordSDK implements IDiscordSDK {
 
     this.guildId = urlParams.get('guild_id');
     this.channelId = urlParams.get('channel_id');
+    this.locationId = urlParams.get('location_id');
 
     this.mobileAppVersion = urlParams.get('mobile_app_version');
     // END Capture URL Query Params
