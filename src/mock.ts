@@ -24,13 +24,15 @@ export class DiscordSDKMock implements IDiscordSDK {
   public commands: IDiscordSDK['commands'];
   readonly guildId: string | null;
   readonly channelId: string | null;
+  readonly locationId: string | null;
 
-  constructor(clientId: string, guildId: string | null, channelId: string | null) {
+  constructor(clientId: string, guildId: string | null, channelId: string | null, locationId: string | null) {
     this.clientId = clientId;
 
     this.commands = this._updateCommandMocks({});
     this.guildId = guildId;
     this.channelId = channelId;
+    this.locationId = locationId;
   }
 
   _updateCommandMocks(newCommands: Partial<IDiscordSDK['commands']>) {
