@@ -14,7 +14,7 @@ import {
   ChannelTypesObject,
   ReceiveFramePayload,
 } from './common';
-import {zodCoerceUnhandledValue} from '../utils/zodUtils';
+import {fallbackToDefault, zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {Schemas, AuthenticateResponseSchema, InitiateImageUploadResponseSchema} from '../generated/schemas';
 import assertUnreachable from '../utils/assertUnreachable';
 
@@ -106,9 +106,9 @@ export const GetChannelPermissionsResponse = zod.object({
   permissions: zod.bigint().or(zod.string()),
 });
 
-export const OpenExternalLinkResponse = zod.object({
-  opened: zod.boolean(),
-});
+export const OpenExternalLinkResponse = fallbackToDefault(zod.object({
+  opened: zod.boolean().or(zod.null()),
+}).default({opened: null}));
 
 export {InitiateImageUploadResponseSchema as InitiateImageUploadResponse};
 
