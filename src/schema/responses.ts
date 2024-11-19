@@ -106,9 +106,9 @@ export const GetChannelPermissionsResponse = zod.object({
   permissions: zod.bigint().or(zod.string()),
 });
 
-export const OpenExternalLinkResponse = fallbackToDefault(zod.object({
-  opened: zod.boolean().or(zod.null()),
-}).default({opened: null}));
+export const OpenExternalLinkResponse = fallbackToDefault(
+  zod.object({opened: zod.boolean().or(zod.null())}).default({opened: null}),
+);
 
 export {InitiateImageUploadResponseSchema as InitiateImageUploadResponse};
 
