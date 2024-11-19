@@ -5,7 +5,7 @@
 
 ### Features
 
-* openExternalLink returns a `{ opened:  boolean }` result ([#282](https://github.com/discord/embedded-app-sdk/issues/282)) ([d3bd375](https://github.com/discord/embedded-app-sdk/commit/d3bd375094735a5994f302a29f1845510cc7e045))
+* openExternalLink returns a `{ opened: boolean | null }` result ([#282](https://github.com/discord/embedded-app-sdk/issues/282)) ([d3bd375](https://github.com/discord/embedded-app-sdk/commit/d3bd375094735a5994f302a29f1845510cc7e045))
 * **locationId** added as SDK instance variable ([#281](https://github.com/discord/embedded-app-sdk/pull/281/files)) ([2cb879a](https://github.com/discord/embedded-app-sdk/commit/2cb879af80535b87d4a80cd98597f8ce3062f1cc))
 
 
