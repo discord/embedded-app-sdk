@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/discord/embedded-app-sdk/compare/v1.6.1...v1.7.0) (2024-11-19)
+
+
+### Features
+
+* openExternalLink returns a `{ opened:  boolean }` result ([#282](https://github.com/discord/embedded-app-sdk/issues/282)) ([d3bd375](https://github.com/discord/embedded-app-sdk/commit/d3bd375094735a5994f302a29f1845510cc7e045))
+
+
+### Bug Fixes
+
+* **authorize:** remove token response type ([#273](https://github.com/discord/embedded-app-sdk/issues/273)) ([f45973b](https://github.com/discord/embedded-app-sdk/commit/f45973babc63dcd33281370b2db969c4cb1b38ca))
+
 ## [1.6.1](https://github.com/discord/embedded-app-sdk/compare/v1.6.0...v1.6.1) (2024-10-21)
 
 
