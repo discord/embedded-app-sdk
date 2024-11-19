@@ -14,7 +14,7 @@ import {
   ChannelTypesObject,
   ReceiveFramePayload,
 } from './common';
-import {zodCoerceUnhandledValue} from '../utils/zodUtils';
+import {fallbackToDefault, zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {Schemas, AuthenticateResponseSchema, InitiateImageUploadResponseSchema} from '../generated/schemas';
 import assertUnreachable from '../utils/assertUnreachable';
 
@@ -106,6 +106,10 @@ export const GetChannelPermissionsResponse = zod.object({
   permissions: zod.bigint().or(zod.string()),
 });
 
+export const OpenExternalLinkResponse = fallbackToDefault(
+  zod.object({opened: zod.boolean().or(zod.null())}).default({opened: null}),
+);
+
 export {InitiateImageUploadResponseSchema as InitiateImageUploadResponse};
 
 /**
@@ -162,8 +166,9 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return SubscribeResponse.parse(data);
     case Commands.USER_SETTINGS_GET_LOCALE:
       return UserSettingsGetLocaleResponse.parse(data);
-    // Empty Responses
     case Commands.OPEN_EXTERNAL_LINK:
+      return OpenExternalLinkResponse.parse(data);
+    // Empty Responses
     case Commands.SET_ORIENTATION_LOCK_STATE:
     case Commands.SET_CERTIFIED_DEVICES:
     case Commands.SEND_ANALYTICS_EVENT:

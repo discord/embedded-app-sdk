@@ -1,5 +1,5 @@
 import {Commands} from '../schema/common';
-import {EmptyResponse} from '../schema/responses';
+import {OpenExternalLinkResponse} from '../schema/responses';
 import {TSendCommand} from '../schema/types';
 import {commandFactory} from '../utils/commandFactory';
 
@@ -11,4 +11,8 @@ export interface OpenExternalLinkInput {
  *
  */
 export const openExternalLink = (sendCommand: TSendCommand) =>
-  commandFactory<OpenExternalLinkInput, typeof EmptyResponse>(sendCommand, Commands.OPEN_EXTERNAL_LINK, EmptyResponse);
+  commandFactory<OpenExternalLinkInput, typeof OpenExternalLinkResponse>(
+    sendCommand,
+    Commands.OPEN_EXTERNAL_LINK,
+    OpenExternalLinkResponse,
+  );
