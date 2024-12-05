@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/discord/embedded-app-sdk/compare/v1.7.0...v1.7.1) (2024-12-05)
+
+
+### Bug Fixes
+
+* don't infinitely set the src which triggers the mutation observer again ([#287](https://github.com/discord/embedded-app-sdk/issues/287)) ([7adc57e](https://github.com/discord/embedded-app-sdk/commit/7adc57e9aa020d8beac8839eb4da948d115fe40b))
+
 ## [1.7.0](https://github.com/discord/embedded-app-sdk/compare/v1.6.1...v1.7.0) (2024-11-19)
 
 
