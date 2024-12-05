@@ -127,7 +127,8 @@ function recursivelyRemapChildNodes(node: Node, mappings: Mapping[]) {
 
 function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
   if (node instanceof HTMLElement && node.hasAttribute('src')) {
-    const url = absoluteURL(node.getAttribute('src') ?? '');
+    const rawSrc = node.getAttribute('src');
+    const url = absoluteURL(rawSrc ?? '');
     if (url.host === window.location.host) return;
 
     if (node.tagName.toLowerCase() === 'script') {
@@ -135,7 +136,11 @@ function attemptSetNodeSrc(node: Node, mappings: Mapping[]) {
       // modifying a script tag doesn't refetch.
       attemptRecreateScriptNode(node, {url, mappings});
     } else {
-      node.setAttribute('src', attemptRemap({url, mappings}).toString());
+      const newSrc = attemptRemap({url, mappings}).toString();
+      // Only apply the remapping if we actually remapped the value
+      if (newSrc !== rawSrc) {
+        node.setAttribute('src', newSrc);
+      }
     }
   }
 }
