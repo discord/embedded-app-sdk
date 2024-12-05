@@ -274,6 +274,7 @@ export class DiscordSDK implements IDiscordSDK {
    */
   private handleMessage = (event: MessageEvent) => {
     if (!ALLOWED_ORIGINS.has(event.origin)) return;
+    if (event.source !== this.source) return;
 
     const tuple = event.data;
     if (!Array.isArray(tuple)) {
