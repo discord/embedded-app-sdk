@@ -63,6 +63,8 @@ interface HandshakePayload {
 export class DiscordSDK implements IDiscordSDK {
   readonly clientId: string;
   readonly instanceId: string;
+  readonly customId: string | null;
+  readonly referrerId: string | null;
   readonly platform: Platform;
   readonly guildId: string | null;
   readonly channelId: string | null;
@@ -119,6 +121,8 @@ export class DiscordSDK implements IDiscordSDK {
     if (typeof window === 'undefined') {
       this.frameId = '';
       this.instanceId = '';
+      this.customId = null;
+      this.referrerId = null;
       this.platform = Platform.DESKTOP;
       this.guildId = null;
       this.channelId = null;
@@ -151,6 +155,8 @@ export class DiscordSDK implements IDiscordSDK {
     }
     this.platform = platform;
 
+    this.customId = urlParams.get('custom_id');
+    this.referrerId = urlParams.get('referrer_id');
     this.guildId = urlParams.get('guild_id');
     this.channelId = urlParams.get('channel_id');
     this.locationId = urlParams.get('location_id');
