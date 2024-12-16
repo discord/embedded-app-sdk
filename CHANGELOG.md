@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/discord/embedded-app-sdk/compare/v1.7.1...v1.8.0) (2024-12-16)
+
+
+### Features
+
+* add custom_id and referrer_id query params ([96777ac](https://github.com/discord/embedded-app-sdk/commit/96777ac976693309be9019657a60af4044765436))
+
 ## [1.7.1](https://github.com/discord/embedded-app-sdk/compare/v1.7.0...v1.7.1) (2024-12-05)
 
 
