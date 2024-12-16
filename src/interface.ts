@@ -21,6 +21,8 @@ export type MaybeZodObjectArray<T extends EventArgs> =
 export interface IDiscordSDK {
   readonly clientId: string;
   readonly instanceId: string;
+  readonly customId: string | null;
+  readonly referrerId: string | null;
   readonly platform: Platform;
   readonly mobileAppVersion: string | null;
   readonly sdkVersion: string;
