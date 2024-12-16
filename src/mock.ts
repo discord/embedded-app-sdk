@@ -13,6 +13,8 @@ export class DiscordSDKMock implements IDiscordSDK {
   readonly clientId: string;
   readonly platform = Platform.DESKTOP;
   readonly instanceId = '123456789012345678';
+  readonly customId: string | null;
+  readonly referrerId: string | null;
   readonly configuration = getDefaultSdkConfiguration();
   readonly source: Window | WindowProxy | null = null;
   readonly sourceOrigin: string = '';
@@ -33,6 +35,8 @@ export class DiscordSDKMock implements IDiscordSDK {
     this.guildId = guildId;
     this.channelId = channelId;
     this.locationId = locationId;
+    this.customId = null;
+    this.referrerId = null;
   }
 
   _updateCommandMocks(newCommands: Partial<IDiscordSDK['commands']>) {
