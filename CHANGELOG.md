@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/discord/embedded-app-sdk/compare/v1.8.0...v1.8.1) (2024-12-16)
+
+
+### Bug Fixes
+
+* add new params to IDiscordSDK ([#293](https://github.com/discord/embedded-app-sdk/issues/293)) ([6182474](https://github.com/discord/embedded-app-sdk/commit/618247414b6ae18e9c2fea5b58e2cb49bdeba354))
+
 ## [1.8.0](https://github.com/discord/embedded-app-sdk/compare/v1.7.1...v1.8.0) (2024-12-16)
 
 
