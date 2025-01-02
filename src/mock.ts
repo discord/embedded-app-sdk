@@ -134,6 +134,7 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
     }),
   getChannelPermissions: () => Promise.resolve({permissions: bigInt(1234567890) as unknown as bigint}),
   openShareMomentDialog: () => Promise.resolve(null),
+  shareLink: () => Promise.resolve(null),
   initiateImageUpload: () =>
     Promise.resolve({
       image_url:
