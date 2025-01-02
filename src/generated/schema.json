@@ -148,5 +148,66 @@
       "required": ["participants"],
       "additionalProperties": false
     }
+  },
+  "SHARE_INTERACTION": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "command": {"type": "string"},
+        "content": {"type": "string", "maxLength": 2000},
+        "preview_image": {
+          "type": "object",
+          "properties": {"height": {"type": "number"}, "url": {"type": "string"}, "width": {"type": "number"}},
+          "required": ["height", "url", "width"],
+          "additionalProperties": false
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {"const": 1},
+              "components": {
+                "type": "array",
+                "maxItems": 5,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {"const": 2},
+                    "style": {"type": "number", "minimum": 1, "maximum": 5},
+                    "label": {"type": "string", "description": "Text that appears on the button", "maxLength": 80},
+                    "custom_id": {
+                      "type": "string",
+                      "description": "Developer-defined identifier for the button; max 100 characters",
+                      "maxLength": 100
+                    }
+                  },
+                  "required": ["type", "style"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["type"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["command"],
+      "additionalProperties": false
+    },
+    "response": null
+  },
+  "SHARE_LINK": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "referrer_id": {"type": "string", "maxLength": 64},
+        "custom_id": {"type": "string", "maxLength": 64},
+        "message": {"type": "string", "maxLength": 1000}
+      },
+      "required": ["message"],
+      "additionalProperties": false
+    },
+    "response": null
   }
 }

@@ -113,6 +113,44 @@ export type GetActivityInstanceConnectedParticipantsResponse = zInfer<
   typeof GetActivityInstanceConnectedParticipantsResponseSchema
 >;
 
+// SHARE_INTERACTION
+export const ShareInteractionRequestSchema = z.object({
+  command: z.string(),
+  content: z.string().max(2000).optional(),
+  preview_image: z.object({height: z.number(), url: z.string(), width: z.number()}).optional(),
+  components: z
+    .array(
+      z.object({
+        type: z.literal(1),
+        components: z
+          .array(
+            z.object({
+              type: z.literal(2),
+              style: z.number().gte(1).lte(5),
+              label: z.string().max(80).optional(),
+              custom_id: z
+                .string()
+                .max(100)
+                .describe('Developer-defined identifier for the button; max 100 characters')
+                .optional(),
+            }),
+          )
+          .max(5)
+          .optional(),
+      }),
+    )
+    .optional(),
+});
+export type ShareInteractionRequest = zInfer<typeof ShareInteractionRequestSchema>;
+
+// SHARE_LINK
+export const ShareLinkRequestSchema = z.object({
+  referrer_id: z.string().max(64).optional(),
+  custom_id: z.string().max(64).optional(),
+  message: z.string().max(1000),
+});
+export type ShareLinkRequest = zInfer<typeof ShareLinkRequestSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -121,6 +159,8 @@ export enum Command {
   OPEN_SHARE_MOMENT_DIALOG = 'OPEN_SHARE_MOMENT_DIALOG',
   AUTHENTICATE = 'AUTHENTICATE',
   GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS = 'GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS',
+  SHARE_INTERACTION = 'SHARE_INTERACTION',
+  SHARE_LINK = 'SHARE_LINK',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -145,5 +185,13 @@ export const Schemas = {
   [Command.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS]: {
     request: emptyRequestSchema,
     response: GetActivityInstanceConnectedParticipantsResponseSchema,
+  },
+  [Command.SHARE_INTERACTION]: {
+    request: ShareInteractionRequestSchema,
+    response: emptyResponseSchema,
+  },
+  [Command.SHARE_LINK]: {
+    request: ShareLinkRequestSchema,
+    response: emptyResponseSchema,
   },
 } as const;
