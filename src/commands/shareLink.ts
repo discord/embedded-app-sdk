@@ -9,5 +9,4 @@ import {schemaCommandFactory} from '../utils/commandFactory';
  * @param {string} message - message sent alongside link when shared.
  * @returns {Promise<void>}
  */
-
 export const shareLink = schemaCommandFactory(Command.SHARE_LINK);
