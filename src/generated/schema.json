@@ -208,6 +208,11 @@
       "required": ["message"],
       "additionalProperties": false
     },
-    "response": null
+    "response": {
+      "type": "object",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
+      "additionalProperties": false
+    }
   }
 }

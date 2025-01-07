@@ -7,6 +7,6 @@ import {schemaCommandFactory} from '../utils/commandFactory';
  * @param {string} referrer_id
  * @param {string} custom_id
  * @param {string} message - message sent alongside link when shared.
- * @returns {Promise<void>}
+ * @returns {Promise<{success: boolean>} whether or not the user shared the link to someone
  */
 export const shareLink = schemaCommandFactory(Command.SHARE_LINK);

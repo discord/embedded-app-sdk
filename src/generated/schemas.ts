@@ -150,6 +150,8 @@ export const ShareLinkRequestSchema = z.object({
   message: z.string().max(1000),
 });
 export type ShareLinkRequest = zInfer<typeof ShareLinkRequestSchema>;
+export const ShareLinkResponseSchema = z.object({success: z.boolean()});
+export type ShareLinkResponse = zInfer<typeof ShareLinkResponseSchema>;
 
 /**
  * RPC Commands which support schemas.
@@ -192,6 +194,6 @@ export const Schemas = {
   },
   [Command.SHARE_LINK]: {
     request: ShareLinkRequestSchema,
-    response: emptyResponseSchema,
+    response: ShareLinkResponseSchema,
   },
 } as const;
