@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/discord/embedded-app-sdk/compare/v1.8.1...v1.9.0) (2025-01-09)
+
+
+### Features
+
+* add shareLink command ([#297](https://github.com/discord/embedded-app-sdk/issues/297)) ([effd59b](https://github.com/discord/embedded-app-sdk/commit/effd59b378cd969ba82551d95b35e6ac12532ad1))
+
 ## [1.8.1](https://github.com/discord/embedded-app-sdk/compare/v1.8.0...v1.8.1) (2024-12-16)
 
 
