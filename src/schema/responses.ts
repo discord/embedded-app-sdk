@@ -182,6 +182,7 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.INITIATE_IMAGE_UPLOAD:
     case Commands.OPEN_SHARE_MOMENT_DIALOG:
     case Commands.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS:
+    case Commands.SHARE_LINK:
       const {response} = Schemas[cmd];
       return response.parse(data);
     default:

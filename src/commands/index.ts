@@ -15,6 +15,7 @@ import {openShareMomentDialog} from './openShareMomentDialog';
 import {setActivity, SetActivity} from './setActivity';
 import {setConfig} from './setConfig';
 import {setOrientationLockState} from './setOrientationLockState';
+import {shareLink} from './shareLink';
 import {startPurchase} from './startPurchase';
 import {userSettingsGetLocale} from './userSettingsGetLocale';
 import {initiateImageUpload} from './initiateImageUpload';
@@ -40,6 +41,7 @@ function commands(sendCommand: TSendCommand) {
     setActivity: setActivity(sendCommand),
     setConfig: setConfig(sendCommand),
     setOrientationLockState: setOrientationLockState(sendCommand),
+    shareLink: shareLink(sendCommand),
     startPurchase: startPurchase(sendCommand),
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
     initiateImageUpload: initiateImageUpload(sendCommand),
