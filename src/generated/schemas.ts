@@ -60,6 +60,7 @@ export const AuthenticateResponseSchema = z.object({
           'applications.entitlements',
           'activities.read',
           'activities.write',
+          'activities.invites.write',
           'relationships.read',
           'relationships.write',
           'voice',
@@ -102,7 +103,10 @@ export const GetActivityInstanceConnectedParticipantsResponseSchema = z.object({
       flags: z.number(),
       bot: z.boolean(),
       avatar_decoration_data: z
-        .union([z.object({asset: z.string(), skuId: z.string().optional()}), z.null()])
+        .union([
+          z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+          z.null(),
+        ])
         .optional(),
       premium_type: z.union([z.number(), z.null()]).optional(),
       nickname: z.string().optional(),
@@ -117,6 +121,7 @@ export type GetActivityInstanceConnectedParticipantsResponse = zInfer<
 export const ShareInteractionRequestSchema = z.object({
   command: z.string(),
   content: z.string().max(2000).optional(),
+  require_launch_channel: z.boolean().optional(),
   preview_image: z.object({height: z.number(), url: z.string(), width: z.number()}).optional(),
   components: z
     .array(
@@ -142,6 +147,8 @@ export const ShareInteractionRequestSchema = z.object({
     .optional(),
 });
 export type ShareInteractionRequest = zInfer<typeof ShareInteractionRequestSchema>;
+export const ShareInteractionResponseSchema = z.object({success: z.boolean()});
+export type ShareInteractionResponse = zInfer<typeof ShareInteractionResponseSchema>;
 
 // SHARE_LINK
 export const ShareLinkRequestSchema = z.object({
@@ -153,6 +160,34 @@ export type ShareLinkRequest = zInfer<typeof ShareLinkRequestSchema>;
 export const ShareLinkResponseSchema = z.object({success: z.boolean()});
 export type ShareLinkResponse = zInfer<typeof ShareLinkResponseSchema>;
 
+// GET_RELATIONSHIPS
+export const GetRelationshipsResponseSchema = z.object({
+  relationships: z.array(
+    z.object({
+      type: z.number(),
+      user: z.object({
+        id: z.string(),
+        username: z.string(),
+        global_name: z.union([z.string(), z.null()]).optional(),
+        discriminator: z.string(),
+        avatar: z.union([z.string(), z.null()]).optional(),
+        flags: z.number(),
+        bot: z.boolean(),
+        avatar_decoration_data: z
+          .union([
+            z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+            z.null(),
+          ])
+          .optional(),
+        premium_type: z.union([z.number(), z.null()]).optional(),
+      }),
+      since: z.string().optional(),
+      nickname: z.string().describe('Friend nickname of friend, not unique').optional(),
+    }),
+  ),
+});
+export type GetRelationshipsResponse = zInfer<typeof GetRelationshipsResponseSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -163,6 +198,7 @@ export enum Command {
   GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS = 'GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS',
   SHARE_INTERACTION = 'SHARE_INTERACTION',
   SHARE_LINK = 'SHARE_LINK',
+  GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -190,10 +226,14 @@ export const Schemas = {
   },
   [Command.SHARE_INTERACTION]: {
     request: ShareInteractionRequestSchema,
-    response: emptyResponseSchema,
+    response: ShareInteractionResponseSchema,
   },
   [Command.SHARE_LINK]: {
     request: ShareLinkRequestSchema,
     response: ShareLinkResponseSchema,
+  },
+  [Command.GET_RELATIONSHIPS]: {
+    request: emptyRequestSchema,
+    response: GetRelationshipsResponseSchema,
   },
 } as const;

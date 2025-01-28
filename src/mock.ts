@@ -141,4 +141,44 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
         'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png',
     }),
   getInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
+  getRelationships: () =>
+    Promise.resolve({
+      relationships: [
+        {
+          type: 1,
+          user: {
+            username: 'mock_friend_username',
+            flags: 0,
+            bot: false,
+            discriminator: 'mock_friend_discriminator',
+            id: 'mock_friend_id_1',
+            avatar: null,
+          },
+        },
+        {
+          type: 1,
+          user: {
+            username: 'mock_friend_username_with_nickname',
+            flags: 0,
+            bot: false,
+            discriminator: 'mock_friend_discriminator_with_nickname',
+            id: 'mock_friend_id_2',
+            avatar: null,
+          },
+          nickname: 'mock_friend_nickname_for_user',
+        },
+        {
+          type: 1,
+          user: {
+            username: 'mock_friend_username_with_since',
+            flags: 0,
+            bot: false,
+            discriminator: 'mock_friend_discriminator_with_since',
+            id: 'mock_friend_id_3',
+            avatar: null,
+          },
+          since: '2021-06-29T00:32:37.180813+00:00',
+        },
+      ],
+    }),
 };

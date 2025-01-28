@@ -74,6 +74,7 @@
               "applications.entitlements",
               "activities.read",
               "activities.write",
+              "activities.invites.write",
               "relationships.read",
               "relationships.write",
               "voice",
@@ -133,7 +134,11 @@
               "avatar_decoration_data": {
                 "type": ["object", "null"],
                 "description": "Details about avatar decoration",
-                "properties": {"asset": {"type": "string"}, "skuId": {"type": "string"}},
+                "properties": {
+                  "asset": {"type": "string"},
+                  "skuId": {"type": "string"},
+                  "expiresAt": {"type": "number"}
+                },
                 "required": ["asset"],
                 "additionalProperties": false
               },
@@ -155,6 +160,7 @@
       "properties": {
         "command": {"type": "string"},
         "content": {"type": "string", "maxLength": 2000},
+        "require_launch_channel": {"type": "boolean"},
         "preview_image": {
           "type": "object",
           "properties": {"height": {"type": "number"}, "url": {"type": "string"}, "width": {"type": "number"}},
@@ -195,7 +201,12 @@
       "required": ["command"],
       "additionalProperties": false
     },
-    "response": null
+    "response": {
+      "type": "object",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
+      "additionalProperties": false
+    }
   },
   "SHARE_LINK": {
     "request": {
@@ -212,6 +223,59 @@
       "type": "object",
       "properties": {"success": {"type": "boolean"}},
       "required": ["success"],
+      "additionalProperties": false
+    }
+  },
+  "GET_RELATIONSHIPS": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "properties": {
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "number"},
+              "user": {
+                "type": "object",
+                "description": "Discord User",
+                "properties": {
+                  "id": {"type": "string", "description": "User ID"},
+                  "username": {"type": "string"},
+                  "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                  "discriminator": {
+                    "type": "string",
+                    "description": "Global name discriminator. Will be 0 if a unique username"
+                  },
+                  "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                  "flags": {"type": "number", "description": "Public user flags"},
+                  "bot": {"type": "boolean", "description": "If a bot user."},
+                  "avatar_decoration_data": {
+                    "type": ["object", "null"],
+                    "description": "Details about avatar decoration",
+                    "properties": {
+                      "asset": {"type": "string"},
+                      "skuId": {"type": "string"},
+                      "expiresAt": {"type": "number"}
+                    },
+                    "required": ["asset"],
+                    "additionalProperties": false
+                  },
+                  "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"}
+                },
+                "required": ["id", "username", "discriminator", "flags", "bot"],
+                "additionalProperties": false
+              },
+              "since": {"type": "string", "description": "Timestamp of when friend was added"},
+              "nickname": {"type": "string", "description": "Friend nickname of friend, not unique"}
+            },
+            "required": ["type", "user"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["relationships"],
       "additionalProperties": false
     }
   }
