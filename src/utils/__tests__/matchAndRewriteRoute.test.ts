@@ -232,6 +232,22 @@ describe('matchAndRewriteURL', () => {
       expect(url4.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url?key=abc123');
     });
 
+    it('Matches port parameters and remaps them properly', () => {
+      const url = attemptRemap({
+        url: new URL('https://foo.domain.com:4567/'),
+        mappings: [{prefix: '/domain/{subdomain}/{port}', target: '{subdomain}.domain.com:{port}'}],
+      });
+      expect(url.toString()).toEqual('https://localhost/domain/foo/4567/');
+    });
+
+    it('Does not remove port when url is not matched', () => {
+      const url = attemptRemap({
+        url: new URL('https://foo.domain.com:4567/'),
+        mappings: [],
+      });
+      expect(url.toString()).toEqual('https://foo.domain.com:4567/');
+    });
+
     it('Applies the /.proxy/ mapping without any mappings', () => {
       const url = attemptRemap({
         url: new URL('https://1234567890.discordsays.com/api/token'),
