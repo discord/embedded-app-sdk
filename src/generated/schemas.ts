@@ -246,6 +246,15 @@ export const GetRelationshipsResponseSchema = z.object({
 });
 export type GetRelationshipsResponse = zInfer<typeof GetRelationshipsResponseSchema>;
 
+// ACTIVITY_INVITE_USER
+export const ActivityInviteUserRequestSchema = z.object({
+  user_id: z.string(),
+  type: z.literal(1),
+  content: z.string().min(0).max(1024).optional(),
+  pid: z.number().gte(0).optional(),
+});
+export type ActivityInviteUserRequest = zInfer<typeof ActivityInviteUserRequestSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -257,6 +266,7 @@ export enum Command {
   SHARE_INTERACTION = 'SHARE_INTERACTION',
   SHARE_LINK = 'SHARE_LINK',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
+  ACTIVITY_INVITE_USER = 'ACTIVITY_INVITE_USER',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -293,5 +303,9 @@ export const Schemas = {
   [Command.GET_RELATIONSHIPS]: {
     request: emptyRequestSchema,
     response: GetRelationshipsResponseSchema,
+  },
+  [Command.ACTIVITY_INVITE_USER]: {
+    request: ActivityInviteUserRequestSchema,
+    response: emptyResponseSchema,
   },
 } as const;

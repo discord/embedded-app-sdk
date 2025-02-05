@@ -346,5 +346,19 @@
       "required": ["relationships"],
       "additionalProperties": false
     }
+  },
+  "ACTIVITY_INVITE_USER": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "user_id": {"type": "string"},
+        "type": {"const": 1},
+        "content": {"type": "string", "minLength": 0, "maxLength": 1024},
+        "pid": {"type": "number", "minimum": 0}
+      },
+      "required": ["user_id", "type"],
+      "additionalProperties": false
+    },
+    "response": null
   }
 }

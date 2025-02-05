@@ -184,6 +184,7 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS:
     case Commands.SHARE_LINK:
     case Commands.GET_RELATIONSHIPS:
+    case Commands.ACTIVITY_INVITE_USER:
       const {response} = Schemas[cmd];
       return response.parse(data);
     default:
