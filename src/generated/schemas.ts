@@ -165,24 +165,82 @@ export const GetRelationshipsResponseSchema = z.object({
   relationships: z.array(
     z.object({
       type: z.number(),
-      user: z.object({
-        id: z.string(),
-        username: z.string(),
-        global_name: z.union([z.string(), z.null()]).optional(),
-        discriminator: z.string(),
-        avatar: z.union([z.string(), z.null()]).optional(),
-        flags: z.number(),
-        bot: z.boolean(),
-        avatar_decoration_data: z
-          .union([
-            z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
-            z.null(),
-          ])
-          .optional(),
-        premium_type: z.union([z.number(), z.null()]).optional(),
-      }),
-      since: z.string().optional(),
-      nickname: z.string().describe('Friend nickname of friend, not unique').optional(),
+      user: z
+        .union([
+          z.object({
+            id: z.string(),
+            username: z.string(),
+            global_name: z.union([z.string(), z.null()]).optional(),
+            discriminator: z.string(),
+            avatar: z.union([z.string(), z.null()]).optional(),
+            flags: z.number(),
+            bot: z.boolean(),
+            avatar_decoration_data: z
+              .union([
+                z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+                z.null(),
+              ])
+              .optional(),
+            premium_type: z.union([z.number(), z.null()]).optional(),
+          }),
+          z.null(),
+        ])
+        .optional(),
+      presence: z
+        .object({
+          status: z.string(),
+          activity: z
+            .union([
+              z.object({
+                session_id: z.string().optional(),
+                type: z.number().optional(),
+                name: z.string(),
+                url: z.union([z.string(), z.null()]).optional(),
+                application_id: z.string().optional(),
+                state: z.string().optional(),
+                details: z.string().optional(),
+                emoji: z
+                  .union([
+                    z.object({
+                      name: z.string(),
+                      id: z.union([z.string(), z.null()]).optional(),
+                      animated: z.union([z.boolean(), z.null()]).optional(),
+                    }),
+                    z.null(),
+                  ])
+                  .optional(),
+                assets: z
+                  .object({
+                    large_image: z.string().optional(),
+                    large_text: z.string().optional(),
+                    small_image: z.string().optional(),
+                    small_text: z.string().optional(),
+                  })
+                  .optional(),
+                timestamps: z.object({start: z.number().optional(), end: z.number().optional()}).optional(),
+                party: z
+                  .object({
+                    id: z.string().optional(),
+                    size: z.array(z.number()).min(2).max(2).optional(),
+                    privacy: z.number().optional(),
+                  })
+                  .optional(),
+                secrets: z.object({match: z.string().optional(), join: z.string().optional()}).optional(),
+                sync_id: z.string().optional(),
+                created_at: z.number().optional(),
+                instance: z.boolean().optional(),
+                flags: z.number().optional(),
+                metadata: z.object({}).optional(),
+                platform: z.string().optional(),
+                supported_platforms: z.array(z.string()).optional(),
+                buttons: z.array(z.string()).optional(),
+                hangStatus: z.string().optional(),
+              }),
+              z.null(),
+            ])
+            .optional(),
+        })
+        .optional(),
     }),
   ),
 });

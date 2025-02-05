@@ -238,7 +238,7 @@
             "properties": {
               "type": {"type": "number"},
               "user": {
-                "type": "object",
+                "type": ["object", "null"],
                 "description": "Discord User",
                 "properties": {
                   "id": {"type": "string", "description": "User ID"},
@@ -267,10 +267,78 @@
                 "required": ["id", "username", "discriminator", "flags", "bot"],
                 "additionalProperties": false
               },
-              "since": {"type": "string", "description": "Timestamp of when friend was added"},
-              "nickname": {"type": "string", "description": "Friend nickname of friend, not unique"}
+              "presence": {
+                "type": "object",
+                "properties": {
+                  "status": {"type": "string"},
+                  "activity": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "session_id": {"type": "string"},
+                      "type": {"type": "number"},
+                      "name": {"type": "string"},
+                      "url": {"type": ["string", "null"]},
+                      "application_id": {"type": "string"},
+                      "state": {"type": "string"},
+                      "details": {"type": "string"},
+                      "emoji": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "name": {"type": "string"},
+                          "id": {"type": ["string", "null"]},
+                          "animated": {"type": ["boolean", "null"]}
+                        },
+                        "required": ["name"],
+                        "additionalProperties": false
+                      },
+                      "assets": {
+                        "type": "object",
+                        "properties": {
+                          "large_image": {"type": "string"},
+                          "large_text": {"type": "string"},
+                          "small_image": {"type": "string"},
+                          "small_text": {"type": "string"}
+                        },
+                        "additionalProperties": false
+                      },
+                      "timestamps": {
+                        "type": "object",
+                        "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
+                        "additionalProperties": false
+                      },
+                      "party": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "string"},
+                          "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
+                          "privacy": {"type": "number"}
+                        },
+                        "additionalProperties": false
+                      },
+                      "secrets": {
+                        "type": "object",
+                        "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
+                        "additionalProperties": false
+                      },
+                      "sync_id": {"type": "string"},
+                      "created_at": {"type": "number"},
+                      "instance": {"type": "boolean"},
+                      "flags": {"type": "number"},
+                      "metadata": {"type": "object", "properties": {}, "additionalProperties": false},
+                      "platform": {"type": "string"},
+                      "supported_platforms": {"type": "array", "items": {"type": "string"}},
+                      "buttons": {"type": "array", "items": {"type": "string"}},
+                      "hangStatus": {"type": "string"}
+                    },
+                    "required": ["name"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["status"],
+                "additionalProperties": false
+              }
             },
-            "required": ["type", "user"],
+            "required": ["type"],
             "additionalProperties": false
           }
         }
