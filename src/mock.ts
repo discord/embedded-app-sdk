@@ -182,4 +182,14 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       ],
     }),
   inviteUserEmbedded: () => Promise.resolve(null),
+  getUser: () => {
+    return Promise.resolve({
+      username: 'mock_friend_username',
+      flags: 0,
+      bot: false,
+      discriminator: 'mock_friend_discriminator',
+      id: 'mock_friend_id_1',
+      avatar: null,
+    });
+  },
 };

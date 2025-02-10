@@ -39,6 +39,7 @@ export enum Commands {
   SHARE_LINK = 'SHARE_LINK',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
   INVITE_USER_EMBEDDED = 'INVITE_USER_EMBEDDED',
+  GET_USER = 'GET_USER',
 }
 
 export const ReceiveFramePayload = zod
