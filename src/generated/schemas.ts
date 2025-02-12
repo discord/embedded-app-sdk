@@ -249,9 +249,7 @@ export type GetRelationshipsResponse = zInfer<typeof GetRelationshipsResponseSch
 // ACTIVITY_INVITE_USER
 export const ActivityInviteUserRequestSchema = z.object({
   user_id: z.string(),
-  type: z.literal(1),
   content: z.string().min(0).max(1024).optional(),
-  pid: z.number().gte(0).optional(),
 });
 export type ActivityInviteUserRequest = zInfer<typeof ActivityInviteUserRequestSchema>;
 
