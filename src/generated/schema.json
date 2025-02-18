@@ -74,6 +74,7 @@
               "applications.entitlements",
               "activities.read",
               "activities.write",
+              "activities.invites.write",
               "relationships.read",
               "relationships.write",
               "voice",
@@ -133,7 +134,11 @@
               "avatar_decoration_data": {
                 "type": ["object", "null"],
                 "description": "Details about avatar decoration",
-                "properties": {"asset": {"type": "string"}, "skuId": {"type": "string"}},
+                "properties": {
+                  "asset": {"type": "string"},
+                  "skuId": {"type": "string"},
+                  "expiresAt": {"type": "number"}
+                },
                 "required": ["asset"],
                 "additionalProperties": false
               },
@@ -155,6 +160,7 @@
       "properties": {
         "command": {"type": "string"},
         "content": {"type": "string", "maxLength": 2000},
+        "require_launch_channel": {"type": "boolean"},
         "preview_image": {
           "type": "object",
           "properties": {"height": {"type": "number"}, "url": {"type": "string"}, "width": {"type": "number"}},
@@ -195,7 +201,12 @@
       "required": ["command"],
       "additionalProperties": false
     },
-    "response": null
+    "response": {
+      "type": "object",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
+      "additionalProperties": false
+    }
   },
   "SHARE_LINK": {
     "request": {
@@ -212,6 +223,127 @@
       "type": "object",
       "properties": {"success": {"type": "boolean"}},
       "required": ["success"],
+      "additionalProperties": false
+    }
+  },
+  "GET_RELATIONSHIPS": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "properties": {
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "number"},
+              "user": {
+                "type": ["object", "null"],
+                "description": "Discord User",
+                "properties": {
+                  "id": {"type": "string", "description": "User ID"},
+                  "username": {"type": "string"},
+                  "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                  "discriminator": {
+                    "type": "string",
+                    "description": "Global name discriminator. Will be 0 if a unique username"
+                  },
+                  "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                  "flags": {"type": "number", "description": "Public user flags"},
+                  "bot": {"type": "boolean", "description": "If a bot user."},
+                  "avatar_decoration_data": {
+                    "type": ["object", "null"],
+                    "description": "Details about avatar decoration",
+                    "properties": {
+                      "asset": {"type": "string"},
+                      "skuId": {"type": "string"},
+                      "expiresAt": {"type": "number"}
+                    },
+                    "required": ["asset"],
+                    "additionalProperties": false
+                  },
+                  "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"}
+                },
+                "required": ["id", "username", "discriminator", "flags", "bot"],
+                "additionalProperties": false
+              },
+              "presence": {
+                "type": "object",
+                "properties": {
+                  "status": {"type": "string"},
+                  "activity": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "session_id": {"type": "string"},
+                      "type": {"type": "number"},
+                      "name": {"type": "string"},
+                      "url": {"type": ["string", "null"]},
+                      "application_id": {"type": "string"},
+                      "state": {"type": "string"},
+                      "details": {"type": "string"},
+                      "emoji": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "name": {"type": "string"},
+                          "id": {"type": ["string", "null"]},
+                          "animated": {"type": ["boolean", "null"]}
+                        },
+                        "required": ["name"],
+                        "additionalProperties": false
+                      },
+                      "assets": {
+                        "type": "object",
+                        "properties": {
+                          "large_image": {"type": "string"},
+                          "large_text": {"type": "string"},
+                          "small_image": {"type": "string"},
+                          "small_text": {"type": "string"}
+                        },
+                        "additionalProperties": false
+                      },
+                      "timestamps": {
+                        "type": "object",
+                        "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
+                        "additionalProperties": false
+                      },
+                      "party": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "string"},
+                          "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
+                          "privacy": {"type": "number"}
+                        },
+                        "additionalProperties": false
+                      },
+                      "secrets": {
+                        "type": "object",
+                        "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
+                        "additionalProperties": false
+                      },
+                      "sync_id": {"type": "string"},
+                      "created_at": {"type": "number"},
+                      "instance": {"type": "boolean"},
+                      "flags": {"type": "number"},
+                      "metadata": {"type": "object", "properties": {}, "additionalProperties": false},
+                      "platform": {"type": "string"},
+                      "supported_platforms": {"type": "array", "items": {"type": "string"}},
+                      "buttons": {"type": "array", "items": {"type": "string"}},
+                      "hangStatus": {"type": "string"}
+                    },
+                    "required": ["name"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["status"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["type"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["relationships"],
       "additionalProperties": false
     }
   }
