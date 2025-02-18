@@ -347,7 +347,7 @@
       "additionalProperties": false
     }
   },
-  "ACTIVITY_INVITE_USER": {
+  "INVITE_USER_EMBEDDED": {
     "request": {
       "type": "object",
       "properties": {"user_id": {"type": "string"}, "content": {"type": "string", "minLength": 0, "maxLength": 1024}},

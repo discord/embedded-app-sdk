@@ -181,5 +181,5 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
         },
       ],
     }),
-  activityInviteUser: () => Promise.resolve(null),
+  inviteUserEmbedded: () => Promise.resolve(null),
 };

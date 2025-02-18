@@ -22,7 +22,7 @@ import {initiateImageUpload} from './initiateImageUpload';
 import {getChannel} from './getChannel';
 import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipants';
 import {getRelationships} from './getRelationships';
-import {ActivityInviteUser} from './activityInviteUser';
+import {inviteUserEmbedded} from './inviteUserEmbedded';
 
 export {Commands, SetActivity};
 
@@ -49,7 +49,7 @@ function commands(sendCommand: TSendCommand) {
     initiateImageUpload: initiateImageUpload(sendCommand),
     getInstanceConnectedParticipants: getInstanceConnectedParticipants(sendCommand),
     getRelationships: getRelationships(sendCommand),
-    activityInviteUser: ActivityInviteUser(sendCommand),
+    inviteUserEmbedded: inviteUserEmbedded(sendCommand),
   };
 }
 
