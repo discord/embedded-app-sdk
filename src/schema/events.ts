@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {Orientation} from '../Constants';
-import {DISPATCH, GuildMemberRPC, UserVoiceState} from './common';
+import {DISPATCH, GuildMemberRPC, Relationship, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
   Entitlement,
@@ -27,6 +27,7 @@ export enum Events {
   ENTITLEMENT_CREATE = 'ENTITLEMENT_CREATE',
   THERMAL_STATE_UPDATE = 'THERMAL_STATE_UPDATE',
   ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
+  RELATIONSHIP_UPDATE = 'RELATIONSHIP_UPDATE',
 }
 
 export const DispatchEventFrame = ReceiveFrame.extend({
@@ -227,6 +228,12 @@ export const EventSchema = {
       data: zod.object({
         participants: GetActivityInstanceConnectedParticipantsResponseSchema.shape.participants,
       }),
+    }),
+  },
+  [Events.RELATIONSHIP_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.RELATIONSHIP_UPDATE),
+      data: Relationship,
     }),
   },
 } satisfies Record<keyof typeof Events, EventArgs>;
