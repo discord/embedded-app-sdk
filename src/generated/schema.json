@@ -88,7 +88,8 @@
               "gateway.connect",
               "account.global_name.update",
               "payment_sources.country_code",
-              "sdk.social_layer"
+              "sdk.social_layer",
+              "lobbies.write"
             ]
           }
         },
@@ -238,7 +239,7 @@
             "properties": {
               "type": {"type": "number"},
               "user": {
-                "type": ["object", "null"],
+                "type": "object",
                 "description": "Discord User",
                 "properties": {
                   "id": {"type": "string", "description": "User ID"},
@@ -338,7 +339,7 @@
                 "additionalProperties": false
               }
             },
-            "required": ["type"],
+            "required": ["type", "user"],
             "additionalProperties": false
           }
         }

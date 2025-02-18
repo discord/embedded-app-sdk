@@ -75,6 +75,7 @@ export const AuthenticateResponseSchema = z.object({
           'account.global_name.update',
           'payment_sources.country_code',
           'sdk.social_layer',
+          'lobbies.write',
         ])
         .or(z.literal(-1))
         .default(-1),
@@ -165,27 +166,22 @@ export const GetRelationshipsResponseSchema = z.object({
   relationships: z.array(
     z.object({
       type: z.number(),
-      user: z
-        .union([
-          z.object({
-            id: z.string(),
-            username: z.string(),
-            global_name: z.union([z.string(), z.null()]).optional(),
-            discriminator: z.string(),
-            avatar: z.union([z.string(), z.null()]).optional(),
-            flags: z.number(),
-            bot: z.boolean(),
-            avatar_decoration_data: z
-              .union([
-                z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
-                z.null(),
-              ])
-              .optional(),
-            premium_type: z.union([z.number(), z.null()]).optional(),
-          }),
-          z.null(),
-        ])
-        .optional(),
+      user: z.object({
+        id: z.string(),
+        username: z.string(),
+        global_name: z.union([z.string(), z.null()]).optional(),
+        discriminator: z.string(),
+        avatar: z.union([z.string(), z.null()]).optional(),
+        flags: z.number(),
+        bot: z.boolean(),
+        avatar_decoration_data: z
+          .union([
+            z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+            z.null(),
+          ])
+          .optional(),
+        premium_type: z.union([z.number(), z.null()]).optional(),
+      }),
       presence: z
         .object({
           status: z.string(),
