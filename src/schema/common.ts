@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
-import {AuthenticateResponseSchema} from '../generated/schemas';
+import {AuthenticateResponseSchema, GetRelationshipsResponseSchema} from '../generated/schemas';
 
 // DISPATCH is sent as cmd but is a special case, so is excluded from Commands enum
 export const DISPATCH = 'DISPATCH';
@@ -57,6 +57,8 @@ export const ScopesObject = {
 } as const;
 
 export const Scopes = zodCoerceUnhandledValue(ScopesObject);
+
+export const Relationship = GetRelationshipsResponseSchema.shape.relationships.element;
 
 export const User = zod.object({
   id: zod.string(),
