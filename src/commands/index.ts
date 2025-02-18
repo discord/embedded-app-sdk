@@ -21,7 +21,7 @@ import {userSettingsGetLocale} from './userSettingsGetLocale';
 import {initiateImageUpload} from './initiateImageUpload';
 import {getChannel} from './getChannel';
 import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipants';
-import {GetRelationships} from './getRelationships';
+import {getRelationships} from './getRelationships';
 
 export {Commands, SetActivity};
 
@@ -47,7 +47,7 @@ function commands(sendCommand: TSendCommand) {
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
     initiateImageUpload: initiateImageUpload(sendCommand),
     getInstanceConnectedParticipants: getInstanceConnectedParticipants(sendCommand),
-    getRelationships: GetRelationships(sendCommand),
+    getRelationships: getRelationships(sendCommand),
   };
 }
 
