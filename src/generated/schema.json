@@ -88,8 +88,7 @@
               "gateway.connect",
               "account.global_name.update",
               "payment_sources.country_code",
-              "sdk.social_layer",
-              "lobbies.write"
+              "sdk.social_layer"
             ]
           }
         },
