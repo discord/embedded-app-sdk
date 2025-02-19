@@ -75,6 +75,7 @@ export const AuthenticateResponseSchema = z.object({
           'account.global_name.update',
           'payment_sources.country_code',
           'sdk.social_layer',
+          'lobbies.write',
         ])
         .or(z.literal(-1))
         .default(-1),
@@ -165,27 +166,22 @@ export const GetRelationshipsResponseSchema = z.object({
   relationships: z.array(
     z.object({
       type: z.number(),
-      user: z
-        .union([
-          z.object({
-            id: z.string(),
-            username: z.string(),
-            global_name: z.union([z.string(), z.null()]).optional(),
-            discriminator: z.string(),
-            avatar: z.union([z.string(), z.null()]).optional(),
-            flags: z.number(),
-            bot: z.boolean(),
-            avatar_decoration_data: z
-              .union([
-                z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
-                z.null(),
-              ])
-              .optional(),
-            premium_type: z.union([z.number(), z.null()]).optional(),
-          }),
-          z.null(),
-        ])
-        .optional(),
+      user: z.object({
+        id: z.string(),
+        username: z.string(),
+        global_name: z.union([z.string(), z.null()]).optional(),
+        discriminator: z.string(),
+        avatar: z.union([z.string(), z.null()]).optional(),
+        flags: z.number(),
+        bot: z.boolean(),
+        avatar_decoration_data: z
+          .union([
+            z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+            z.null(),
+          ])
+          .optional(),
+        premium_type: z.union([z.number(), z.null()]).optional(),
+      }),
       presence: z
         .object({
           status: z.string(),
@@ -246,6 +242,13 @@ export const GetRelationshipsResponseSchema = z.object({
 });
 export type GetRelationshipsResponse = zInfer<typeof GetRelationshipsResponseSchema>;
 
+// INVITE_USER_EMBEDDED
+export const InviteUserEmbeddedRequestSchema = z.object({
+  user_id: z.string(),
+  content: z.string().min(0).max(1024).optional(),
+});
+export type InviteUserEmbeddedRequest = zInfer<typeof InviteUserEmbeddedRequestSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -257,6 +260,7 @@ export enum Command {
   SHARE_INTERACTION = 'SHARE_INTERACTION',
   SHARE_LINK = 'SHARE_LINK',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
+  INVITE_USER_EMBEDDED = 'INVITE_USER_EMBEDDED',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -293,5 +297,9 @@ export const Schemas = {
   [Command.GET_RELATIONSHIPS]: {
     request: emptyRequestSchema,
     response: GetRelationshipsResponseSchema,
+  },
+  [Command.INVITE_USER_EMBEDDED]: {
+    request: InviteUserEmbeddedRequestSchema,
+    response: emptyResponseSchema,
   },
 } as const;
