@@ -185,6 +185,7 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.SHARE_LINK:
     case Commands.GET_RELATIONSHIPS:
     case Commands.INVITE_USER_EMBEDDED:
+    case Commands.GET_USER:
       const {response} = Schemas[cmd];
       return response.parse(data);
     default:

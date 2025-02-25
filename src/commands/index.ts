@@ -23,6 +23,7 @@ import {getChannel} from './getChannel';
 import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipants';
 import {getRelationships} from './getRelationships';
 import {inviteUserEmbedded} from './inviteUserEmbedded';
+import {getUser} from './getUser';
 
 export {Commands, SetActivity};
 
@@ -50,6 +51,7 @@ function commands(sendCommand: TSendCommand) {
     getInstanceConnectedParticipants: getInstanceConnectedParticipants(sendCommand),
     getRelationships: getRelationships(sendCommand),
     inviteUserEmbedded: inviteUserEmbedded(sendCommand),
+    getUser: getUser(sendCommand),
   };
 }
 

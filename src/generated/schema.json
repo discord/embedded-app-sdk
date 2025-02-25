@@ -88,7 +88,8 @@
               "gateway.connect",
               "account.global_name.update",
               "payment_sources.country_code",
-              "sdk.social_layer"
+              "sdk.social_layer",
+              "lobbies.write"
             ]
           }
         },
@@ -355,5 +356,36 @@
       "additionalProperties": false
     },
     "response": null
+  },
+  "GET_USER": {
+    "request": {
+      "type": "object",
+      "properties": {"id": {"type": "string", "maxLength": 64}},
+      "required": ["id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": ["object", "null"],
+      "description": "Discord User",
+      "properties": {
+        "id": {"type": "string", "description": "User ID"},
+        "username": {"type": "string"},
+        "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+        "discriminator": {"type": "string", "description": "Global name discriminator. Will be 0 if a unique username"},
+        "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+        "flags": {"type": "number", "description": "Public user flags"},
+        "bot": {"type": "boolean", "description": "If a bot user."},
+        "avatar_decoration_data": {
+          "type": ["object", "null"],
+          "description": "Details about avatar decoration",
+          "properties": {"asset": {"type": "string"}, "skuId": {"type": "string"}, "expiresAt": {"type": "number"}},
+          "required": ["asset"],
+          "additionalProperties": false
+        },
+        "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"}
+      },
+      "required": ["id", "username", "discriminator", "flags", "bot"],
+      "additionalProperties": false
+    }
   }
 }

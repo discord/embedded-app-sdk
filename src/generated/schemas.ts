@@ -249,6 +249,27 @@ export const InviteUserEmbeddedRequestSchema = z.object({
 });
 export type InviteUserEmbeddedRequest = zInfer<typeof InviteUserEmbeddedRequestSchema>;
 
+// GET_USER
+export const GetUserRequestSchema = z.object({id: z.string().max(64)});
+export type GetUserRequest = zInfer<typeof GetUserRequestSchema>;
+export const GetUserResponseSchema = z.union([
+  z.object({
+    id: z.string(),
+    username: z.string(),
+    global_name: z.union([z.string(), z.null()]).optional(),
+    discriminator: z.string(),
+    avatar: z.union([z.string(), z.null()]).optional(),
+    flags: z.number(),
+    bot: z.boolean(),
+    avatar_decoration_data: z
+      .union([z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}), z.null()])
+      .optional(),
+    premium_type: z.union([z.number(), z.null()]).optional(),
+  }),
+  z.null(),
+]);
+export type GetUserResponse = zInfer<typeof GetUserResponseSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -261,6 +282,7 @@ export enum Command {
   SHARE_LINK = 'SHARE_LINK',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
   INVITE_USER_EMBEDDED = 'INVITE_USER_EMBEDDED',
+  GET_USER = 'GET_USER',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -301,5 +323,9 @@ export const Schemas = {
   [Command.INVITE_USER_EMBEDDED]: {
     request: InviteUserEmbeddedRequestSchema,
     response: emptyResponseSchema,
+  },
+  [Command.GET_USER]: {
+    request: GetUserRequestSchema,
+    response: GetUserResponseSchema,
   },
 } as const;
