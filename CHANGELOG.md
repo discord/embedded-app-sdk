@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.10.0](https://github.com/discord/embedded-app-sdk/compare/v1.9.0...v1.10.0) (2025-02-25)
+
+
+### Features
+
+* add activity invite command ([#305](https://github.com/discord/embedded-app-sdk/issues/305)) ([5d54cde](https://github.com/discord/embedded-app-sdk/commit/5d54cde51834229900f85c9aa2400c5b32eabd63))
+* add new GetRelationships command ([#301](https://github.com/discord/embedded-app-sdk/issues/301)) ([8bff274](https://github.com/discord/embedded-app-sdk/commit/8bff274ee5a9a987058fce01115c636505d8b81f))
+* add new GetUser command ([#308](https://github.com/discord/embedded-app-sdk/issues/308)) ([9aa310f](https://github.com/discord/embedded-app-sdk/commit/9aa310f3864aab435f351fdf120e28b800af3626))
+* add RELATIONSHIP_UPDATE event ([#306](https://github.com/discord/embedded-app-sdk/issues/306)) ([7d3b134](https://github.com/discord/embedded-app-sdk/commit/7d3b13486bac04821391045ff2cff5ff093c7310))
+
 ## [1.9.0](https://github.com/discord/embedded-app-sdk/compare/v1.8.1...v1.9.0) (2025-01-09)
 
 
