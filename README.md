@@ -1,4 +1,4 @@
-# @discord/embedded-app-sdk
+## @discord/embedded-app-sdk
 
 <p align="center">
   <img src="/assets/discord-embedded-apps.svg" alt="Discord Embedded App SDK" />
@@ -72,3 +72,4 @@ Developing a new feature or patching a bug on the SDK? Check out [this guide](/d
 ## Discord Developer Terms of Service & Developer Policy
 
 Please note that while this SDK is licensed under the MIT License, the [Discord Developer Terms of Service](https://discord.com/developers/docs/policies-and-agreements/developer-terms-of-service) and [Discord Developer Policy](https://discord.com/developers/docs/policies-and-agreements/developer-policy) otherwise still apply to you and the applications you develop utilizing this SDK.
+## end #
