@@ -214,7 +214,6 @@
     "request": {
       "type": "object",
       "properties": {
-        "referrer_id": {"type": "string", "maxLength": 64},
         "custom_id": {"type": "string", "maxLength": 64},
         "message": {"type": "string", "maxLength": 1000},
         "link_id": {"type": "string", "maxLength": 64}
