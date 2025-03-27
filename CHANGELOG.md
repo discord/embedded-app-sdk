@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.0.0](https://github.com/discord/embedded-app-sdk/compare/v1.9.0...v2.0.0) (2025-03-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove referrer_id from shareLink API ([#312](https://github.com/discord/embedded-app-sdk/issues/312))
+
+### Features
+
+* add activity invite command ([#305](https://github.com/discord/embedded-app-sdk/issues/305)) ([5d54cde](https://github.com/discord/embedded-app-sdk/commit/5d54cde51834229900f85c9aa2400c5b32eabd63))
+* add new GetRelationships command ([#301](https://github.com/discord/embedded-app-sdk/issues/301)) ([8bff274](https://github.com/discord/embedded-app-sdk/commit/8bff274ee5a9a987058fce01115c636505d8b81f))
+* add new GetUser command ([#308](https://github.com/discord/embedded-app-sdk/issues/308)) ([9aa310f](https://github.com/discord/embedded-app-sdk/commit/9aa310f3864aab435f351fdf120e28b800af3626))
+* add RELATIONSHIP_UPDATE event ([#306](https://github.com/discord/embedded-app-sdk/issues/306)) ([7d3b134](https://github.com/discord/embedded-app-sdk/commit/7d3b13486bac04821391045ff2cff5ff093c7310))
+* remove referrer_id from shareLink API ([#312](https://github.com/discord/embedded-app-sdk/issues/312)) ([1186ade](https://github.com/discord/embedded-app-sdk/commit/1186adeedb07ebb42ee5140a7e53defe71cd2e1a))
+
+
+### Bug Fixes
+
+* sync schema for shareLink command ([#311](https://github.com/discord/embedded-app-sdk/issues/311)) ([0f8855d](https://github.com/discord/embedded-app-sdk/commit/0f8855dec8613338b1dc161ab91153317e0f7e8b))
+
 ## [1.9.0](https://github.com/discord/embedded-app-sdk/compare/v1.8.1...v1.9.0) (2025-01-09)
 
 
