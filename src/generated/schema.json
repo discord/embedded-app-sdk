@@ -88,6 +88,7 @@
               "gateway.connect",
               "account.global_name.update",
               "payment_sources.country_code",
+              "sdk.social_layer_presence",
               "sdk.social_layer",
               "lobbies.write"
             ]
@@ -215,15 +216,20 @@
       "properties": {
         "referrer_id": {"type": "string", "maxLength": 64},
         "custom_id": {"type": "string", "maxLength": 64},
-        "message": {"type": "string", "maxLength": 1000}
+        "message": {"type": "string", "maxLength": 1000},
+        "link_id": {"type": "string", "maxLength": 64}
       },
       "required": ["message"],
       "additionalProperties": false
     },
     "response": {
       "type": "object",
-      "properties": {"success": {"type": "boolean"}},
-      "required": ["success"],
+      "properties": {
+        "success": {"type": "boolean"},
+        "didCopyLink": {"type": "boolean"},
+        "didSendMessage": {"type": "boolean"}
+      },
+      "required": ["success", "didCopyLink", "didSendMessage"],
       "additionalProperties": false
     }
   },

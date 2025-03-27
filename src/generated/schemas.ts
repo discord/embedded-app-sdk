@@ -74,6 +74,7 @@ export const AuthenticateResponseSchema = z.object({
           'gateway.connect',
           'account.global_name.update',
           'payment_sources.country_code',
+          'sdk.social_layer_presence',
           'sdk.social_layer',
           'lobbies.write',
         ])
@@ -156,9 +157,14 @@ export const ShareLinkRequestSchema = z.object({
   referrer_id: z.string().max(64).optional(),
   custom_id: z.string().max(64).optional(),
   message: z.string().max(1000),
+  link_id: z.string().max(64).optional(),
 });
 export type ShareLinkRequest = zInfer<typeof ShareLinkRequestSchema>;
-export const ShareLinkResponseSchema = z.object({success: z.boolean()});
+export const ShareLinkResponseSchema = z.object({
+  success: z.boolean(),
+  didCopyLink: z.boolean(),
+  didSendMessage: z.boolean(),
+});
 export type ShareLinkResponse = zInfer<typeof ShareLinkResponseSchema>;
 
 // GET_RELATIONSHIPS
