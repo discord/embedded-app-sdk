@@ -154,7 +154,6 @@ export type ShareInteractionResponse = zInfer<typeof ShareInteractionResponseSch
 
 // SHARE_LINK
 export const ShareLinkRequestSchema = z.object({
-  referrer_id: z.string().max(64).optional(),
   custom_id: z.string().max(64).optional(),
   message: z.string().max(1000),
   link_id: z.string().max(64).optional(),
