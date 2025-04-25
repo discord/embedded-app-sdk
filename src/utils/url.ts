@@ -15,6 +15,10 @@ function regexFromTarget(target: string): RegExp {
   return new RegExp(`${regexString}(/|$)`);
 }
 
+function removePortParameterFromTarget(url: string): string {
+  return url.replace(/:\{[^}]+\}/g, '');
+}
+
 export interface MatchAndRewriteURLInputs {
   originalURL: URL;
   prefixHost: string;
@@ -32,15 +36,17 @@ export interface MatchAndRewriteURLInputs {
  * @returns  null if URL doesn't match prefix, otherwise return rewritten URL
  */
 export function matchAndRewriteURL({originalURL, prefix, prefixHost, target}: MatchAndRewriteURLInputs): URL | null {
-  // coerce url with filler https protocol so we can retrieve host and pathname from target
-  const targetURL = new URL(`https://${target}`);
+  // Remove port parameter from target and coerce url with filler https protocol so we can retrieve host and pathname from target
+  const targetURL = new URL(`https://${removePortParameterFromTarget(target)}`);
   // Depending on the environment, the URL constructor may turn `{` and `}` into `%7B` and `%7D`, respectively
-  const targetRegEx = regexFromTarget(targetURL.host.replace(/%7B/g, '{').replace(/%7D/g, '}'));
+  const targetRegEx = regexFromTarget(target.replace(/%7B/g, '{').replace(/%7D/g, '}'));
   const match = originalURL.toString().match(targetRegEx);
   // Null match indicates that this target is not relevant
   if (match == null) return originalURL;
   const newURL = new URL(originalURL.toString());
   newURL.host = prefixHost;
+  // Remove port from new url (discord activities proxy doesn't listen on custom ports)
+  newURL.port = '';
   newURL.pathname = prefix.replace(SUBSTITUTION_REGEX, (_, matchName) => {
     const replaceValue = match.groups?.[matchName];
     if (replaceValue == null) throw new Error('Misconfigured route.');
