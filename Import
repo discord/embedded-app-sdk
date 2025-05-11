@@ -1,0 +1,3 @@
+import { DiscordSDK } from "@discord/embedded-app-sdk";
+
+const discordSdk = new DiscordSDK(DISCORD_CLIENT_ID);
