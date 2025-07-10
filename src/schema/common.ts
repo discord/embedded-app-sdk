@@ -154,7 +154,9 @@ export const Activity = zod.object({
     .nullable(),
   application_id: zod.string().optional().nullable(),
   details: zod.string().optional().nullable(),
+  details_url: zod.string().url().optional().nullable(),
   state: zod.string().optional().nullable(),
+  state_url: zod.string().url().optional().nullable(),
   emoji: Emoji.optional().nullable(),
   party: zod
     .object({
@@ -167,8 +169,10 @@ export const Activity = zod.object({
     .object({
       large_image: zod.string().nullable(),
       large_text: zod.string().nullable(),
+      large_url: zod.string().url().optional().nullable(),
       small_image: zod.string().nullable(),
       small_text: zod.string().nullable(),
+      small_url: zod.string().url().optional().nullable(),
     })
     .partial()
     .optional()
