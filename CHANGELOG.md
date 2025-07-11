@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/discord/embedded-app-sdk/compare/v2.0.0...v2.1.0) (2025-07-11)
+
+
+### Features
+
+* add state/details/large/small_url ([#319](https://github.com/discord/embedded-app-sdk/issues/319)) ([f81b623](https://github.com/discord/embedded-app-sdk/commit/f81b623234cda079e98aaab28458ec37b7e87005))
+
 ## [2.0.0](https://github.com/discord/embedded-app-sdk/compare/v1.9.0...v2.0.0) (2025-03-27)
 
 
