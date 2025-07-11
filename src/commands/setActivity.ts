@@ -6,7 +6,9 @@ import {commandFactory} from '../utils/commandFactory';
 
 export const SetActivity = Activity.pick({
   state: true,
+  state_url: true,
   details: true,
+  details_url: true,
   timestamps: true,
   assets: true,
   party: true,
