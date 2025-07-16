@@ -10,49 +10,49 @@ describe('matchAndRewriteURL', () => {
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/',
+          result: 'https://123456789012345678.discordsays.com/',
         },
         {
           originalURL: new URL('https://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/test/?foo=bar',
+          result: 'https://123456789012345678.discordsays.com/test/?foo=bar',
         },
         {
           originalURL: new URL('https://discord.com/test?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/test?foo=bar',
+          result: 'https://123456789012345678.discordsays.com/test?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/test/?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/test/?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/test?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/test?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/test?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/foo/bar/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com/foo/bar',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/foo/bar/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com/foo/bar',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/test/?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/test/?foo=bar',
         },
       ];
       for (const {result, ...rest} of TEST_CASES) {
@@ -68,14 +68,14 @@ describe('matchAndRewriteURL', () => {
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/',
+          result: 'https://123456789012345678.discordsays.com/',
         },
         {
           originalURL: new URL('wss://discord.com'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/',
           target: 'discord.com',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/',
+          result: 'wss://123456789012345678.discordsays.com/',
         },
       ];
       for (const {result, ...rest} of TEST_CASES) {
@@ -98,49 +98,49 @@ describe('matchAndRewriteURL', () => {
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/discord/',
+          result: 'https://123456789012345678.discordsays.com/discord/',
         },
         {
           originalURL: new URL('https://discord.com/test?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/discord/test?foo=bar',
+          result: 'https://123456789012345678.discordsays.com/discord/test?foo=bar',
         },
         {
           originalURL: new URL('https://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/discord/test/?foo=bar',
+          result: 'https://123456789012345678.discordsays.com/discord/test/?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/test?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/discord/test?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/discord/test?foo=bar',
         },
         {
           originalURL: new URL('wss://discord.com/test/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/discord',
           target: 'discord.com',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/discord/test/?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/discord/test/?foo=bar',
         },
         {
           originalURL: new URL('wss://test-hyphen.discord.com/baz/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/foo/{parameter}',
           target: '{parameter}.discord.com/baz',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/foo/test-hyphen/?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/foo/test-hyphen/?foo=bar',
         },
         {
           originalURL: new URL('wss://test-hyphen.discord.com/baz/bar/?foo=bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/foo/{parameter}',
           target: '{parameter}.discord.com/baz',
-          result: 'wss://123456789012345678.discordsays.com/.proxy/foo/test-hyphen/bar/?foo=bar',
+          result: 'wss://123456789012345678.discordsays.com/foo/test-hyphen/bar/?foo=bar',
         },
       ];
       for (const {result, ...rest} of TEST_CASES) {
@@ -156,21 +156,21 @@ describe('matchAndRewriteURL', () => {
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/foo/{parameter}',
           target: '{parameter}.discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/foo/test/',
+          result: 'https://123456789012345678.discordsays.com/foo/test/',
         },
         {
           originalURL: new URL('https://test.discord.com/bar'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/foo/{parameter}',
           target: '{parameter}.discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/foo/test/bar',
+          result: 'https://123456789012345678.discordsays.com/foo/test/bar',
         },
         {
           originalURL: new URL('https://test1-hyphen.discord.com/test2-hyphen/'),
           prefixHost: '123456789012345678.discordsays.com',
           prefix: '/foo/{parameter}',
           target: '{parameter}.discord.com',
-          result: 'https://123456789012345678.discordsays.com/.proxy/foo/test1-hyphen/test2-hyphen/',
+          result: 'https://123456789012345678.discordsays.com/foo/test1-hyphen/test2-hyphen/',
         },
       ];
 
@@ -232,34 +232,6 @@ describe('matchAndRewriteURL', () => {
       expect(url4.toString()).toEqual('https://localhost/googleapis/foo/v1/test:url?key=abc123');
     });
 
-    it('Applies the /.proxy/ mapping without any mappings', () => {
-      const url = attemptRemap({
-        url: new URL('https://1234567890.discordsays.com/api/token'),
-        mappings: [],
-      });
-      expect(url.toString()).toEqual('https://1234567890.discordsays.com/.proxy/api/token');
-
-      const base = attemptRemap({
-        url: new URL('https://1234567890.discordsays.com/'),
-        mappings: [],
-      });
-      expect(base.toString()).toEqual('https://1234567890.discordsays.com/.proxy/');
-    });
-
-    it("Doesn't apply /.proxy/ if it already prepends the path", () => {
-      const noPrepend = attemptRemap({
-        url: new URL('https://1234567890.discordsays.com/.proxy/api/token'),
-        mappings: [],
-      });
-      expect(noPrepend.toString()).toEqual('https://1234567890.discordsays.com/.proxy/api/token');
-
-      const prepend = attemptRemap({
-        url: new URL('https://1234567890.discordsays.com/path/before/.proxy/api/token'),
-        mappings: [],
-      });
-      expect(prepend.toString()).toEqual('https://1234567890.discordsays.com/.proxy/path/before/.proxy/api/token');
-    });
-
     it("Doesn't apply trailing slash to complete filenames", () => {
       const prefixHost = '123456789012345678.discordsays.com';
       const target = 'domain.com';
@@ -269,28 +241,28 @@ describe('matchAndRewriteURL', () => {
           prefixHost,
           prefix: '/',
           target,
-          result: 'https://123456789012345678.discordsays.com/.proxy/file/music.mp3',
+          result: 'https://123456789012345678.discordsays.com/file/music.mp3',
         },
         {
           originalURL: new URL('https://domain.com/file/text.txt'),
           prefixHost,
           prefix: '/',
           target,
-          result: 'https://123456789012345678.discordsays.com/.proxy/file/text.txt',
+          result: 'https://123456789012345678.discordsays.com/file/text.txt',
         },
         {
           originalURL: new URL('https://domain.com/a.b/c.html'),
           prefixHost,
           prefix: '/path/to/files',
           target,
-          result: 'https://123456789012345678.discordsays.com/.proxy/path/to/files/a.b/c.html',
+          result: 'https://123456789012345678.discordsays.com/path/to/files/a.b/c.html',
         },
         {
           originalURL: new URL('https://domain.com/file/scene.bundle'),
           prefixHost,
           prefix: '/',
           target,
-          result: 'https://123456789012345678.discordsays.com/.proxy/file/scene.bundle',
+          result: 'https://123456789012345678.discordsays.com/file/scene.bundle',
         },
       ];
 
