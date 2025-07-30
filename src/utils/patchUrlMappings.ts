@@ -1,4 +1,4 @@
-import {absoluteURL, matchAndRewriteURL, PROXY_PREFIX} from './url';
+import {absoluteURL, matchAndRewriteURL} from './url';
 
 export interface Mapping {
   prefix: string;
@@ -163,13 +163,6 @@ function attemptRecreateScriptNode(node: HTMLElement, {url, mappings}: RemapInpu
 
 export function attemptRemap({url, mappings}: RemapInput): URL {
   const newURL = new URL(url.toString());
-  if (
-    (newURL.hostname.includes('discordsays.com') || newURL.hostname.includes('discordsez.com')) &&
-    // Only apply proxy prefix once
-    !newURL.pathname.startsWith(PROXY_PREFIX)
-  ) {
-    newURL.pathname = PROXY_PREFIX + newURL.pathname;
-  }
   for (const mapping of mappings) {
     const mapped = matchAndRewriteURL({
       originalURL: newURL,
