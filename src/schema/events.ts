@@ -28,6 +28,7 @@ export enum Events {
   THERMAL_STATE_UPDATE = 'THERMAL_STATE_UPDATE',
   ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
   RELATIONSHIP_UPDATE = 'RELATIONSHIP_UPDATE',
+  ACTIVITY_JOIN = 'ACTIVITY_JOIN',
 }
 
 export const DispatchEventFrame = ReceiveFrame.extend({
@@ -234,6 +235,15 @@ export const EventSchema = {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.RELATIONSHIP_UPDATE),
       data: Relationship,
+    }),
+  },
+  [Events.ACTIVITY_JOIN]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_JOIN),
+      data: zod.object({
+        applicationId: zod.string(),
+        secret: zod.string(),
+      }),
     }),
   },
 } satisfies Record<keyof typeof Events, EventArgs>;
