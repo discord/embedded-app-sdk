@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/discord/embedded-app-sdk/compare/v2.1.0...v2.2.0) (2025-08-05)
+
+
+### Features
+
+* add ACTIVITY_JOIN event ([#324](https://github.com/discord/embedded-app-sdk/issues/324)) ([9d9e155](https://github.com/discord/embedded-app-sdk/commit/9d9e155fb238779def00d53ca441947a024f7760))
+
 ## [2.1.0](https://github.com/discord/embedded-app-sdk/compare/v2.0.0...v2.1.0) (2025-07-11)
 
 
