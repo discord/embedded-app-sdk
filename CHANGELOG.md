@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/discord/embedded-app-sdk/compare/v2.2.0...v2.2.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to v11 ([#275](https://github.com/discord/embedded-app-sdk/issues/275)) ([84735bd](https://github.com/discord/embedded-app-sdk/commit/84735bd85d02e4ef502722b69c9a8b4a3b1a57f7))
+
 ## [2.2.0](https://github.com/discord/embedded-app-sdk/compare/v2.1.0...v2.2.0) (2025-08-05)
 
 
