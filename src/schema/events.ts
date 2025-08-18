@@ -29,6 +29,7 @@ export enum Events {
   ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
   RELATIONSHIP_UPDATE = 'RELATIONSHIP_UPDATE',
   ACTIVITY_JOIN = 'ACTIVITY_JOIN',
+  QUEST_ENROLLMENT_STATUS_UPDATE = 'QUEST_ENROLLMENT_STATUS_UPDATE',
 }
 
 export const DispatchEventFrame = ReceiveFrame.extend({
@@ -243,6 +244,16 @@ export const EventSchema = {
       data: zod.object({
         applicationId: zod.string(),
         secret: zod.string(),
+      }),
+    }),
+  },
+  [Events.QUEST_ENROLLMENT_STATUS_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.QUEST_ENROLLMENT_STATUS_UPDATE),
+      data: zod.object({
+        quest_id: zod.string(),
+        is_enrolled: zod.boolean(),
+        enrolled_at: zod.string().date(),
       }),
     }),
   },
