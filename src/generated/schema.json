@@ -3,6 +3,7 @@
     "request": null,
     "response": {
       "type": "object",
+      "description": "Response for \"INITIATE_IMAGE_UPLOAD\" Command",
       "properties": {"image_url": {"type": "string"}},
       "required": ["image_url"],
       "additionalProperties": false
@@ -11,6 +12,7 @@
   "OPEN_SHARE_MOMENT_DIALOG": {
     "request": {
       "type": "object",
+      "description": "Request for \"OPEN_SHARE_MOMENT_DIALOG\" Command",
       "properties": {"mediaUrl": {"type": "string", "maxLength": 1024}},
       "required": ["mediaUrl"],
       "additionalProperties": false
@@ -20,11 +22,13 @@
   "AUTHENTICATE": {
     "request": {
       "type": "object",
+      "description": "Request for \"AUTHENTICATE\" Command",
       "properties": {"access_token": {"type": ["string", "null"]}},
       "additionalProperties": false
     },
     "response": {
       "type": "object",
+      "description": "Response for \"AUTHENTICATE\" Command",
       "properties": {
         "access_token": {"type": "string"},
         "user": {
@@ -90,7 +94,8 @@
               "payment_sources.country_code",
               "sdk.social_layer_presence",
               "sdk.social_layer",
-              "lobbies.write"
+              "lobbies.write",
+              "application_identities.write"
             ]
           }
         },
@@ -116,6 +121,7 @@
     "request": null,
     "response": {
       "type": "object",
+      "description": "Response for \"GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS\" Command",
       "properties": {
         "participants": {
           "type": "array",
@@ -159,8 +165,18 @@
   "SHARE_INTERACTION": {
     "request": {
       "type": "object",
+      "description": "Request for \"SHARE_INTERACTION\" Command",
       "properties": {
         "command": {"type": "string"},
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {"name": {"type": "string"}, "value": {"type": "string"}},
+            "required": ["name", "value"],
+            "additionalProperties": false
+          }
+        },
         "content": {"type": "string", "maxLength": 2000},
         "require_launch_channel": {"type": "boolean"},
         "preview_image": {
@@ -198,13 +214,15 @@
             "required": ["type"],
             "additionalProperties": false
           }
-        }
+        },
+        "pid": {"type": "number"}
       },
       "required": ["command"],
       "additionalProperties": false
     },
     "response": {
       "type": "object",
+      "description": "Response for \"SHARE_INTERACTION\" Command",
       "properties": {"success": {"type": "boolean"}},
       "required": ["success"],
       "additionalProperties": false
@@ -213,6 +231,7 @@
   "SHARE_LINK": {
     "request": {
       "type": "object",
+      "description": "Request for \"SHARE_LINK\" Command",
       "properties": {
         "custom_id": {"type": "string", "maxLength": 64},
         "message": {"type": "string", "maxLength": 1000},
@@ -223,6 +242,7 @@
     },
     "response": {
       "type": "object",
+      "description": "Response for \"SHARE_LINK\" Command",
       "properties": {
         "success": {"type": "boolean"},
         "didCopyLink": {"type": "boolean"},
@@ -236,6 +256,7 @@
     "request": null,
     "response": {
       "type": "object",
+      "description": "Response for \"GET_RELATIONSHIPS\" Command",
       "properties": {
         "relationships": {
           "type": "array",
@@ -285,8 +306,11 @@
                       "name": {"type": "string"},
                       "url": {"type": ["string", "null"]},
                       "application_id": {"type": "string"},
+                      "status_display_type": {"type": "number"},
                       "state": {"type": "string"},
+                      "state_url": {"type": "string"},
                       "details": {"type": "string"},
+                      "details_url": {"type": "string"},
                       "emoji": {
                         "type": ["object", "null"],
                         "properties": {
@@ -302,8 +326,10 @@
                         "properties": {
                           "large_image": {"type": "string"},
                           "large_text": {"type": "string"},
+                          "large_url": {"type": "string"},
                           "small_image": {"type": "string"},
-                          "small_text": {"type": "string"}
+                          "small_text": {"type": "string"},
+                          "small_url": {"type": "string"}
                         },
                         "additionalProperties": false
                       },
@@ -356,6 +382,7 @@
   "INVITE_USER_EMBEDDED": {
     "request": {
       "type": "object",
+      "description": "Request for \"INVITE_USER_EMBEDDED\" Command",
       "properties": {"user_id": {"type": "string"}, "content": {"type": "string", "minLength": 0, "maxLength": 1024}},
       "required": ["user_id"],
       "additionalProperties": false
@@ -365,6 +392,7 @@
   "GET_USER": {
     "request": {
       "type": "object",
+      "description": "Request for \"GET_USER\" Command",
       "properties": {"id": {"type": "string", "maxLength": 64}},
       "required": ["id"],
       "additionalProperties": false
@@ -390,6 +418,42 @@
         "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"}
       },
       "required": ["id", "username", "discriminator", "flags", "bot"],
+      "additionalProperties": false
+    }
+  },
+  "GET_QUEST_ENROLLMENT_STATUS": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"GET_QUEST_ENROLLMENT_STATUS\" Command",
+      "properties": {"quest_id": {"type": "string"}},
+      "required": ["quest_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"GET_QUEST_ENROLLMENT_STATUS\" Command",
+      "properties": {
+        "quest_id": {"type": "string"},
+        "is_enrolled": {"type": "boolean"},
+        "enrolled_at": {"type": ["string", "null"]}
+      },
+      "required": ["quest_id", "is_enrolled"],
+      "additionalProperties": false
+    }
+  },
+  "QUEST_START_TIMER": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"QUEST_START_TIMER\" Command",
+      "properties": {"quest_id": {"type": "string"}},
+      "required": ["quest_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"QUEST_START_TIMER\" Command",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
       "additionalProperties": false
     }
   }
