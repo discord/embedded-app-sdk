@@ -121,6 +121,8 @@ async function main() {
   console.log('> Auto-syncing Commands enum and response parsing');
   await syncCommandsEnum(schemas);
   await syncResponseParsing(schemas);
+  await syncCommandsIndex(schemas);
+  await generateCommandFiles(schemas);
 }
 
 function formatToken(name) {
@@ -209,6 +211,102 @@ async function syncResponseParsing(schemas) {
     prettierOpts.parser = 'typescript';
     const formattedContent = await prettier.format(content, prettierOpts);
     await fs.writeFile(responsesPath, formattedContent);
+  }
+}
+
+async function syncCommandsIndex(schemas) {
+  const indexPath = path.join(__dirname, '..', 'src', 'commands', 'index.ts');
+  let content = await fs.readFile(indexPath, 'utf-8');
+  
+  // Find the imports section using sentinel comment
+  const importsMatch = content.match(/(import[\s\S]*?)(\/\/ END-OF-GENERATED-IMPORTS)/);
+  if (!importsMatch) {
+    throw new Error('Could not find imports section with sentinel comment in index.ts');
+  }
+  
+  // Find the exports section using sentinel comment
+  const exportsMatch = content.match(/(,[\s\S]*?)(\/\/ END-OF-GENERATED-EXPORTS)/);
+  if (!exportsMatch) {
+    throw new Error('Could not find exports section with sentinel comment in index.ts');
+  }
+  
+  // Extract existing imports
+  const existingImports = new Set();
+  const importMatches = importsMatch[1].matchAll(/import\s*\{\s*(\w+)\s*\}\s*from\s*'\.\/(\w+)'/g);
+  for (const match of importMatches) {
+    existingImports.add(match[2]); // file name without extension
+  }
+  
+  // Extract existing exports
+  const existingExports = new Set();
+  const exportMatches = exportsMatch[1].matchAll(/(\w+):/g);
+  for (const match of exportMatches) {
+    existingExports.add(match[1]);
+  }
+  
+  // Find missing commands and convert to camelCase
+  const newImports = [];
+  const newExports = [];
+  for (const cmd of Object.keys(schemas)) {
+    const camelCaseCmd = camelCase(cmd);
+    const fileName = camelCase(cmd);
+    
+    if (!existingImports.has(fileName)) {
+      newImports.push(`import {${camelCaseCmd}} from './${fileName}';`);
+    }
+    if (!existingExports.has(camelCaseCmd)) {
+      newExports.push(`    ${camelCaseCmd}: ${camelCaseCmd}(sendCommand),`);
+    }
+  }
+  
+  let hasChanges = false;
+  
+  // Add missing imports
+  if (newImports.length > 0) {
+    console.log(`> Adding ${newImports.length} new imports to index.ts:`, newImports.map(imp => imp.match(/from '\.\/(\w+)'/)[1]));
+    const updatedImports = importsMatch[1] + newImports.join('\n') + '\n' + importsMatch[2];
+    content = content.replace(importsMatch[1] + importsMatch[2], updatedImports);
+    hasChanges = true;
+  }
+  
+  // Add missing exports
+  if (newExports.length > 0) {
+    console.log(`> Adding ${newExports.length} new exports to index.ts:`, newExports.map(exp => exp.match(/(\w+):/)[1]));
+    const updatedExports = exportsMatch[1] + '\n' + newExports.join('\n') + '\n    ' + exportsMatch[2];
+    content = content.replace(exportsMatch[1] + exportsMatch[2], updatedExports);
+    hasChanges = true;
+  }
+  
+  // Write back if there are changes
+  if (hasChanges) {
+    const prettierOpts = await prettier.resolveConfig(__dirname);
+    prettierOpts.parser = 'typescript';
+    const formattedContent = await prettier.format(content, prettierOpts);
+    await fs.writeFile(indexPath, formattedContent);
+  }
+}
+
+async function generateCommandFiles(schemas) {
+  const commandsDir = path.join(__dirname, '..', 'src', 'commands');
+  
+  for (const cmd of Object.keys(schemas)) {
+    const camelCaseCmd = camelCase(cmd);
+    const fileName = `${camelCaseCmd}.ts`;
+    const filePath = path.join(commandsDir, fileName);
+    
+    // Only create file if it doesn't exist
+    const exists = await fs.pathExists(filePath);
+    if (!exists) {
+      console.log(`> Generating command file: ${fileName}`);
+      
+      const fileContent = `import {Command} from '../generated/schemas';
+import {schemaCommandFactory} from '../utils/commandFactory';
+
+export const ${camelCaseCmd} = schemaCommandFactory(Command.${cmd});
+`;
+      
+      await fs.writeFile(filePath, fileContent);
+    }
   }
 }
 
