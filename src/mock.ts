@@ -199,6 +199,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       enrolled_at: null,
     }),
   questStartTimer: () => Promise.resolve({success: true}),
-  getActivityInstanceConnectedParticipants: () => Promise.resolve(null),
-  shareInteraction: () => Promise.resolve(null),
+  getActivityInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
+  shareInteraction: () => Promise.resolve({success: false}),
 };
