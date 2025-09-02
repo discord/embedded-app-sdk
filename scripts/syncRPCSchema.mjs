@@ -261,21 +261,6 @@ async function syncCommandsIndex(schemas) {
     }
   }
   
-  // Find missing commands and convert to camelCase
-  const newImports = [];
-  const newExports = [];
-  for (const cmd of Object.keys(schemas)) {
-    const camelCaseCmd = camelCase(cmd);
-    const fileName = camelCase(cmd);
-    
-    if (!existingImports.has(fileName)) {
-      newImports.push(`import {${camelCaseCmd}} from './${fileName}';`);
-    }
-    if (!existingExports.has(camelCaseCmd)) {
-      newExports.push(`    ${camelCaseCmd}: ${camelCaseCmd}(sendCommand),`);
-    }
-  }
-  
   let hasChanges = false;
   
   // Add missing imports
