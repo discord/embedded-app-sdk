@@ -1,6 +1,6 @@
 {
   "name": "@discord/embedded-app-sdk",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "@discord/embedded-app-sdk enables you to build rich, multiplayer experiences inside Discord.",
   "author": "Discord",
   "license": "MIT",
