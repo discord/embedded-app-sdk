@@ -24,8 +24,11 @@ import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipan
 import {getRelationships} from './getRelationships';
 import {inviteUserEmbedded} from './inviteUserEmbedded';
 import {getUser} from './getUser';
+import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
+import {shareInteraction} from './shareInteraction';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
 import {questStartTimer} from './questStartTimer';
+// END-OF-GENERATED-IMPORTS
 
 export {Commands, SetActivity};
 
@@ -54,8 +57,12 @@ function commands(sendCommand: TSendCommand) {
     getRelationships: getRelationships(sendCommand),
     inviteUserEmbedded: inviteUserEmbedded(sendCommand),
     getUser: getUser(sendCommand),
+
+    getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
+    shareInteraction: shareInteraction(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
+    // END-OF-GENERATED-EXPORTS
   };
 }
 

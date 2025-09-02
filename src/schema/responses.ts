@@ -186,6 +186,10 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.GET_RELATIONSHIPS:
     case Commands.INVITE_USER_EMBEDDED:
     case Commands.GET_USER:
+    case Commands.SHARE_INTERACTION:
+    case Commands.GET_QUEST_ENROLLMENT_STATUS:
+    case Commands.QUEST_START_TIMER:
+      // END-OF-GENERATED-RESPONSES
       const {response} = Schemas[cmd];
       return response.parse(data);
     default:
