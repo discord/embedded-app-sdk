@@ -24,6 +24,8 @@ import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipan
 import {getRelationships} from './getRelationships';
 import {inviteUserEmbedded} from './inviteUserEmbedded';
 import {getUser} from './getUser';
+import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
+import {questStartTimer} from './questStartTimer';
 
 export {Commands, SetActivity};
 
@@ -52,6 +54,8 @@ function commands(sendCommand: TSendCommand) {
     getRelationships: getRelationships(sendCommand),
     inviteUserEmbedded: inviteUserEmbedded(sendCommand),
     getUser: getUser(sendCommand),
+    getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
+    questStartTimer: questStartTimer(sendCommand),
   };
 }
 
