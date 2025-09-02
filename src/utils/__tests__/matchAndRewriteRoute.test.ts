@@ -271,5 +271,37 @@ describe('matchAndRewriteURL', () => {
         expect(resultURL?.toString()).toEqual(result);
       }
     });
+
+    it('handles prefixes ending with slash without adding extra slashes', () => {
+      const prefixHost = '123456789012345678.discordsays.com';
+      const TEST_CASES: Array<MatchAndRewriteURLInputs & {result: string}> = [
+        {
+          originalURL: new URL('https://api.example.com/v1/test'),
+          prefixHost,
+          prefix: '/api/',
+          target: 'api.example.com',
+          result: 'https://123456789012345678.discordsays.com/api/v1/test',
+        },
+        {
+          originalURL: new URL('https://service.example.com/endpoint/'),
+          prefixHost,
+          prefix: '/service/',
+          target: 'service.example.com',
+          result: 'https://123456789012345678.discordsays.com/service/endpoint/',
+        },
+        {
+          originalURL: new URL('https://cdn.example.com/assets/image.png'),
+          prefixHost,
+          prefix: '/cdn/',
+          target: 'cdn.example.com',
+          result: 'https://123456789012345678.discordsays.com/cdn/assets/image.png',
+        },
+      ];
+
+      for (const {result, ...rest} of TEST_CASES) {
+        const resultURL = matchAndRewriteURL(rest);
+        expect(resultURL?.toString()).toEqual(result);
+      }
+    });
   });
 });
