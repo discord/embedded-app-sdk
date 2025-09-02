@@ -123,6 +123,7 @@ async function main() {
   await syncResponseParsing(schemas);
   await syncCommandsIndex(schemas);
   await generateCommandFiles(schemas);
+  await syncMockCommands(schemas);
 }
 
 function formatToken(name) {
@@ -307,6 +308,49 @@ export const ${camelCaseCmd} = schemaCommandFactory(Command.${cmd});
       
       await fs.writeFile(filePath, fileContent);
     }
+  }
+}
+
+async function syncMockCommands(schemas) {
+  const mockPath = path.join(__dirname, '..', 'src', 'mock.ts');
+  let content = await fs.readFile(mockPath, 'utf-8');
+  
+  // Find the commandsMockDefault object ending
+  const mockMatch = content.match(/(export const commandsMockDefault: IDiscordSDK\['commands'\] = \{[\s\S]*?)(\}\;)/);
+  if (!mockMatch) {
+    throw new Error('Could not find commandsMockDefault object in mock.ts');
+  }
+  
+  // Extract existing mock commands
+  const existingMocks = new Set();
+  const mockMatches = mockMatch[1].matchAll(/(\w+):\s*\(\)/g);
+  for (const match of mockMatches) {
+    existingMocks.add(match[1]);
+  }
+  
+  // Find missing commands and add basic mocks
+  const newMocks = [];
+  for (const cmd of Object.keys(schemas)) {
+    const camelCaseCmd = camelCase(cmd);
+    if (!existingMocks.has(camelCaseCmd)) {
+      // Generate a basic mock that returns a resolved promise with a simple structure
+      const mockFunction = `  ${camelCaseCmd}: () => Promise.resolve(null),`;
+      newMocks.push(mockFunction);
+    }
+  }
+  
+  if (newMocks.length > 0) {
+    console.log(`> Adding ${newMocks.length} new mock commands:`, newMocks.map(mock => mock.match(/(\w+):/)[1]));
+    
+    // Insert new mocks before the closing brace
+    const updatedContent = mockMatch[1] + newMocks.join('\n') + '\n' + mockMatch[2];
+    content = content.replace(mockMatch[1] + mockMatch[2], updatedContent);
+    
+    // Format and write back
+    const prettierOpts = await prettier.resolveConfig(__dirname);
+    prettierOpts.parser = 'typescript';
+    const formattedContent = await prettier.format(content, prettierOpts);
+    await fs.writeFile(mockPath, formattedContent);
   }
 }
 
