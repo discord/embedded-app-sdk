@@ -136,17 +136,17 @@ async function syncCommandsEnum(schemas) {
   const commonPath = path.join(__dirname, '..', 'src', 'schema', 'common.ts');
   let content = await fs.readFile(commonPath, 'utf-8');
   
-  // Find the Commands enum using sentinel comment
-  const enumMatch = content.match(/(export enum Commands \{[\s\S]*?)(\/\/ END-OF-GENERATED-COMMANDS)/);
+  // Find the Commands enum using sentinel comments
+  const enumMatch = content.match(/(export enum Commands \{[\s\S]*?\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
   if (!enumMatch) {
-    throw new Error('Could not find Commands enum with sentinel comment in common.ts');
+    throw new Error('Could not find Commands enum with START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/schema/common.ts. Please add these comments around the generated commands section.');
   }
   
-  const currentEnum = enumMatch[1];
+  const generatedSection = enumMatch[2];
   
-  // Extract existing commands from the enum
+  // Extract existing commands from the generated section
   const existingCommands = new Set();
-  const commandMatches = currentEnum.matchAll(/(\w+) = '(\w+)'/g);
+  const commandMatches = generatedSection.matchAll(/(\w+) = '(\w+)'/g);
   for (const match of commandMatches) {
     existingCommands.add(match[2]);
   }
@@ -162,9 +162,10 @@ async function syncCommandsEnum(schemas) {
   if (newCommands.length > 0) {
     console.log(`> Adding ${newCommands.length} new commands to Commands enum:`, Object.keys(schemas).filter(cmd => !existingCommands.has(cmd)));
     
-    // Insert new commands before the sentinel comment
-    const updatedContent = currentEnum + newCommands.join('\n') + '\n  ' + enumMatch[2];
-    content = content.replace(currentEnum + enumMatch[2], updatedContent);
+    // Insert new commands in the generated section
+    const generatedContent = newCommands.join('\n');
+    const updatedContent = enumMatch[1] + generatedContent + '\n  ' + enumMatch[3];
+    content = content.replace(enumMatch[1] + enumMatch[2] + enumMatch[3], updatedContent);
     
     // Format and write back
     const prettierOpts = await prettier.resolveConfig(__dirname);
@@ -178,15 +179,15 @@ async function syncResponseParsing(schemas) {
   const responsesPath = path.join(__dirname, '..', 'src', 'schema', 'responses.ts');
   let content = await fs.readFile(responsesPath, 'utf-8');
   
-  // Find the generated responses section using sentinel comment
-  const sectionMatch = content.match(/(case Commands\.AUTHENTICATE:[\s\S]*?)(\/\/ END-OF-GENERATED-RESPONSES)/);
+  // Find the generated responses section using sentinel comments
+  const sectionMatch = content.match(/(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
   if (!sectionMatch) {
-    throw new Error('Could not find generated responses section with sentinel comment in responses.ts');
+    throw new Error('Could not find generated responses section with START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/schema/responses.ts. Please add these comments around the generated case statements.');
   }
   
-  // Extract existing schema commands
+  // Extract existing schema commands from generated section
   const existingSchemaCommands = new Set();
-  const caseMatches = sectionMatch[1].matchAll(/case Commands\.(\w+):/g);
+  const caseMatches = sectionMatch[2].matchAll(/case Commands\.(\w+):/g);
   for (const match of caseMatches) {
     existingSchemaCommands.add(match[1]);
   }
@@ -202,10 +203,10 @@ async function syncResponseParsing(schemas) {
   if (missingCommands.length > 0) {
     console.log(`> Adding ${missingCommands.length} new commands to response parsing:`, missingCommands);
     
-    // Add new case statements before the sentinel comment
+    // Add new case statements in the generated section
     const newCases = missingCommands.map(cmd => `    case Commands.${cmd}:`).join('\n');
-    const updatedContent = sectionMatch[1] + newCases + '\n      ' + sectionMatch[2];
-    content = content.replace(sectionMatch[1] + sectionMatch[2], updatedContent);
+    const updatedContent = sectionMatch[1] + newCases + '\n      ' + sectionMatch[3];
+    content = content.replace(sectionMatch[1] + sectionMatch[2] + sectionMatch[3], updatedContent);
     
     // Format and write back  
     const prettierOpts = await prettier.resolveConfig(__dirname);
@@ -219,30 +220,45 @@ async function syncCommandsIndex(schemas) {
   const indexPath = path.join(__dirname, '..', 'src', 'commands', 'index.ts');
   let content = await fs.readFile(indexPath, 'utf-8');
   
-  // Find the imports section using sentinel comment
-  const importsMatch = content.match(/(import[\s\S]*?)(\/\/ END-OF-GENERATED-IMPORTS)/);
+  // Find the imports section using sentinel comments
+  const importsMatch = content.match(/(import[\s\S]*?\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
   if (!importsMatch) {
-    throw new Error('Could not find imports section with sentinel comment in index.ts');
+    throw new Error('Could not find imports section with START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/commands/index.ts. Please add these comments around the generated imports section.');
   }
   
-  // Find the exports section using sentinel comment
-  const exportsMatch = content.match(/(,[\s\S]*?)(\/\/ END-OF-GENERATED-EXPORTS)/);
+  // Find the exports section using sentinel comments (within the commands function)
+  const exportsMatch = content.match(/(userSettingsGetLocale: userSettingsGetLocale\(sendCommand\),\n    \/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
   if (!exportsMatch) {
-    throw new Error('Could not find exports section with sentinel comment in index.ts');
+    throw new Error('Could not find exports section with START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/commands/index.ts. Please add these comments around the generated exports section.');
   }
   
-  // Extract existing imports
+  // Extract existing imports from generated section
   const existingImports = new Set();
-  const importMatches = importsMatch[1].matchAll(/import\s*\{\s*(\w+)\s*\}\s*from\s*'\.\/(\w+)'/g);
+  const importMatches = importsMatch[2].matchAll(/import\s*\{\s*(\w+)\s*\}\s*from\s*'\.\/(\w+)'/g);
   for (const match of importMatches) {
     existingImports.add(match[2]); // file name without extension
   }
   
-  // Extract existing exports
+  // Extract existing exports from generated section
   const existingExports = new Set();
-  const exportMatches = exportsMatch[1].matchAll(/(\w+):/g);
+  const exportMatches = exportsMatch[2].matchAll(/(\w+):/g);
   for (const match of exportMatches) {
     existingExports.add(match[1]);
+  }
+  
+  // Find missing commands and convert to camelCase
+  const newImports = [];
+  const newExports = [];
+  for (const cmd of Object.keys(schemas)) {
+    const camelCaseCmd = camelCase(cmd);
+    const fileName = camelCase(cmd);
+    
+    if (!existingImports.has(fileName)) {
+      newImports.push(`import {${camelCaseCmd}} from './${fileName}';`);
+    }
+    if (!existingExports.has(camelCaseCmd)) {
+      newExports.push(`    ${camelCaseCmd}: ${camelCaseCmd}(sendCommand),`);
+    }
   }
   
   // Find missing commands and convert to camelCase
@@ -265,16 +281,16 @@ async function syncCommandsIndex(schemas) {
   // Add missing imports
   if (newImports.length > 0) {
     console.log(`> Adding ${newImports.length} new imports to index.ts:`, newImports.map(imp => imp.match(/from '\.\/(\w+)'/)[1]));
-    const updatedImports = importsMatch[1] + newImports.join('\n') + '\n' + importsMatch[2];
-    content = content.replace(importsMatch[1] + importsMatch[2], updatedImports);
+    const updatedImports = importsMatch[1] + newImports.join('\n') + '\n' + importsMatch[3];
+    content = content.replace(importsMatch[1] + importsMatch[2] + importsMatch[3], updatedImports);
     hasChanges = true;
   }
   
   // Add missing exports
   if (newExports.length > 0) {
     console.log(`> Adding ${newExports.length} new exports to index.ts:`, newExports.map(exp => exp.match(/(\w+):/)[1]));
-    const updatedExports = exportsMatch[1] + '\n' + newExports.join('\n') + '\n    ' + exportsMatch[2];
-    content = content.replace(exportsMatch[1] + exportsMatch[2], updatedExports);
+    const updatedExports = exportsMatch[1] + newExports.join('\n') + '\n    ' + exportsMatch[3];
+    content = content.replace(exportsMatch[1] + exportsMatch[2] + exportsMatch[3], updatedExports);
     hasChanges = true;
   }
   
