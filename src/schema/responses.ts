@@ -177,19 +177,8 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.GET_SKUS:
     case Commands.GET_ENTITLEMENTS:
       return EmptyResponse.parse(data);
-    // Generated Responses
-    case Commands.AUTHENTICATE:
-    case Commands.INITIATE_IMAGE_UPLOAD:
-    case Commands.OPEN_SHARE_MOMENT_DIALOG:
-    case Commands.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS:
-    case Commands.SHARE_LINK:
-    case Commands.GET_RELATIONSHIPS:
-    case Commands.INVITE_USER_EMBEDDED:
-    case Commands.GET_USER:
-    case Commands.SHARE_INTERACTION:
-    case Commands.GET_QUEST_ENROLLMENT_STATUS:
-    case Commands.QUEST_START_TIMER:
-      // END-OF-GENERATED-RESPONSES
+      // START-GENERATED-SECTION
+      // END-GENERATED-SECTION
       const {response} = Schemas[cmd];
       return response.parse(data);
     default:

@@ -1,40 +1,28 @@
 import {Commands} from '../schema/common';
 import {TSendCommand} from '../schema/types';
 
-import {authenticate} from './authenticate';
 import {authorize} from './authorize';
 import {captureLog} from './captureLog';
 import {encourageHardwareAcceleration} from './encourageHardwareAcceleration';
+import {getChannel} from './getChannel';
 import {getEntitlements} from './getEntitlements';
 import {getSkus} from './getSkus';
 import {getChannelPermissions} from './getChannelPermissions';
 import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {openExternalLink} from './openExternalLink';
 import {openInviteDialog} from './openInviteDialog';
-import {openShareMomentDialog} from './openShareMomentDialog';
 import {setActivity, SetActivity} from './setActivity';
 import {setConfig} from './setConfig';
 import {setOrientationLockState} from './setOrientationLockState';
-import {shareLink} from './shareLink';
 import {startPurchase} from './startPurchase';
 import {userSettingsGetLocale} from './userSettingsGetLocale';
-import {initiateImageUpload} from './initiateImageUpload';
-import {getChannel} from './getChannel';
-import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipants';
-import {getRelationships} from './getRelationships';
-import {inviteUserEmbedded} from './inviteUserEmbedded';
-import {getUser} from './getUser';
-import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
-import {shareInteraction} from './shareInteraction';
-import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
-import {questStartTimer} from './questStartTimer';
-// END-OF-GENERATED-IMPORTS
+// START-GENERATED-SECTION
+// END-GENERATED-SECTION
 
 export {Commands, SetActivity};
 
 function commands(sendCommand: TSendCommand) {
   return {
-    authenticate: authenticate(sendCommand),
     authorize: authorize(sendCommand),
     captureLog: captureLog(sendCommand),
     encourageHardwareAcceleration: encourageHardwareAcceleration(sendCommand),
@@ -45,24 +33,13 @@ function commands(sendCommand: TSendCommand) {
     getSkus: getSkus(sendCommand),
     openExternalLink: openExternalLink(sendCommand),
     openInviteDialog: openInviteDialog(sendCommand),
-    openShareMomentDialog: openShareMomentDialog(sendCommand),
     setActivity: setActivity(sendCommand),
     setConfig: setConfig(sendCommand),
     setOrientationLockState: setOrientationLockState(sendCommand),
-    shareLink: shareLink(sendCommand),
     startPurchase: startPurchase(sendCommand),
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
-    initiateImageUpload: initiateImageUpload(sendCommand),
-    getInstanceConnectedParticipants: getInstanceConnectedParticipants(sendCommand),
-    getRelationships: getRelationships(sendCommand),
-    inviteUserEmbedded: inviteUserEmbedded(sendCommand),
-    getUser: getUser(sendCommand),
-
-    getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
-    shareInteraction: shareInteraction(sendCommand),
-    getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
-    questStartTimer: questStartTimer(sendCommand),
-    // END-OF-GENERATED-EXPORTS
+    // START-GENERATED-SECTION
+    // END-GENERATED-SECTION
   };
 }
 
