@@ -271,5 +271,37 @@ describe('matchAndRewriteURL', () => {
         expect(resultURL?.toString()).toEqual(result);
       }
     });
+
+    it('handles URLs with .proxy without adding extra slashes', () => {
+      const prefixHost = '123456789012345678.discordsays.com';
+      const TEST_CASES: Array<MatchAndRewriteURLInputs & {result: string}> = [
+        {
+          originalURL: new URL('https://api.example.com/.proxy/test'),
+          prefixHost,
+          prefix: '/api/',
+          target: 'api.example.com',
+          result: 'https://123456789012345678.discordsays.com/api/.proxy/test',
+        },
+        {
+          originalURL: new URL('https://service.example.com/.proxy/endpoint/'),
+          prefixHost,
+          prefix: '/service/',
+          target: 'service.example.com',
+          result: 'https://123456789012345678.discordsays.com/service/.proxy/endpoint/',
+        },
+        {
+          originalURL: new URL('https://cdn.example.com/.proxy/assets/image.png'),
+          prefixHost,
+          prefix: '/cdn/',
+          target: 'cdn.example.com',
+          result: 'https://123456789012345678.discordsays.com/cdn/.proxy/assets/image.png',
+        },
+      ];
+
+      for (const {result, ...rest} of TEST_CASES) {
+        const resultURL = matchAndRewriteURL(rest);
+        expect(resultURL?.toString()).toEqual(result);
+      }
+    });
   });
 });

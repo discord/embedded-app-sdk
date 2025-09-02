@@ -46,7 +46,8 @@ export function matchAndRewriteURL({originalURL, prefix, prefixHost, target}: Ma
   });
 
   // Append the original path
-  newURL.pathname += newURL.pathname === '/' ? originalURL.pathname.slice(1) : originalURL.pathname;
+  const pathToAppend = originalURL.pathname.startsWith('/') ? originalURL.pathname.slice(1) : originalURL.pathname;
+  newURL.pathname += newURL.pathname.endsWith('/') ? pathToAppend : '/' + pathToAppend;
 
   // Remove the target's path from the new url path
   newURL.pathname = newURL.pathname.replace(targetURL.pathname, '');
