@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/discord/embedded-app-sdk/compare/v2.3.0...v2.3.1) (2025-09-02)
+
+
+### Bug Fixes
+
+* properly export the quest commands ([#334](https://github.com/discord/embedded-app-sdk/issues/334)) ([e096ab4](https://github.com/discord/embedded-app-sdk/commit/e096ab40cb9a02156e8cbe2d9f208b315ac42a98))
+
 ## [2.3.0](https://github.com/discord/embedded-app-sdk/compare/v2.2.0...v2.3.0) (2025-09-02)
 
 
