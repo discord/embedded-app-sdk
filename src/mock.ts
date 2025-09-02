@@ -192,4 +192,11 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       avatar: null,
     });
   },
+  getQuestEnrollmentStatus: () =>
+    Promise.resolve({
+      quest_id: 'mock_quest_id',
+      is_enrolled: false,
+      enrolled_at: null,
+    }),
+  questStartTimer: () => Promise.resolve({success: true}),
 };
