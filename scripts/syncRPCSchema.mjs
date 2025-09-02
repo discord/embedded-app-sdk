@@ -116,12 +116,100 @@ async function main() {
   prettierOpts.parser = 'typescript';
   const formattedCode = await prettier.format(output, prettierOpts);
   await fs.writeFile(path.join(genDir, 'schemas.ts'), formattedCode);
+
+  // Auto-sync Commands enum and response parsing
+  console.log('> Auto-syncing Commands enum and response parsing');
+  await syncCommandsEnum(schemas);
+  await syncResponseParsing(schemas);
 }
 
 function formatToken(name) {
   let className = camelCase(name);
   className = className.charAt(0).toUpperCase() + className.slice(1);
   return className;
+}
+
+async function syncCommandsEnum(schemas) {
+  const commonPath = path.join(__dirname, '..', 'src', 'schema', 'common.ts');
+  let content = await fs.readFile(commonPath, 'utf-8');
+  
+  // Find the Commands enum using sentinel comment
+  const enumMatch = content.match(/(export enum Commands \{[\s\S]*?)(\/\/ END-OF-GENERATED-COMMANDS)/);
+  if (!enumMatch) {
+    throw new Error('Could not find Commands enum with sentinel comment in common.ts');
+  }
+  
+  const currentEnum = enumMatch[1];
+  
+  // Extract existing commands from the enum
+  const existingCommands = new Set();
+  const commandMatches = currentEnum.matchAll(/(\w+) = '(\w+)'/g);
+  for (const match of commandMatches) {
+    existingCommands.add(match[2]);
+  }
+  
+  // Add any missing schema commands
+  const newCommands = [];
+  for (const cmd of Object.keys(schemas)) {
+    if (!existingCommands.has(cmd)) {
+      newCommands.push(`  ${cmd} = '${cmd}',`);
+    }
+  }
+  
+  if (newCommands.length > 0) {
+    console.log(`> Adding ${newCommands.length} new commands to Commands enum:`, Object.keys(schemas).filter(cmd => !existingCommands.has(cmd)));
+    
+    // Insert new commands before the sentinel comment
+    const updatedContent = currentEnum + newCommands.join('\n') + '\n  ' + enumMatch[2];
+    content = content.replace(currentEnum + enumMatch[2], updatedContent);
+    
+    // Format and write back
+    const prettierOpts = await prettier.resolveConfig(__dirname);
+    prettierOpts.parser = 'typescript';
+    const formattedContent = await prettier.format(content, prettierOpts);
+    await fs.writeFile(commonPath, formattedContent);
+  }
+}
+
+async function syncResponseParsing(schemas) {
+  const responsesPath = path.join(__dirname, '..', 'src', 'schema', 'responses.ts');
+  let content = await fs.readFile(responsesPath, 'utf-8');
+  
+  // Find the generated responses section using sentinel comment
+  const sectionMatch = content.match(/(case Commands\.AUTHENTICATE:[\s\S]*?)(\/\/ END-OF-GENERATED-RESPONSES)/);
+  if (!sectionMatch) {
+    throw new Error('Could not find generated responses section with sentinel comment in responses.ts');
+  }
+  
+  // Extract existing schema commands
+  const existingSchemaCommands = new Set();
+  const caseMatches = sectionMatch[1].matchAll(/case Commands\.(\w+):/g);
+  for (const match of caseMatches) {
+    existingSchemaCommands.add(match[1]);
+  }
+  
+  // Find missing commands
+  const missingCommands = [];
+  for (const cmd of Object.keys(schemas)) {
+    if (!existingSchemaCommands.has(cmd)) {
+      missingCommands.push(cmd);
+    }
+  }
+  
+  if (missingCommands.length > 0) {
+    console.log(`> Adding ${missingCommands.length} new commands to response parsing:`, missingCommands);
+    
+    // Add new case statements before the sentinel comment
+    const newCases = missingCommands.map(cmd => `    case Commands.${cmd}:`).join('\n');
+    const updatedContent = sectionMatch[1] + newCases + '\n      ' + sectionMatch[2];
+    content = content.replace(sectionMatch[1] + sectionMatch[2], updatedContent);
+    
+    // Format and write back  
+    const prettierOpts = await prettier.resolveConfig(__dirname);
+    prettierOpts.parser = 'typescript';
+    const formattedContent = await prettier.format(content, prettierOpts);
+    await fs.writeFile(responsesPath, formattedContent);
+  }
 }
 
 function parseZodSchema(code) {
