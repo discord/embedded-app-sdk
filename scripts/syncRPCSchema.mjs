@@ -245,8 +245,8 @@ async function syncCommandsEnum(schemas) {
   // Extract existing commands from the generated section
   const existingCommands = extractExistingItems(generatedSection, /(\w+) = '(\w+)'/g);
 
-  // Find missing schema commands
-  const missingCommands = Object.keys(schemas).filter((cmd) => !existingCommands.has(cmd));
+  // Find missing schema commands (sorted alphabetically)
+  const missingCommands = Object.keys(schemas).sort().filter((cmd) => !existingCommands.has(cmd));
   if (missingCommands.length === 0) return;
 
   console.log(`> Adding ${missingCommands.length} new commands to Commands enum:`, missingCommands);
@@ -270,8 +270,8 @@ async function syncResponseParsing(schemas) {
   // Extract existing schema commands from generated section
   const existingCommands = extractExistingItems(generatedSection, /case Commands\.(\w+):/g);
 
-  // Find missing commands
-  const missingCommands = Object.keys(schemas).filter((cmd) => !existingCommands.has(cmd));
+  // Find missing commands (sorted alphabetically)
+  const missingCommands = Object.keys(schemas).sort().filter((cmd) => !existingCommands.has(cmd));
   if (missingCommands.length === 0) return;
 
   console.log(`> Adding ${missingCommands.length} new commands to response parsing:`, missingCommands);
@@ -296,8 +296,9 @@ async function syncCommandsIndex(schemas) {
   const existingImports = extractExistingItems(importsMatch[2], /import\s*\{\s*(\w+)\s*\}\s*from\s*'\.\/(\w+)'/g);
   const existingExports = extractExistingItems(exportsMatch[2], /(\w+):/g);
 
-  // Find missing commands
+  // Find missing commands (sorted alphabetically)
   const missingCommands = Object.keys(schemas)
+    .sort()
     .map(getCommandNames)
     .filter(({camelCase}) => !existingImports.has(camelCase) || !existingExports.has(camelCase));
   if (missingCommands.length === 0) return;
@@ -337,7 +338,7 @@ async function syncCommandsIndex(schemas) {
 async function generateCommandFiles(schemas) {
   const commandsToGenerate = [];
 
-  for (const cmd of Object.keys(schemas)) {
+  for (const cmd of Object.keys(schemas).sort()) {
     const {camelCase: cmdName} = getCommandNames(cmd);
     const filePath = path.join(PATHS.commandsDir, `${cmdName}.ts`);
 
@@ -371,8 +372,9 @@ async function syncMockCommands(schemas) {
   // Extract existing mock commands from generated section
   const existingMocks = extractExistingItems(generatedSection, /(\w+):\s*\(\)/g);
 
-  // Find missing commands
+  // Find missing commands (sorted alphabetically)
   const missingCommands = Object.keys(schemas)
+    .sort()
     .map(getCommandNames)
     .filter(({camelCase}) => !existingMocks.has(camelCase));
   if (missingCommands.length === 0) return;
