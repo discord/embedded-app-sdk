@@ -114,6 +114,7 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       iosKeyboardResizesView: true,
     }),
   getChannelPermissions: () => Promise.resolve({permissions: bigInt(1234567890) as unknown as bigint}),
+  getInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   // START-GENERATED-SECTION
   openShareMomentDialog: () => Promise.resolve(null),
   authenticate: () =>
@@ -141,7 +142,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       image_url:
         'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png',
     }),
-  getInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   getRelationships: () =>
     Promise.resolve({
       relationships: [

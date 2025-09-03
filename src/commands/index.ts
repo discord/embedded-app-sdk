@@ -49,6 +49,8 @@ function commands(sendCommand: TSendCommand) {
     setOrientationLockState: setOrientationLockState(sendCommand),
     startPurchase: startPurchase(sendCommand),
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
+    // Backward compatibility - getInstanceConnectedParticipants is an alias for getActivityInstanceConnectedParticipants
+    getInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
     // START-GENERATED-SECTION
     authenticate: authenticate(sendCommand),
     getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
