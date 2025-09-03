@@ -220,17 +220,13 @@ async function syncCommandsIndex(schemas) {
   const indexPath = path.join(__dirname, '..', 'src', 'commands', 'index.ts');
   let content = await fs.readFile(indexPath, 'utf-8');
   
-  // Find the imports section using sentinel comments
-  const importsMatch = content.match(/(import[\s\S]*?\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
-  if (!importsMatch) {
-    throw new Error('Could not find imports section with START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/commands/index.ts. Please add these comments around the generated imports section.');
+  // Find all sentinel pairs - first is imports, second is exports
+  const sentinelMatches = [...content.matchAll(/(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/g)];
+  if (sentinelMatches.length !== 2) {
+    throw new Error(`Expected exactly 2 START-GENERATED-SECTION/END-GENERATED-SECTION pairs in src/commands/index.ts, but found ${sentinelMatches.length}. Please add these comments around the imports and exports sections.`);
   }
   
-  // Find the exports section using sentinel comments (within the commands function)
-  const exportsMatch = content.match(/(userSettingsGetLocale: userSettingsGetLocale\(sendCommand\),\n    \/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
-  if (!exportsMatch) {
-    throw new Error('Could not find exports section with START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/commands/index.ts. Please add these comments around the generated exports section.');
-  }
+  const [importsMatch, exportsMatch] = sentinelMatches;
   
   // Extract existing imports from generated section
   const existingImports = new Set();
@@ -316,15 +312,15 @@ async function syncMockCommands(schemas) {
   const mockPath = path.join(__dirname, '..', 'src', 'mock.ts');
   let content = await fs.readFile(mockPath, 'utf-8');
   
-  // Find the commandsMockDefault object ending
-  const mockMatch = content.match(/(export const commandsMockDefault: IDiscordSDK\['commands'\] = \{[\s\S]*?)(\}\;)/);
-  if (!mockMatch) {
-    throw new Error('Could not find commandsMockDefault object in mock.ts');
+  // Find the generated section using sentinel comments
+  const sectionMatch = content.match(/(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/);
+  if (!sectionMatch) {
+    throw new Error('Could not find START-GENERATED-SECTION and END-GENERATED-SECTION sentinels in src/mock.ts. Please add these comments around the generated mock commands section.');
   }
   
-  // Extract existing mock commands
+  // Extract existing mock commands from generated section
   const existingMocks = new Set();
-  const mockMatches = mockMatch[1].matchAll(/(\w+):\s*\(\)/g);
+  const mockMatches = sectionMatch[2].matchAll(/(\w+):\s*\(\)/g);
   for (const match of mockMatches) {
     existingMocks.add(match[1]);
   }
@@ -343,9 +339,11 @@ async function syncMockCommands(schemas) {
   if (newMocks.length > 0) {
     console.log(`> Adding ${newMocks.length} new mock commands:`, newMocks.map(mock => mock.match(/(\w+):/)[1]));
     
-    // Insert new mocks before the closing brace
-    const updatedContent = mockMatch[1] + newMocks.join('\n') + '\n' + mockMatch[2];
-    content = content.replace(mockMatch[1] + mockMatch[2], updatedContent);
+    // Add new mocks to the generated section
+    const currentGenerated = sectionMatch[2].trim();
+    const newContent = currentGenerated ? currentGenerated + '\n' + newMocks.join('\n') : newMocks.join('\n');
+    const updatedContent = sectionMatch[1] + newContent + '\n  ' + sectionMatch[3];
+    content = content.replace(sectionMatch[1] + sectionMatch[2] + sectionMatch[3], updatedContent);
     
     // Format and write back
     const prettierOpts = await prettier.resolveConfig(__dirname);
