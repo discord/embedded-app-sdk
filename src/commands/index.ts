@@ -1,37 +1,39 @@
 import {Commands} from '../schema/common';
 import {TSendCommand} from '../schema/types';
 
-import {authenticate} from './authenticate';
 import {authorize} from './authorize';
 import {captureLog} from './captureLog';
 import {encourageHardwareAcceleration} from './encourageHardwareAcceleration';
+import {getChannel} from './getChannel';
 import {getEntitlements} from './getEntitlements';
 import {getSkus} from './getSkus';
 import {getChannelPermissions} from './getChannelPermissions';
 import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {openExternalLink} from './openExternalLink';
 import {openInviteDialog} from './openInviteDialog';
-import {openShareMomentDialog} from './openShareMomentDialog';
 import {setActivity, SetActivity} from './setActivity';
 import {setConfig} from './setConfig';
 import {setOrientationLockState} from './setOrientationLockState';
-import {shareLink} from './shareLink';
 import {startPurchase} from './startPurchase';
 import {userSettingsGetLocale} from './userSettingsGetLocale';
-import {initiateImageUpload} from './initiateImageUpload';
-import {getChannel} from './getChannel';
-import {getInstanceConnectedParticipants} from './getInstanceConnectedParticipants';
-import {getRelationships} from './getRelationships';
-import {inviteUserEmbedded} from './inviteUserEmbedded';
-import {getUser} from './getUser';
+// START-GENERATED-SECTION
+import {authenticate} from './authenticate';
+import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
+import {getRelationships} from './getRelationships';
+import {getUser} from './getUser';
+import {initiateImageUpload} from './initiateImageUpload';
+import {inviteUserEmbedded} from './inviteUserEmbedded';
+import {openShareMomentDialog} from './openShareMomentDialog';
 import {questStartTimer} from './questStartTimer';
+import {shareInteraction} from './shareInteraction';
+import {shareLink} from './shareLink';
+// END-GENERATED-SECTION
 
 export {Commands, SetActivity};
 
 function commands(sendCommand: TSendCommand) {
   return {
-    authenticate: authenticate(sendCommand),
     authorize: authorize(sendCommand),
     captureLog: captureLog(sendCommand),
     encourageHardwareAcceleration: encourageHardwareAcceleration(sendCommand),
@@ -42,20 +44,26 @@ function commands(sendCommand: TSendCommand) {
     getSkus: getSkus(sendCommand),
     openExternalLink: openExternalLink(sendCommand),
     openInviteDialog: openInviteDialog(sendCommand),
-    openShareMomentDialog: openShareMomentDialog(sendCommand),
     setActivity: setActivity(sendCommand),
     setConfig: setConfig(sendCommand),
     setOrientationLockState: setOrientationLockState(sendCommand),
-    shareLink: shareLink(sendCommand),
     startPurchase: startPurchase(sendCommand),
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
-    initiateImageUpload: initiateImageUpload(sendCommand),
-    getInstanceConnectedParticipants: getInstanceConnectedParticipants(sendCommand),
-    getRelationships: getRelationships(sendCommand),
-    inviteUserEmbedded: inviteUserEmbedded(sendCommand),
-    getUser: getUser(sendCommand),
+    // Backward compatibility - getInstanceConnectedParticipants is an alias for getActivityInstanceConnectedParticipants
+    getInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
+    // START-GENERATED-SECTION
+    authenticate: authenticate(sendCommand),
+    getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
+    getRelationships: getRelationships(sendCommand),
+    getUser: getUser(sendCommand),
+    initiateImageUpload: initiateImageUpload(sendCommand),
+    inviteUserEmbedded: inviteUserEmbedded(sendCommand),
+    openShareMomentDialog: openShareMomentDialog(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
+    shareInteraction: shareInteraction(sendCommand),
+    shareLink: shareLink(sendCommand),
+    // END-GENERATED-SECTION
   };
 }
 

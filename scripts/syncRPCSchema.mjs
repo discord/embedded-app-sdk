@@ -9,12 +9,100 @@ const defaultBranch = 'main';
 const branch = argv.branch ?? defaultBranch;
 let jsonSchemaPath = argv.path;
 if (jsonSchemaPath == null) {
-  throw new Error('Expected -- --path argument.\nThis should point to the generated JSON Schema file.\nExample command below:\nnpm run sync -- --path path/to/monorepo/discord_common/js/packages/rpc-schema/generated/schema.json');
+  throw new Error(
+    'Expected -- --path argument.\nThis should point to the generated JSON Schema file.\nExample command below:\nnpm run sync -- --path path/to/monorepo/discord_common/js/packages/rpc-schema/generated/schema.json',
+  );
 }
 // Resolve absolute path
 jsonSchemaPath = path.resolve(jsonSchemaPath);
 const genDir = path.join(__dirname, '..', 'src', 'generated');
 const schemaFilePath = path.join(genDir, 'schema.json');
+
+// Constants for generated sections
+const GENERATED_SECTION_START = '// START-GENERATED-SECTION';
+const GENERATED_SECTION_END = '// END-GENERATED-SECTION';
+const SENTINEL_REGEX = /(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/g;
+const SENTINEL_REGEX_SINGLE = /(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/;
+
+// File paths
+const PATHS = {
+  common: path.join(__dirname, '..', 'src', 'schema', 'common.ts'),
+  responses: path.join(__dirname, '..', 'src', 'schema', 'responses.ts'),
+  index: path.join(__dirname, '..', 'src', 'commands', 'index.ts'),
+  mock: path.join(__dirname, '..', 'src', 'mock.ts'),
+  commandsDir: path.join(__dirname, '..', 'src', 'commands'),
+};
+
+// Templates
+const COMMAND_FILE_TEMPLATE = (cmdName, cmd) => `import {Command} from '../generated/schemas';
+import {schemaCommandFactory} from '../utils/commandFactory';
+
+export const ${cmdName} = schemaCommandFactory(Command.${cmd});
+`;
+
+// Helper Functions
+/**
+ * @param {string} filePath - Path to write the file
+ * @param {string} content - File content to format and write
+ */
+async function formatAndWriteFile(filePath, content) {
+  const prettierOpts = await prettier.resolveConfig(__dirname);
+  prettierOpts.parser = 'typescript';
+  const formattedContent = await prettier.format(content, prettierOpts);
+  await fs.writeFile(filePath, formattedContent);
+}
+
+/**
+ * @param {string} content - File content to search
+ * @param {string} filePath - File path for error messages
+ * @param {number} expectedCount - Expected number of sentinel pairs
+ * @returns {RegExpMatchArray | RegExpMatchArray[]} Single match or array of matches
+ */
+function findSentinelSections(content, filePath, expectedCount = 1) {
+  const matches = [...content.matchAll(SENTINEL_REGEX)];
+  if (matches.length !== expectedCount) {
+    throw createSentinelError(filePath, expectedCount, matches.length);
+  }
+  return expectedCount === 1 ? matches[0] : matches;
+}
+
+/**
+ * @param {string} filePath - File path for error message
+ * @param {number} expected - Expected number of sentinels
+ * @param {number} found - Actual number found
+ * @returns {Error} Descriptive error with guidance
+ */
+function createSentinelError(filePath, expected, found) {
+  return new Error(
+    `Expected exactly ${expected} ${GENERATED_SECTION_START}/${GENERATED_SECTION_END} pair(s) in ${filePath}, but found ${found}. ` +
+      'Please add these comments around the generated sections.',
+  );
+}
+
+/**
+ * @param {string} cmd - Command name to convert
+ * @returns {{camelCase: string, original: string}} Command names in different formats
+ */
+function getCommandNames(cmd) {
+  return {
+    camelCase: camelCase(cmd),
+    original: cmd,
+  };
+}
+
+/**
+ * @param {string} content - Content to search in
+ * @param {RegExp} regex - Regex pattern to match
+ * @returns {Set<string>} Set of extracted items
+ */
+function extractExistingItems(content, regex) {
+  const existing = new Set();
+  const matches = content.matchAll(regex);
+  for (const match of matches) {
+    existing.add(match[1]);
+  }
+  return existing;
+}
 
 main().catch((err) => {
   throw err;
@@ -116,14 +204,167 @@ async function main() {
   prettierOpts.parser = 'typescript';
   const formattedCode = await prettier.format(output, prettierOpts);
   await fs.writeFile(path.join(genDir, 'schemas.ts'), formattedCode);
+
+  // Auto-sync Commands enum and response parsing
+  console.log('> Auto-syncing Commands enum and response parsing');
+  await syncCommandsEnum(schemas);
+  await syncResponseParsing(schemas);
+  await syncCommandsIndex(schemas);
+  await generateCommandFiles(schemas);
+  await syncMockCommands(schemas);
 }
 
+/**
+ * @param {string} name - Token name to format
+ * @returns {string} Formatted class name
+ */
 function formatToken(name) {
   let className = camelCase(name);
   className = className.charAt(0).toUpperCase() + className.slice(1);
   return className;
 }
 
+/**
+ * @param {Record<string, any>} schemas - Schema definitions from JSON
+ */
+async function syncCommandsEnum(schemas) {
+  const content = await fs.readFile(PATHS.common, 'utf-8');
+
+  // Find the Commands enum using sentinel comments
+  const enumRegex =
+    /(export enum Commands \{[\s\S]*?\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/;
+  const enumMatch = content.match(enumRegex);
+  if (!enumMatch) {
+    throw new Error(
+      `Could not find Commands enum with ${GENERATED_SECTION_START}/${GENERATED_SECTION_END} sentinels in ${PATHS.common}`,
+    );
+  }
+
+  const [fullMatch, beforeSection, generatedSection, afterSection] = enumMatch;
+
+  // Generate ALL schema commands (sorted alphabetically)
+  const allCommandEntries = Object.keys(schemas).sort().map((cmd) => `  ${cmd} = '${cmd}',`);
+  
+  console.log(`> Syncing ${allCommandEntries.length} commands in Commands enum`);
+
+  // Replace entire generated section
+  const updatedContent = beforeSection + allCommandEntries.join('\n') + '\n  ' + afterSection;
+  const updatedFile = content.replace(fullMatch, updatedContent);
+  
+  await formatAndWriteFile(PATHS.common, updatedFile);
+}
+
+/**
+ * @param {Record<string, any>} schemas - Schema definitions from JSON
+ */
+async function syncResponseParsing(schemas) {
+  const content = await fs.readFile(PATHS.responses, 'utf-8');
+
+  const [fullMatch, beforeSection, generatedSection, afterSection] = findSentinelSections(content, PATHS.responses);
+
+  // Generate ALL schema case statements (sorted alphabetically)
+  const allCaseStatements = Object.keys(schemas).sort().map((cmd) => `    case Commands.${cmd}:`);
+  
+  console.log(`> Syncing ${allCaseStatements.length} commands in response parsing`);
+
+  // Replace entire generated section
+  const updatedContent = beforeSection + allCaseStatements.join('\n') + '\n      ' + afterSection;
+  const updatedFile = content.replace(fullMatch, updatedContent);
+  
+  await formatAndWriteFile(PATHS.responses, updatedFile);
+}
+
+/**
+ * @param {Record<string, any>} schemas - Schema definitions from JSON
+ */
+async function syncCommandsIndex(schemas) {
+  let content = await fs.readFile(PATHS.index, 'utf-8');
+
+  const [importsMatch, exportsMatch] = findSentinelSections(content, PATHS.index, 2);
+
+  // Generate ALL schema imports and exports (sorted alphabetically)
+  const allCommands = Object.keys(schemas).sort().map(getCommandNames);
+  
+  const allImports = allCommands.map(({camelCase}) => `import {${camelCase}} from './${camelCase}';`);
+  const allExports = allCommands.map(({camelCase}) => `    ${camelCase}: ${camelCase}(sendCommand),`);
+
+  console.log(`> Syncing ${allCommands.length} commands in index.ts`);
+
+  // Replace entire imports section
+  const updatedImports = importsMatch[1] + allImports.join('\n') + '\n' + importsMatch[3];
+  content = content.replace(importsMatch[0], updatedImports);
+
+  // Replace entire exports section
+  const updatedExports = exportsMatch[1] + allExports.join('\n') + '\n    ' + exportsMatch[3];
+  content = content.replace(exportsMatch[0], updatedExports);
+
+  await formatAndWriteFile(PATHS.index, content);
+}
+
+/**
+ * @param {Record<string, any>} schemas - Schema definitions from JSON
+ */
+async function generateCommandFiles(schemas) {
+  const commandsToGenerate = [];
+
+  for (const cmd of Object.keys(schemas).sort()) {
+    const {camelCase: cmdName} = getCommandNames(cmd);
+    const filePath = path.join(PATHS.commandsDir, `${cmdName}.ts`);
+
+    const exists = await fs.pathExists(filePath);
+    if (!exists) {
+      commandsToGenerate.push({cmd, cmdName, filePath});
+    }
+  }
+
+  if (commandsToGenerate.length === 0) return;
+
+  console.log(
+    `> Generating ${commandsToGenerate.length} command files:`,
+    commandsToGenerate.map((c) => c.cmdName),
+  );
+
+  // Generate all files
+  await Promise.all(
+    commandsToGenerate.map(({cmd, cmdName, filePath}) => fs.writeFile(filePath, COMMAND_FILE_TEMPLATE(cmdName, cmd))),
+  );
+}
+
+/**
+ * @param {Record<string, any>} schemas - Schema definitions from JSON
+ */
+async function syncMockCommands(schemas) {
+  const content = await fs.readFile(PATHS.mock, 'utf-8');
+
+  const [fullMatch, beforeSection, generatedSection, afterSection] = findSentinelSections(content, PATHS.mock);
+
+  // Extract existing mock commands from generated section
+  const existingMocks = extractExistingItems(generatedSection, /(\w+):\s*\(\)/g);
+
+  // Find missing commands (sorted alphabetically)
+  const missingCommands = Object.keys(schemas)
+    .sort()
+    .map(getCommandNames)
+    .filter(({camelCase}) => !existingMocks.has(camelCase));
+  if (missingCommands.length === 0) return;
+
+  console.log(`> Adding ${missingCommands.length} new mock commands:`, missingCommands.map(c => c.camelCase));
+
+  // Generate basic mock functions for missing commands only
+  const newMockFunctions = missingCommands.map(({camelCase}) => `  ${camelCase}: () => Promise.resolve(null),`);
+
+  const currentContent = generatedSection.trim();
+  const newContent = currentContent ? currentContent + '\n' + newMockFunctions.join('\n') : newMockFunctions.join('\n');
+  const updatedContent = beforeSection + newContent + '\n  ' + afterSection;
+
+  const updatedFile = content.replace(fullMatch, updatedContent);
+  await formatAndWriteFile(PATHS.mock, updatedFile);
+}
+
+/**
+ * @param {string} code - JSON schema code to parse
+ * @returns {string} Converted Zod schema code
+ */
 function parseZodSchema(code) {
   return (
     parseSchema(code)

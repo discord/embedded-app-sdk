@@ -86,25 +86,6 @@ export class DiscordSDKMock implements IDiscordSDK {
 /** Default return values for all discord SDK commands */
 export const commandsMockDefault: IDiscordSDK['commands'] = {
   authorize: () => Promise.resolve({code: 'mock_code'}),
-  authenticate: () =>
-    Promise.resolve({
-      access_token: 'mock_token',
-      user: {
-        username: 'mock_user_username',
-        discriminator: 'mock_user_discriminator',
-        id: 'mock_user_id',
-        avatar: null,
-        public_flags: 1,
-      },
-      scopes: [],
-      expires: new Date(2121, 1, 1).toString(),
-      application: {
-        description: 'mock_app_description',
-        icon: 'mock_app_icon',
-        id: 'mock_app_id',
-        name: 'mock_app_name',
-      },
-    }),
   setActivity: () =>
     Promise.resolve({
       name: 'mock_activity_name',
@@ -133,14 +114,34 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       iosKeyboardResizesView: true,
     }),
   getChannelPermissions: () => Promise.resolve({permissions: bigInt(1234567890) as unknown as bigint}),
+  getInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
+  // START-GENERATED-SECTION
   openShareMomentDialog: () => Promise.resolve(null),
+  authenticate: () =>
+    Promise.resolve({
+      access_token: 'mock_token',
+      user: {
+        username: 'mock_user_username',
+        discriminator: 'mock_user_discriminator',
+        id: 'mock_user_id',
+        avatar: null,
+        public_flags: 1,
+      },
+      scopes: [],
+      expires: new Date(2121, 1, 1).toString(),
+      application: {
+        description: 'mock_app_description',
+        icon: 'mock_app_icon',
+        id: 'mock_app_id',
+        name: 'mock_app_name',
+      },
+    }),
   shareLink: () => Promise.resolve({success: false, didSendMessage: false, didCopyLink: false}),
   initiateImageUpload: () =>
     Promise.resolve({
       image_url:
         'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png',
     }),
-  getInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   getRelationships: () =>
     Promise.resolve({
       relationships: [
@@ -199,4 +200,7 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       enrolled_at: null,
     }),
   questStartTimer: () => Promise.resolve({success: true}),
+  getActivityInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
+  shareInteraction: () => Promise.resolve({success: false}),
+  // END-GENERATED-SECTION
 };
