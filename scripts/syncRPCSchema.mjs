@@ -242,20 +242,15 @@ async function syncCommandsEnum(schemas) {
 
   const [fullMatch, beforeSection, generatedSection, afterSection] = enumMatch;
 
-  // Extract existing commands from the generated section
-  const existingCommands = extractExistingItems(generatedSection, /(\w+) = '(\w+)'/g);
+  // Generate ALL schema commands (sorted alphabetically)
+  const allCommandEntries = Object.keys(schemas).sort().map((cmd) => `  ${cmd} = '${cmd}',`);
+  
+  console.log(`> Syncing ${allCommandEntries.length} commands in Commands enum`);
 
-  // Find missing schema commands (sorted alphabetically)
-  const missingCommands = Object.keys(schemas).sort().filter((cmd) => !existingCommands.has(cmd));
-  if (missingCommands.length === 0) return;
-
-  console.log(`> Adding ${missingCommands.length} new commands to Commands enum:`, missingCommands);
-
-  // Generate new command entries
-  const newCommandEntries = missingCommands.map((cmd) => `  ${cmd} = '${cmd}',`);
-  const updatedContent = beforeSection + newCommandEntries.join('\n') + '\n  ' + afterSection;
-
+  // Replace entire generated section
+  const updatedContent = beforeSection + allCommandEntries.join('\n') + '\n  ' + afterSection;
   const updatedFile = content.replace(fullMatch, updatedContent);
+  
   await formatAndWriteFile(PATHS.common, updatedFile);
 }
 
@@ -267,20 +262,15 @@ async function syncResponseParsing(schemas) {
 
   const [fullMatch, beforeSection, generatedSection, afterSection] = findSentinelSections(content, PATHS.responses);
 
-  // Extract existing schema commands from generated section
-  const existingCommands = extractExistingItems(generatedSection, /case Commands\.(\w+):/g);
+  // Generate ALL schema case statements (sorted alphabetically)
+  const allCaseStatements = Object.keys(schemas).sort().map((cmd) => `    case Commands.${cmd}:`);
+  
+  console.log(`> Syncing ${allCaseStatements.length} commands in response parsing`);
 
-  // Find missing commands (sorted alphabetically)
-  const missingCommands = Object.keys(schemas).sort().filter((cmd) => !existingCommands.has(cmd));
-  if (missingCommands.length === 0) return;
-
-  console.log(`> Adding ${missingCommands.length} new commands to response parsing:`, missingCommands);
-
-  // Generate new case statements
-  const newCaseStatements = missingCommands.map((cmd) => `    case Commands.${cmd}:`);
-  const updatedContent = beforeSection + newCaseStatements.join('\n') + '\n      ' + afterSection;
-
+  // Replace entire generated section
+  const updatedContent = beforeSection + allCaseStatements.join('\n') + '\n      ' + afterSection;
   const updatedFile = content.replace(fullMatch, updatedContent);
+  
   await formatAndWriteFile(PATHS.responses, updatedFile);
 }
 
@@ -292,42 +282,21 @@ async function syncCommandsIndex(schemas) {
 
   const [importsMatch, exportsMatch] = findSentinelSections(content, PATHS.index, 2);
 
-  // Extract existing items from generated sections
-  const existingImports = extractExistingItems(importsMatch[2], /import\s*\{\s*(\w+)\s*\}\s*from\s*'\.\/(\w+)'/g);
-  const existingExports = extractExistingItems(exportsMatch[2], /(\w+):/g);
+  // Generate ALL schema imports and exports (sorted alphabetically)
+  const allCommands = Object.keys(schemas).sort().map(getCommandNames);
+  
+  const allImports = allCommands.map(({camelCase}) => `import {${camelCase}} from './${camelCase}';`);
+  const allExports = allCommands.map(({camelCase}) => `    ${camelCase}: ${camelCase}(sendCommand),`);
 
-  // Find missing commands (sorted alphabetically)
-  const missingCommands = Object.keys(schemas)
-    .sort()
-    .map(getCommandNames)
-    .filter(({camelCase}) => !existingImports.has(camelCase) || !existingExports.has(camelCase));
-  if (missingCommands.length === 0) return;
+  console.log(`> Syncing ${allCommands.length} commands in index.ts`);
 
-  console.log(
-    `> Syncing ${missingCommands.length} commands in index.ts:`,
-    missingCommands.map((c) => c.camelCase),
-  );
+  // Replace entire imports section
+  const updatedImports = importsMatch[1] + allImports.join('\n') + '\n' + importsMatch[3];
+  content = content.replace(importsMatch[0], updatedImports);
 
-  // Generate imports and exports for missing commands
-  const newImports = missingCommands
-    .filter(({camelCase}) => !existingImports.has(camelCase))
-    .map(({camelCase}) => `import {${camelCase}} from './${camelCase}';`);
-
-  const newExports = missingCommands
-    .filter(({camelCase}) => !existingExports.has(camelCase))
-    .map(({camelCase}) => `    ${camelCase}: ${camelCase}(sendCommand),`);
-
-  // Update imports section
-  if (newImports.length > 0) {
-    const updatedImports = importsMatch[1] + newImports.join('\n') + '\n' + importsMatch[3];
-    content = content.replace(importsMatch[0], updatedImports);
-  }
-
-  // Update exports section
-  if (newExports.length > 0) {
-    const updatedExports = exportsMatch[1] + newExports.join('\n') + '\n    ' + exportsMatch[3];
-    content = content.replace(exportsMatch[0], updatedExports);
-  }
+  // Replace entire exports section
+  const updatedExports = exportsMatch[1] + allExports.join('\n') + '\n    ' + exportsMatch[3];
+  content = content.replace(exportsMatch[0], updatedExports);
 
   await formatAndWriteFile(PATHS.index, content);
 }
@@ -379,12 +348,9 @@ async function syncMockCommands(schemas) {
     .filter(({camelCase}) => !existingMocks.has(camelCase));
   if (missingCommands.length === 0) return;
 
-  console.log(
-    `> Adding ${missingCommands.length} new mock commands:`,
-    missingCommands.map((c) => c.camelCase),
-  );
+  console.log(`> Adding ${missingCommands.length} new mock commands:`, missingCommands.map(c => c.camelCase));
 
-  // Generate basic mock functions
+  // Generate basic mock functions for missing commands only
   const newMockFunctions = missingCommands.map(({camelCase}) => `  ${camelCase}: () => Promise.resolve(null),`);
 
   const currentContent = generatedSection.trim();
