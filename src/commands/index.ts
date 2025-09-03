@@ -17,6 +17,17 @@ import {setOrientationLockState} from './setOrientationLockState';
 import {startPurchase} from './startPurchase';
 import {userSettingsGetLocale} from './userSettingsGetLocale';
 // START-GENERATED-SECTION
+import {authenticate} from './authenticate';
+import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
+import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
+import {getRelationships} from './getRelationships';
+import {getUser} from './getUser';
+import {initiateImageUpload} from './initiateImageUpload';
+import {inviteUserEmbedded} from './inviteUserEmbedded';
+import {openShareMomentDialog} from './openShareMomentDialog';
+import {questStartTimer} from './questStartTimer';
+import {shareInteraction} from './shareInteraction';
+import {shareLink} from './shareLink';
 // END-GENERATED-SECTION
 
 export {Commands, SetActivity};
@@ -39,6 +50,17 @@ function commands(sendCommand: TSendCommand) {
     startPurchase: startPurchase(sendCommand),
     userSettingsGetLocale: userSettingsGetLocale(sendCommand),
     // START-GENERATED-SECTION
+    authenticate: authenticate(sendCommand),
+    getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
+    getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
+    getRelationships: getRelationships(sendCommand),
+    getUser: getUser(sendCommand),
+    initiateImageUpload: initiateImageUpload(sendCommand),
+    inviteUserEmbedded: inviteUserEmbedded(sendCommand),
+    openShareMomentDialog: openShareMomentDialog(sendCommand),
+    questStartTimer: questStartTimer(sendCommand),
+    shareInteraction: shareInteraction(sendCommand),
+    shareLink: shareLink(sendCommand),
     // END-GENERATED-SECTION
   };
 }
