@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/discord/embedded-app-sdk/compare/v2.3.1...v2.4.0) (2025-09-03)
+
+
+### Features
+
+* upgrade sync script and run it ([#336](https://github.com/discord/embedded-app-sdk/issues/336)) ([b284080](https://github.com/discord/embedded-app-sdk/commit/b284080a80545ed5a4c0f87d63e4961888c2c2ed))
+
 ## [2.3.1](https://github.com/discord/embedded-app-sdk/compare/v2.3.0...v2.3.1) (2025-09-02)
 
 
