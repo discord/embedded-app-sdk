@@ -145,8 +145,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
       return GetGuildsResponse.parse(data);
     case Commands.GET_PLATFORM_BEHAVIORS:
       return GetPlatformBehaviorsResponse.parse(data);
-    case Commands.GET_CHANNEL:
-      return GetChannelResponse.parse(data);
     case Commands.SELECT_TEXT_CHANNEL:
       return SelectTextChannelResponse.parse(data);
     case Commands.SELECT_VOICE_CHANNEL:
@@ -188,10 +186,11 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.OPEN_SHARE_MOMENT_DIALOG:
     case Commands.QUEST_START_TIMER:
     case Commands.SHARE_INTERACTION:
-    case Commands.SHARE_LINK:
+    case Commands.SHARE_LINK: {
       // END-GENERATED-SECTION
       const {response} = Schemas[cmd];
       return response.parse(data);
+    }
     default:
       assertUnreachable(cmd, new Error(`Unrecognized command ${cmd}`));
   }

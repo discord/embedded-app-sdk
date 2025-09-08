@@ -1,5 +1,0 @@
-node_modules
-output
-# Need to upgrade eslint to support es modules
-rollup.config.mjs
-scripts/syncRPCSchema.mjs

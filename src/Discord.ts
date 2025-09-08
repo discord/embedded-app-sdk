@@ -49,7 +49,7 @@ function getAllowedOrigins(): string[] {
  * The embedded application is running in an IFrame either within the main Discord client window or in a popout. The RPC server is always running in the main Discord client window. In either case, the referrer is the correct origin.
  */
 function getRPCServerSource(): [Window, string] {
-  return [window.parent.opener ?? window.parent, !!document.referrer ? document.referrer : '*'];
+  return [window.parent.opener ?? window.parent, document.referrer ? document.referrer : '*'];
 }
 
 interface HandshakePayload {

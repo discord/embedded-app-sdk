@@ -234,7 +234,6 @@ const flagEquals: (first: BigFlag | undefined, second: BigFlag | undefined) => b
     }
   : function flagEqualsHighLow(first, second) {
       if (first == null || second == null) {
-        // eslint-disable-next-line eqeqeq
         return first == second;
       }
       return (first as HighLow).equals(second as HighLow);
