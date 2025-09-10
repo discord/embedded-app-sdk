@@ -202,5 +202,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
   questStartTimer: () => Promise.resolve({success: true}),
   getActivityInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   shareInteraction: () => Promise.resolve({success: false}),
+  requestProxyTicketRefresh: () => Promise.resolve({ticket: 'ticket'}),
   // END-GENERATED-SECTION
 };

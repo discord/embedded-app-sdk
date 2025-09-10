@@ -318,6 +318,12 @@ export const QuestStartTimerResponseSchema = z
   .describe('Response for "QUEST_START_TIMER" Command');
 export type QuestStartTimerResponse = zInfer<typeof QuestStartTimerResponseSchema>;
 
+// REQUEST_PROXY_TICKET_REFRESH
+export const RequestProxyTicketRefreshResponseSchema = z
+  .object({ticket: z.string()})
+  .describe('Response for "REQUEST_PROXY_TICKET_REFRESH" Command');
+export type RequestProxyTicketRefreshResponse = zInfer<typeof RequestProxyTicketRefreshResponseSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -333,6 +339,7 @@ export enum Command {
   GET_USER = 'GET_USER',
   GET_QUEST_ENROLLMENT_STATUS = 'GET_QUEST_ENROLLMENT_STATUS',
   QUEST_START_TIMER = 'QUEST_START_TIMER',
+  REQUEST_PROXY_TICKET_REFRESH = 'REQUEST_PROXY_TICKET_REFRESH',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -385,5 +392,9 @@ export const Schemas = {
   [Command.QUEST_START_TIMER]: {
     request: QuestStartTimerRequestSchema,
     response: QuestStartTimerResponseSchema,
+  },
+  [Command.REQUEST_PROXY_TICKET_REFRESH]: {
+    request: emptyRequestSchema,
+    response: RequestProxyTicketRefreshResponseSchema,
   },
 } as const;
