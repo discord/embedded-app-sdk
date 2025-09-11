@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import {Opcodes} from '../Discord';
-import {DiscordSDK, Events, Platform} from '../index';
+import {DiscordSDK, Events, Platform, RPCCloseCodes} from '../index';
 import {DISPATCH} from '../schema/common';
 import {version as sdkVersion} from '../../package.json';
 
@@ -87,5 +87,102 @@ describe('DiscordSDK', () => {
 
     // Verify "READY" event resolves
     await discordSdk.ready();
+  });
+
+  describe('Proxy Token Refresh', () => {
+    let discordSdk: DiscordSDK;
+    let mockPostMessage: jest.Mock;
+
+    beforeEach(() => {
+      const frame_id = '1234';
+      const instance_id = '2345';
+      const platform = Platform.DESKTOP;
+      const clientId = '1234567890';
+
+      Object.defineProperty(window, 'location', {
+        value: {
+          get pathname() {
+            return jest.fn();
+          },
+          replace: jest.fn(),
+          get search() {
+            return `?${new URLSearchParams({
+              frame_id,
+              instance_id,
+              platform,
+            }).toString()}`;
+          },
+          get origin() {
+            return 'https://example.com';
+          },
+        },
+      });
+
+      mockPostMessage = jest.fn();
+      Object.defineProperty(window, 'parent', {
+        value: {
+          postMessage: mockPostMessage,
+        },
+      });
+
+      Object.defineProperty(document, 'cookie', {
+        writable: true,
+        value: '',
+      });
+
+      global.fetch = jest.fn();
+      jest.clearAllMocks();
+
+      discordSdk = new DiscordSDK(clientId);
+    });
+
+    afterEach(() => {
+      discordSdk.close(RPCCloseCodes.CLOSE_NORMAL, 'Test cleanup');
+    });
+
+    it('should have autoRefreshProxyToken disabled by default', () => {
+      expect(discordSdk.configuration.autoRefreshProxyToken).toBe(false);
+    });
+
+    it('should enable autoRefreshProxyToken through constructor config', () => {
+      const clientId = '1234567890';
+      const sdkWithAutoRefresh = new DiscordSDK(clientId, {
+        disableConsoleLogOverride: false,
+        autoRefreshProxyToken: true,
+      });
+
+      expect(sdkWithAutoRefresh.configuration.autoRefreshProxyToken).toBe(true);
+
+      sdkWithAutoRefresh.close(RPCCloseCodes.CLOSE_NORMAL, 'Test cleanup');
+    });
+
+    it('should have refreshProxyToken method available', () => {
+      expect(typeof discordSdk.refreshProxyToken).toBe('function');
+    });
+
+    it('should rate limit successful refresh calls', async () => {
+      // Mock the command and fetch to succeed for testing rate limiting
+      const originalCommand = discordSdk.commands.requestProxyTicketRefresh;
+      discordSdk.commands.requestProxyTicketRefresh = jest.fn().mockResolvedValue({ticket: 'test'});
+
+      const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
+      mockFetch.mockResolvedValue({ok: true} as Response);
+
+      // First call should succeed and update lastRefreshTime
+      const result1 = await discordSdk.refreshProxyToken();
+      expect(result1).toBe(true);
+      expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(1);
+
+      // Clear the mock call count but keep the same implementation
+      (discordSdk.commands.requestProxyTicketRefresh as jest.Mock).mockClear();
+
+      // Immediate second call should be rate limited (no new RPC call)
+      const result2 = await discordSdk.refreshProxyToken();
+      expect(result2).toBe(false);
+      expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(0); // Rate limited
+
+      // Restore original command
+      discordSdk.commands.requestProxyTicketRefresh = originalCommand;
+    });
   });
 });
