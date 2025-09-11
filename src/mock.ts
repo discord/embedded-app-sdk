@@ -82,6 +82,11 @@ export class DiscordSDKMock implements IDiscordSDK {
   emitEvent<T>(event: string, data: T) {
     this.eventBus.emit(event, data);
   }
+
+  refreshProxyToken(): Promise<boolean> {
+    console.info('DiscordSDKMock: refreshProxyToken()');
+    return Promise.resolve(true);
+  }
 }
 /** Default return values for all discord SDK commands */
 export const commandsMockDefault: IDiscordSDK['commands'] = {
