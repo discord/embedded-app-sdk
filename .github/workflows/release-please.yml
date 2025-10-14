@@ -26,7 +26,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         with:
           ref: main
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         if: ${{ steps.release.outputs.release_created }}
         with:
           node-version: 22
