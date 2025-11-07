@@ -456,5 +456,15 @@
       "required": ["success"],
       "additionalProperties": false
     }
+  },
+  "REQUEST_PROXY_TICKET_REFRESH": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "description": "Response for \"REQUEST_PROXY_TICKET_REFRESH\" Command",
+      "properties": {"ticket": {"type": "string"}},
+      "required": ["ticket"],
+      "additionalProperties": false
+    }
   }
 }
