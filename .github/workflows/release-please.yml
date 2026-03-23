@@ -35,20 +35,8 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
       - run: npm run build
         if: ${{ steps.release.outputs.release_created }}
-      - id: auth
-        if: ${{ steps.release.outputs.release_created }}
-        uses: 'google-github-actions/auth@v3'
-        with:
-          workload_identity_provider: 'projects/626179414504/locations/global/workloadIdentityPools/ga-embedded-app-sdk/providers/ga-embedded-app-sdk'
-          service_account: 'ga-embedded-app-sdk@discord-app-city-prd.iam.gserviceaccount.com'
-      - id: secrets
-        if: ${{ steps.release.outputs.release_created }}
-        uses: 'google-github-actions/get-secretmanager-secrets@v3'
-        with:
-          secrets: |-
-            NPM_TOKEN:discord-app-city-prd/embedded-app-sdk-deploy-token
       - name: Publish 🚀
         if: ${{ steps.release.outputs.release_created }}
         run: npm publish --access public --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{ steps.secrets.outputs.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true # Attaches build provenance
