@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/discord/embedded-app-sdk/compare/v2.4.0...v2.4.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* update docs URLs in README to new docs.discord.com format ([#357](https://github.com/discord/embedded-app-sdk/issues/357)) ([354b778](https://github.com/discord/embedded-app-sdk/commit/354b778c4b8991a87420f2ad3a9881b767fb9daf))
+
 ## [2.4.0](https://github.com/discord/embedded-app-sdk/compare/v2.3.1...v2.4.0) (2025-09-03)
 
 
