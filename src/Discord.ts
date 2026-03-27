@@ -17,6 +17,15 @@ import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
 import {version as sdkVersion} from '../package.json';
+import {ProxyTokenMonitor} from './utils/ProxyTokenMonitor';
+
+interface TokenRefreshState {
+  monitor: ProxyTokenMonitor;
+  promise: Promise<boolean> | null;
+  lastRefreshTime: number;
+}
+
+const TOKEN_REFRESH_RATE_LIMIT_MS = 60000; // 1 minute
 
 export enum Opcodes {
   HANDSHAKE = 0,
@@ -85,6 +94,7 @@ export class DiscordSDK implements IDiscordSDK {
       reject: (error: unknown) => unknown;
     }
   > = new Map();
+  private tokenRefresh: TokenRefreshState;
 
   private getTransfer(payload: TSendCommandPayload): Transferable[] | undefined {
     switch (payload.cmd) {
@@ -113,6 +123,12 @@ export class DiscordSDK implements IDiscordSDK {
     this.isReady = false;
     this.clientId = clientId;
     this.configuration = configuration ?? getDefaultSdkConfiguration();
+
+    this.tokenRefresh = {
+      monitor: new ProxyTokenMonitor(),
+      promise: null,
+      lastRefreshTime: 0,
+    };
 
     if (typeof window !== 'undefined') {
       window.addEventListener('message', this.handleMessage);
@@ -167,9 +183,14 @@ export class DiscordSDK implements IDiscordSDK {
     [this.source, this.sourceOrigin] = getRPCServerSource();
     this.addOnReadyListener();
     this.handshake();
+
+    if (this.configuration.autoRefreshProxyToken) {
+      this.tokenRefresh.monitor.enable((_tokenData) => this.refreshProxyToken());
+    }
   }
   close(code: RPCCloseCodes, message: string) {
     window.removeEventListener('message', this.handleMessage);
+    this.tokenRefresh.monitor.disable();
 
     const nonce = uuidv4();
     this.source?.postMessage([Opcodes.CLOSE, {code, message, nonce}], this.sourceOrigin);
@@ -342,6 +363,51 @@ export class DiscordSDK implements IDiscordSDK {
       this.pendingCommands.delete(parsed.nonce);
     }
   }
+
+  async refreshProxyToken(): Promise<boolean> {
+    if (this.tokenRefresh.promise) {
+      return this.tokenRefresh.promise;
+    }
+
+    const now = Date.now();
+    if (now - this.tokenRefresh.lastRefreshTime < TOKEN_REFRESH_RATE_LIMIT_MS) {
+      return false;
+    }
+
+    this.tokenRefresh.promise = (async () => {
+      if (typeof window === 'undefined') {
+        return false;
+      }
+
+      try {
+        const response = await this.commands.requestProxyTicketRefresh();
+
+        if (!response || !response.ticket) {
+          return false;
+        }
+
+        const exchangeResponse = await fetch(`${window.location.origin}/?discord_proxy_ticket=${response.ticket}`, {
+          method: 'HEAD',
+          credentials: 'include',
+        });
+
+        return exchangeResponse.ok;
+      } catch {
+        return false;
+      }
+    })();
+
+    try {
+      const result = await this.tokenRefresh.promise;
+      if (result) {
+        this.tokenRefresh.lastRefreshTime = now;
+      }
+      return result;
+    } finally {
+      this.tokenRefresh.promise = null;
+    }
+  }
+
   _getSearch() {
     return typeof window === 'undefined' ? '' : window.location.search;
   }

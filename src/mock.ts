@@ -82,6 +82,11 @@ export class DiscordSDKMock implements IDiscordSDK {
   emitEvent<T>(event: string, data: T) {
     this.eventBus.emit(event, data);
   }
+
+  refreshProxyToken(): Promise<boolean> {
+    console.info('DiscordSDKMock: refreshProxyToken()');
+    return Promise.resolve(true);
+  }
 }
 /** Default return values for all discord SDK commands */
 export const commandsMockDefault: IDiscordSDK['commands'] = {
@@ -202,5 +207,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
   questStartTimer: () => Promise.resolve({success: true}),
   getActivityInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   shareInteraction: () => Promise.resolve({success: false}),
+  requestProxyTicketRefresh: () => Promise.resolve({ticket: 'ticket'}),
   // END-GENERATED-SECTION
 };
