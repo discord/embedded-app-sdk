@@ -19,6 +19,7 @@ import {userSettingsGetLocale} from './userSettingsGetLocale';
 // START-GENERATED-SECTION
 import {authenticate} from './authenticate';
 import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
+import {getQuests} from './getQuests';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
 import {getRelationships} from './getRelationships';
 import {getUser} from './getUser';
@@ -26,6 +27,7 @@ import {initiateImageUpload} from './initiateImageUpload';
 import {inviteUserEmbedded} from './inviteUserEmbedded';
 import {openShareMomentDialog} from './openShareMomentDialog';
 import {questStartTimer} from './questStartTimer';
+import {requestProxyTicketRefresh} from './requestProxyTicketRefresh';
 import {shareInteraction} from './shareInteraction';
 import {shareLink} from './shareLink';
 // END-GENERATED-SECTION
@@ -54,6 +56,7 @@ function commands(sendCommand: TSendCommand) {
     // START-GENERATED-SECTION
     authenticate: authenticate(sendCommand),
     getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
+    getQuests: getQuests(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
     getRelationships: getRelationships(sendCommand),
     getUser: getUser(sendCommand),
@@ -61,6 +64,7 @@ function commands(sendCommand: TSendCommand) {
     inviteUserEmbedded: inviteUserEmbedded(sendCommand),
     openShareMomentDialog: openShareMomentDialog(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
+    requestProxyTicketRefresh: requestProxyTicketRefresh(sendCommand),
     shareInteraction: shareInteraction(sendCommand),
     shareLink: shareLink(sendCommand),
     // END-GENERATED-SECTION

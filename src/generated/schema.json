@@ -50,6 +50,7 @@
             "type": "string",
             "enum": [
               "identify",
+              "identify.premium",
               "email",
               "connections",
               "guilds",
@@ -143,11 +144,10 @@
                 "type": ["object", "null"],
                 "description": "Details about avatar decoration",
                 "properties": {
-                  "asset": {"type": "string"},
+                  "asset": {"type": ["string", "null"]},
                   "skuId": {"type": "string"},
                   "expiresAt": {"type": "number"}
                 },
-                "required": ["asset"],
                 "additionalProperties": false
               },
               "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"},
@@ -282,11 +282,10 @@
                     "type": ["object", "null"],
                     "description": "Details about avatar decoration",
                     "properties": {
-                      "asset": {"type": "string"},
+                      "asset": {"type": ["string", "null"]},
                       "skuId": {"type": "string"},
                       "expiresAt": {"type": "number"}
                     },
-                    "required": ["asset"],
                     "additionalProperties": false
                   },
                   "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"}
@@ -411,8 +410,11 @@
         "avatar_decoration_data": {
           "type": ["object", "null"],
           "description": "Details about avatar decoration",
-          "properties": {"asset": {"type": "string"}, "skuId": {"type": "string"}, "expiresAt": {"type": "number"}},
-          "required": ["asset"],
+          "properties": {
+            "asset": {"type": ["string", "null"]},
+            "skuId": {"type": "string"},
+            "expiresAt": {"type": "number"}
+          },
           "additionalProperties": false
         },
         "premium_type": {"type": ["number", "null"], "description": "Nitro premium type"}
@@ -454,6 +456,40 @@
       "description": "Response for \"QUEST_START_TIMER\" Command",
       "properties": {"success": {"type": "boolean"}},
       "required": ["success"],
+      "additionalProperties": false
+    }
+  },
+  "GET_QUESTS": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "description": "Response for \"GET_QUESTS\" Command",
+      "properties": {
+        "quests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "quest_id": {"type": "string"},
+              "enrolled_at": {"type": ["string", "null"]},
+              "external_cta_url": {"type": "string"}
+            },
+            "required": ["quest_id", "external_cta_url"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["quests"],
+      "additionalProperties": false
+    }
+  },
+  "REQUEST_PROXY_TICKET_REFRESH": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "description": "Response for \"REQUEST_PROXY_TICKET_REFRESH\" Command",
+      "properties": {"ticket": {"type": "string"}},
+      "required": ["ticket"],
       "additionalProperties": false
     }
   }
