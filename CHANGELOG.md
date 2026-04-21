@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/discord/embedded-app-sdk/compare/v2.4.1...v2.5.0) (2026-04-21)
+
+
+### Features
+
+* add getQuests command, run sync script ([#364](https://github.com/discord/embedded-app-sdk/issues/364)) ([2844240](https://github.com/discord/embedded-app-sdk/commit/2844240f921e3aad841fbae0b2156ad1d933a53c))
+
 ## [2.4.1](https://github.com/discord/embedded-app-sdk/compare/v2.4.0...v2.4.1) (2026-03-23)
 
 
