@@ -39,6 +39,7 @@ export const AuthenticateResponseSchema = z
         z
           .enum([
             'identify',
+            'identify.premium',
             'email',
             'connections',
             'guilds',
@@ -116,7 +117,11 @@ export const GetActivityInstanceConnectedParticipantsResponseSchema = z
         bot: z.boolean(),
         avatar_decoration_data: z
           .union([
-            z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+            z.object({
+              asset: z.union([z.string(), z.null()]).optional(),
+              skuId: z.string().optional(),
+              expiresAt: z.number().optional(),
+            }),
             z.null(),
           ])
           .optional(),
@@ -199,7 +204,11 @@ export const GetRelationshipsResponseSchema = z
           bot: z.boolean(),
           avatar_decoration_data: z
             .union([
-              z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}),
+              z.object({
+                asset: z.union([z.string(), z.null()]).optional(),
+                skuId: z.string().optional(),
+                expiresAt: z.number().optional(),
+              }),
               z.null(),
             ])
             .optional(),
@@ -290,7 +299,14 @@ export const GetUserResponseSchema = z.union([
     flags: z.number(),
     bot: z.boolean(),
     avatar_decoration_data: z
-      .union([z.object({asset: z.string(), skuId: z.string().optional(), expiresAt: z.number().optional()}), z.null()])
+      .union([
+        z.object({
+          asset: z.union([z.string(), z.null()]).optional(),
+          skuId: z.string().optional(),
+          expiresAt: z.number().optional(),
+        }),
+        z.null(),
+      ])
       .optional(),
     premium_type: z.union([z.number(), z.null()]).optional(),
   }),
@@ -318,6 +334,26 @@ export const QuestStartTimerResponseSchema = z
   .describe('Response for "QUEST_START_TIMER" Command');
 export type QuestStartTimerResponse = zInfer<typeof QuestStartTimerResponseSchema>;
 
+// GET_QUESTS
+export const GetQuestsResponseSchema = z
+  .object({
+    quests: z.array(
+      z.object({
+        quest_id: z.string(),
+        enrolled_at: z.union([z.string(), z.null()]).optional(),
+        external_cta_url: z.string(),
+      }),
+    ),
+  })
+  .describe('Response for "GET_QUESTS" Command');
+export type GetQuestsResponse = zInfer<typeof GetQuestsResponseSchema>;
+
+// REQUEST_PROXY_TICKET_REFRESH
+export const RequestProxyTicketRefreshResponseSchema = z
+  .object({ticket: z.string()})
+  .describe('Response for "REQUEST_PROXY_TICKET_REFRESH" Command');
+export type RequestProxyTicketRefreshResponse = zInfer<typeof RequestProxyTicketRefreshResponseSchema>;
+
 /**
  * RPC Commands which support schemas.
  */
@@ -333,6 +369,8 @@ export enum Command {
   GET_USER = 'GET_USER',
   GET_QUEST_ENROLLMENT_STATUS = 'GET_QUEST_ENROLLMENT_STATUS',
   QUEST_START_TIMER = 'QUEST_START_TIMER',
+  GET_QUESTS = 'GET_QUESTS',
+  REQUEST_PROXY_TICKET_REFRESH = 'REQUEST_PROXY_TICKET_REFRESH',
 }
 
 const emptyResponseSchema = z.object({}).optional().nullable();
@@ -385,5 +423,13 @@ export const Schemas = {
   [Command.QUEST_START_TIMER]: {
     request: QuestStartTimerRequestSchema,
     response: QuestStartTimerResponseSchema,
+  },
+  [Command.GET_QUESTS]: {
+    request: emptyRequestSchema,
+    response: GetQuestsResponseSchema,
+  },
+  [Command.REQUEST_PROXY_TICKET_REFRESH]: {
+    request: emptyRequestSchema,
+    response: RequestProxyTicketRefreshResponseSchema,
   },
 } as const;
