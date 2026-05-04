@@ -19,7 +19,7 @@ import {userSettingsGetLocale} from './userSettingsGetLocale';
 // START-GENERATED-SECTION
 import {authenticate} from './authenticate';
 import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
-import {getQuests} from './getQuests';
+import {getQuest} from './getQuest';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
 import {getRelationships} from './getRelationships';
 import {getUser} from './getUser';
@@ -56,7 +56,7 @@ function commands(sendCommand: TSendCommand) {
     // START-GENERATED-SECTION
     authenticate: authenticate(sendCommand),
     getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
-    getQuests: getQuests(sendCommand),
+    getQuest: getQuest(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
     getRelationships: getRelationships(sendCommand),
     getUser: getUser(sendCommand),

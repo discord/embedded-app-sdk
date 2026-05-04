@@ -180,7 +180,7 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     // START-GENERATED-SECTION
     case Commands.AUTHENTICATE:
     case Commands.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS:
-    case Commands.GET_QUESTS:
+    case Commands.GET_QUEST:
     case Commands.GET_QUEST_ENROLLMENT_STATUS:
     case Commands.GET_RELATIONSHIPS:
     case Commands.GET_USER:

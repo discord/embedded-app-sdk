@@ -202,16 +202,13 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
   questStartTimer: () => Promise.resolve({success: true}),
   getActivityInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   shareInteraction: () => Promise.resolve({success: false}),
-  getQuests: () =>
-    Promise.resolve({
-      quests: [
-        {
-          quest_id: 'mock_quest_id',
-          external_cta_url: 'mock_external_cta_url',
-          enrolled_at: null,
-        },
-      ],
-    }),
   requestProxyTicketRefresh: () => Promise.resolve({ticket: 'mock_ticket'}),
+  getQuest: () =>
+    Promise.resolve({
+      quest_id: 'mock_quest_id',
+      external_cta_url: 'mock_external_cta_url',
+      enrolled_at: null,
+      completed_at: null,
+    }),
   // END-GENERATED-SECTION
 };

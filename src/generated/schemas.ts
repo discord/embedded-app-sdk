@@ -334,19 +334,16 @@ export const QuestStartTimerResponseSchema = z
   .describe('Response for "QUEST_START_TIMER" Command');
 export type QuestStartTimerResponse = zInfer<typeof QuestStartTimerResponseSchema>;
 
-// GET_QUESTS
-export const GetQuestsResponseSchema = z
+// GET_QUEST
+export const GetQuestResponseSchema = z
   .object({
-    quests: z.array(
-      z.object({
-        quest_id: z.string(),
-        enrolled_at: z.union([z.string(), z.null()]).optional(),
-        external_cta_url: z.string(),
-      }),
-    ),
+    quest_id: z.string(),
+    enrolled_at: z.union([z.string(), z.null()]).optional(),
+    completed_at: z.union([z.string(), z.null()]).optional(),
+    external_cta_url: z.string(),
   })
-  .describe('Response for "GET_QUESTS" Command');
-export type GetQuestsResponse = zInfer<typeof GetQuestsResponseSchema>;
+  .describe('Response for "GET_QUEST" Command');
+export type GetQuestResponse = zInfer<typeof GetQuestResponseSchema>;
 
 // REQUEST_PROXY_TICKET_REFRESH
 export const RequestProxyTicketRefreshResponseSchema = z
@@ -369,7 +366,7 @@ export enum Command {
   GET_USER = 'GET_USER',
   GET_QUEST_ENROLLMENT_STATUS = 'GET_QUEST_ENROLLMENT_STATUS',
   QUEST_START_TIMER = 'QUEST_START_TIMER',
-  GET_QUESTS = 'GET_QUESTS',
+  GET_QUEST = 'GET_QUEST',
   REQUEST_PROXY_TICKET_REFRESH = 'REQUEST_PROXY_TICKET_REFRESH',
 }
 
@@ -424,9 +421,9 @@ export const Schemas = {
     request: QuestStartTimerRequestSchema,
     response: QuestStartTimerResponseSchema,
   },
-  [Command.GET_QUESTS]: {
+  [Command.GET_QUEST]: {
     request: emptyRequestSchema,
-    response: GetQuestsResponseSchema,
+    response: GetQuestResponseSchema,
   },
   [Command.REQUEST_PROXY_TICKET_REFRESH]: {
     request: emptyRequestSchema,

@@ -459,27 +459,18 @@
       "additionalProperties": false
     }
   },
-  "GET_QUESTS": {
+  "GET_QUEST": {
     "request": null,
     "response": {
       "type": "object",
-      "description": "Response for \"GET_QUESTS\" Command",
+      "description": "Response for \"GET_QUEST\" Command",
       "properties": {
-        "quests": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "quest_id": {"type": "string"},
-              "enrolled_at": {"type": ["string", "null"]},
-              "external_cta_url": {"type": "string"}
-            },
-            "required": ["quest_id", "external_cta_url"],
-            "additionalProperties": false
-          }
-        }
+        "quest_id": {"type": "string"},
+        "enrolled_at": {"type": ["string", "null"]},
+        "completed_at": {"type": ["string", "null"]},
+        "external_cta_url": {"type": "string"}
       },
-      "required": ["quests"],
+      "required": ["quest_id", "external_cta_url"],
       "additionalProperties": false
     }
   },
