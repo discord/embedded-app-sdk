@@ -160,28 +160,62 @@ describe('DiscordSDK', () => {
       expect(typeof discordSdk.refreshProxyToken).toBe('function');
     });
 
-    it('should rate limit successful refresh calls', async () => {
-      // Mock the command and fetch to succeed for testing rate limiting
+    it('rate limits subsequent refresh calls within the window and returns true (token is fresh)', async () => {
+      jest.useFakeTimers({now: 1_000_000});
+
       const originalCommand = discordSdk.commands.requestProxyTicketRefresh;
       discordSdk.commands.requestProxyTicketRefresh = jest.fn().mockResolvedValue({ticket: 'test'});
 
       const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
       mockFetch.mockResolvedValue({ok: true} as Response);
 
-      // First call should succeed and update lastRefreshTime
       const result1 = await discordSdk.refreshProxyToken();
       expect(result1).toBe(true);
       expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(1);
 
-      // Clear the mock call count but keep the same implementation
       (discordSdk.commands.requestProxyTicketRefresh as jest.Mock).mockClear();
 
-      // Immediate second call should be rate limited (no new RPC call)
+      // Within the 1-minute rate-limit window, no RPC is sent and we still report the token as fresh
+      jest.advanceTimersByTime(30_000);
       const result2 = await discordSdk.refreshProxyToken();
-      expect(result2).toBe(false);
-      expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(0); // Rate limited
+      expect(result2).toBe(true);
+      expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(0);
 
-      // Restore original command
+      // After the window passes, refresh proceeds again
+      jest.advanceTimersByTime(31_000);
+      const result3 = await discordSdk.refreshProxyToken();
+      expect(result3).toBe(true);
+      expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(1);
+
+      discordSdk.commands.requestProxyTicketRefresh = originalCommand;
+      jest.useRealTimers();
+    });
+
+    it('coalesces concurrent refresh calls into a single in-flight request', async () => {
+      const originalCommand = discordSdk.commands.requestProxyTicketRefresh;
+
+      let resolveCommand: (value: {ticket: string}) => void = () => {};
+      const commandPromise = new Promise<{ticket: string}>((resolve) => {
+        resolveCommand = resolve;
+      });
+      discordSdk.commands.requestProxyTicketRefresh = jest.fn().mockReturnValue(commandPromise);
+
+      const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
+      mockFetch.mockResolvedValue({ok: true} as Response);
+
+      const p1 = discordSdk.refreshProxyToken();
+      const p2 = discordSdk.refreshProxyToken();
+      const p3 = discordSdk.refreshProxyToken();
+
+      resolveCommand({ticket: 'test'});
+      const [r1, r2, r3] = await Promise.all([p1, p2, p3]);
+
+      expect(r1).toBe(true);
+      expect(r2).toBe(true);
+      expect(r3).toBe(true);
+      expect(discordSdk.commands.requestProxyTicketRefresh).toHaveBeenCalledTimes(1);
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+
       discordSdk.commands.requestProxyTicketRefresh = originalCommand;
     });
   });

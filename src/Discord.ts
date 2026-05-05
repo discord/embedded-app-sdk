@@ -185,7 +185,7 @@ export class DiscordSDK implements IDiscordSDK {
     this.handshake();
 
     if (this.configuration.autoRefreshProxyToken) {
-      this.tokenRefresh.monitor.enable((_tokenData) => this.refreshProxyToken());
+      this.tokenRefresh.monitor.enable(() => this.refreshProxyToken());
     }
   }
   close(code: RPCCloseCodes, message: string) {
@@ -371,7 +371,7 @@ export class DiscordSDK implements IDiscordSDK {
 
     const now = Date.now();
     if (now - this.tokenRefresh.lastRefreshTime < TOKEN_REFRESH_RATE_LIMIT_MS) {
-      return false;
+      return true;
     }
 
     this.tokenRefresh.promise = (async () => {
