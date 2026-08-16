@@ -11,7 +11,10 @@ import {
   User,
   Commands,
 } from './common';
-import {GetActivityInstanceConnectedParticipantsResponseSchema} from '../generated/schemas';
+import {
+  GetActivityInstanceConnectedParticipantsResponseSchema,
+  GetSpatialVoiceParticipantsResponseSchema,
+} from '../generated/schemas';
 
 // ERROR is sent as evt but is a special case, so is excluded from Events enum
 export const ERROR = 'ERROR';
@@ -20,6 +23,9 @@ export enum Events {
   VOICE_STATE_UPDATE = 'VOICE_STATE_UPDATE',
   SPEAKING_START = 'SPEAKING_START',
   SPEAKING_STOP = 'SPEAKING_STOP',
+  SPATIAL_VOICE_PARTICIPANTS_UPDATE = 'SPATIAL_VOICE_PARTICIPANTS_UPDATE',
+  SPATIAL_VOICE_SPEAKING_START = 'SPATIAL_VOICE_SPEAKING_START',
+  SPATIAL_VOICE_SPEAKING_STOP = 'SPATIAL_VOICE_SPEAKING_STOP',
   ACTIVITY_LAYOUT_MODE_UPDATE = 'ACTIVITY_LAYOUT_MODE_UPDATE',
   ORIENTATION_UPDATE = 'ORIENTATION_UPDATE',
   CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE',
@@ -175,6 +181,42 @@ export const EventSchema = {
     subscribeArgs: zod.object({
       lobby_id: zod.string().nullable().optional(),
       channel_id: zod.string().nullable().optional(),
+    }),
+  },
+  [Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE),
+      data: zod.object({
+        session_id: zod.string(),
+        participants: GetSpatialVoiceParticipantsResponseSchema.shape.participants,
+      }),
+    }),
+    subscribeArgs: zod.object({
+      session_id: zod.string(),
+    }),
+  },
+  [Events.SPATIAL_VOICE_SPEAKING_START]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPATIAL_VOICE_SPEAKING_START),
+      data: zod.object({
+        session_id: zod.string(),
+        user_id: zod.string(),
+      }),
+    }),
+    subscribeArgs: zod.object({
+      session_id: zod.string(),
+    }),
+  },
+  [Events.SPATIAL_VOICE_SPEAKING_STOP]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPATIAL_VOICE_SPEAKING_STOP),
+      data: zod.object({
+        session_id: zod.string(),
+        user_id: zod.string(),
+      }),
+    }),
+    subscribeArgs: zod.object({
+      session_id: zod.string(),
     }),
   },
   [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {

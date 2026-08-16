@@ -44,6 +44,7 @@ export interface SpatialVoiceCapabilities {
   roomSize: boolean;
   reflections: boolean;
   binarySpeaking: boolean;
+  participantUpdates: boolean;
   maxSources: number;
   maxUpdatesPerSecond: number;
 }
@@ -65,8 +66,15 @@ export interface SpatialVoiceSpeakingEvent {
   speaking: boolean;
 }
 
+export interface SpatialVoiceSpeakingTransitionEvent {
+  userId: string;
+}
+
 export type SpatialVoiceSpeakingListener = (event: SpatialVoiceSpeakingEvent) => void;
+export type SpatialVoiceSpeakingTransitionListener = (event: SpatialVoiceSpeakingTransitionEvent) => void;
+export type SpatialVoiceParticipantsListener = (participants: SpatialVoiceParticipant[]) => void;
 export type SpatialVoiceSpeakingUnsubscribe = () => Promise<void>;
+export type SpatialVoiceParticipantsUnsubscribe = () => Promise<void>;
 
 function mapCapabilities(capabilities: RawCapabilities): SpatialVoiceCapabilities {
   return {
@@ -78,6 +86,7 @@ function mapCapabilities(capabilities: RawCapabilities): SpatialVoiceCapabilitie
     roomSize: capabilities.room_size,
     reflections: capabilities.reflections,
     binarySpeaking: capabilities.binary_speaking,
+    participantUpdates: capabilities.participant_updates,
     maxSources: capabilities.max_sources,
     maxUpdatesPerSecond: capabilities.max_updates_per_second,
   };
@@ -106,7 +115,7 @@ export class SpatialVoiceSession {
   private suspended = false;
   private closed = false;
   private closePromise: Promise<void> | null = null;
-  private readonly speakingUnsubscribers = new Set<SpatialVoiceSpeakingUnsubscribe>();
+  private readonly unsubscribers = new Set<() => Promise<void>>();
 
   /** @internal Sessions are created through `discordSdk.spatialVoice.createSession()`. */
   constructor(
@@ -168,38 +177,53 @@ export class SpatialVoiceSession {
       throw new Error('Binary speaking events are not supported by this client');
     }
 
-    const onStart = ({user_id}: {user_id: string}) => listener({userId: user_id, speaking: true});
-    const onStop = ({user_id}: {user_id: string}) => listener({userId: user_id, speaking: false});
-    const args = {channel_id: this.channelId};
-
-    await this.sdk.subscribe(Events.SPEAKING_START, onStart, args);
+    const unsubscribeStart = await this.onSpeakingStart(({userId}) => listener({userId, speaking: true}));
     try {
-      await this.sdk.subscribe(Events.SPEAKING_STOP, onStop, args);
+      const unsubscribeStop = await this.onSpeakingStop(({userId}) => listener({userId, speaking: false}));
+      let active = true;
+      return async () => {
+        if (!active) return;
+        active = false;
+        await Promise.all([unsubscribeStart(), unsubscribeStop()]);
+      };
     } catch (error) {
-      await this.sdk.unsubscribe(Events.SPEAKING_START, onStart, args);
+      await unsubscribeStart();
       throw error;
     }
+  }
 
-    if (this.closed) {
-      await Promise.all([
-        this.sdk.unsubscribe(Events.SPEAKING_START, onStart, args),
-        this.sdk.unsubscribe(Events.SPEAKING_STOP, onStop, args),
-      ]);
-      throw new Error('Spatial voice session is closed');
+  async onSpeakingStart(listener: SpatialVoiceSpeakingTransitionListener): Promise<SpatialVoiceSpeakingUnsubscribe> {
+    if (!this.capabilities.binarySpeaking) {
+      throw new Error('Binary speaking events are not supported by this client');
+    }
+    return await this.subscribeToSpeakingEvent(Events.SPATIAL_VOICE_SPEAKING_START, listener);
+  }
+
+  async onSpeakingStop(listener: SpatialVoiceSpeakingTransitionListener): Promise<SpatialVoiceSpeakingUnsubscribe> {
+    if (!this.capabilities.binarySpeaking) {
+      throw new Error('Binary speaking events are not supported by this client');
+    }
+    return await this.subscribeToSpeakingEvent(Events.SPATIAL_VOICE_SPEAKING_STOP, listener);
+  }
+
+  async onParticipantsChanged(
+    listener: SpatialVoiceParticipantsListener,
+  ): Promise<SpatialVoiceParticipantsUnsubscribe> {
+    this.assertOpen();
+    if (!this.capabilities.participantUpdates) {
+      throw new Error('Spatial voice participant updates are not supported by this client');
     }
 
-    let active = true;
-    const unsubscribe = async () => {
-      if (!active) return;
-      active = false;
-      this.speakingUnsubscribers.delete(unsubscribe);
-      await Promise.all([
-        this.sdk.unsubscribe(Events.SPEAKING_START, onStart, args),
-        this.sdk.unsubscribe(Events.SPEAKING_STOP, onStop, args),
-      ]);
-    };
-    this.speakingUnsubscribers.add(unsubscribe);
-    return unsubscribe;
+    const onUpdate = ({participants}: {participants: RawParticipant[]}) => listener(participants.map(mapParticipant));
+    const args = {session_id: this.id};
+    await this.sdk.subscribe(Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE, onUpdate, args);
+    if (this.closed) {
+      await this.sdk.unsubscribe(Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE, onUpdate, args);
+      throw new Error('Spatial voice session is closed');
+    }
+    return this.trackUnsubscriber(async () => {
+      await this.sdk.unsubscribe(Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE, onUpdate, args);
+    });
   }
 
   close(): Promise<void> {
@@ -209,8 +233,8 @@ export class SpatialVoiceSession {
 
   private async closeInternal(): Promise<void> {
     this.closed = true;
-    const unsubscribers = [...this.speakingUnsubscribers];
-    this.speakingUnsubscribers.clear();
+    const unsubscribers = [...this.unsubscribers];
+    this.unsubscribers.clear();
     await Promise.allSettled(unsubscribers.map((unsubscribe) => unsubscribe()));
     try {
       await this.sdk.commands.stopSpatialVoiceSession({session_id: this.id});
@@ -223,6 +247,35 @@ export class SpatialVoiceSession {
     if (this.closed || this.closePromise != null) {
       throw new Error('Spatial voice session is closed');
     }
+  }
+
+  private async subscribeToSpeakingEvent(
+    event: Events.SPATIAL_VOICE_SPEAKING_START | Events.SPATIAL_VOICE_SPEAKING_STOP,
+    listener: SpatialVoiceSpeakingTransitionListener,
+  ): Promise<SpatialVoiceSpeakingUnsubscribe> {
+    this.assertOpen();
+    const onEvent = ({user_id}: {user_id: string}) => listener({userId: user_id});
+    const args = {session_id: this.id};
+    await this.sdk.subscribe(event, onEvent, args);
+    if (this.closed) {
+      await this.sdk.unsubscribe(event, onEvent, args);
+      throw new Error('Spatial voice session is closed');
+    }
+    return this.trackUnsubscriber(async () => {
+      await this.sdk.unsubscribe(event, onEvent, args);
+    });
+  }
+
+  private trackUnsubscriber(cleanup: () => Promise<void>): () => Promise<void> {
+    let active = true;
+    const unsubscribe = async () => {
+      if (!active) return;
+      active = false;
+      this.unsubscribers.delete(unsubscribe);
+      await cleanup();
+    };
+    this.unsubscribers.add(unsubscribe);
+    return unsubscribe;
   }
 }
 

@@ -9,6 +9,7 @@ const capabilities = {
   room_size: false,
   reflections: false,
   binary_speaking: true,
+  participant_updates: true,
   max_sources: 50,
   max_updates_per_second: 20,
 };
@@ -46,6 +47,7 @@ describe('SpatialVoice', () => {
       roomSize: false,
       reflections: false,
       binarySpeaking: true,
+      participantUpdates: true,
       maxSources: 50,
       maxUpdatesPerSecond: 20,
     });
@@ -133,7 +135,7 @@ describe('SpatialVoice', () => {
     expect(session.isClosed).toBe(true);
   });
 
-  it('combines speaking start and stop into one scoped callback and cleans it up', async () => {
+  it('exposes scoped speaking transitions and a combined callback, then cleans them up', async () => {
     const sdk = createSdk();
     const stop = jest.fn().mockResolvedValue({success: true});
     sdk._updateCommandMocks({
@@ -151,15 +153,48 @@ describe('SpatialVoice', () => {
     const listener = jest.fn();
 
     await session.onSpeaking(listener);
-    sdk.emitEvent(Events.SPEAKING_START, {channel_id: 'voice-channel-id', user_id: 'user-1'});
-    sdk.emitEvent(Events.SPEAKING_STOP, {channel_id: 'voice-channel-id', user_id: 'user-1'});
+    sdk.emitEvent(Events.SPATIAL_VOICE_SPEAKING_START, {session_id: 'session-id', user_id: 'user-1'});
+    sdk.emitEvent(Events.SPATIAL_VOICE_SPEAKING_STOP, {session_id: 'session-id', user_id: 'user-1'});
     expect(listener).toHaveBeenNthCalledWith(1, {userId: 'user-1', speaking: true});
     expect(listener).toHaveBeenNthCalledWith(2, {userId: 'user-1', speaking: false});
 
     await session.close();
     expect(unsubscribe).toHaveBeenCalledTimes(2);
-    sdk.emitEvent(Events.SPEAKING_START, {channel_id: 'voice-channel-id', user_id: 'user-1'});
+    sdk.emitEvent(Events.SPATIAL_VOICE_SPEAKING_START, {session_id: 'session-id', user_id: 'user-1'});
     expect(listener).toHaveBeenCalledTimes(2);
+  });
+
+  it('exposes complete participant and voice-state snapshots', async () => {
+    const sdk = createSdk();
+    sdk._updateCommandMocks({
+      startSpatialVoiceSession: () =>
+        Promise.resolve({
+          session_id: 'session-id',
+          channel_id: 'voice-channel-id',
+          capabilities,
+          participants: [participant],
+        }),
+      stopSpatialVoiceSession: () => Promise.resolve({success: true}),
+    });
+    const session = await sdk.spatialVoice.createSession();
+    const listener = jest.fn();
+
+    const unsubscribe = await session.onParticipantsChanged(listener);
+    sdk.emitEvent(Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE, {
+      session_id: 'session-id',
+      participants: [{...participant, self_mute: true}],
+    });
+    expect(listener).toHaveBeenCalledWith([
+      expect.objectContaining({userId: 'user-1', selfMute: true, speaking: false}),
+    ]);
+
+    await unsubscribe();
+    sdk.emitEvent(Events.SPATIAL_VOICE_PARTICIPANTS_UPDATE, {
+      session_id: 'session-id',
+      participants: [participant],
+    });
+    expect(listener).toHaveBeenCalledTimes(1);
+    await session.close();
   });
 
   it('coalesces concurrent session creation', async () => {

@@ -12,8 +12,14 @@ if (!capabilities.available) {
 }
 
 const session = await discordSdk.spatialVoice.createSession();
-const stopSpeaking = await session.onSpeaking(({userId, speaking}) => {
-  setSpeakingIndicator(userId, speaking);
+const stopParticipants = await session.onParticipantsChanged((participants) => {
+  setVoiceRoster(participants);
+});
+const stopSpeakingStart = await session.onSpeakingStart(({userId}) => {
+  setSpeakingIndicator(userId, true);
+});
+const stopSpeakingStop = await session.onSpeakingStop(({userId}) => {
+  setSpeakingIndicator(userId, false);
 });
 
 await session.update({
@@ -35,7 +41,9 @@ await session.suspend();
 // Proximity mode reapplies the most recent snapshot.
 await session.resume();
 
-await stopSpeaking();
+await stopSpeakingStart();
+await stopSpeakingStop();
+await stopParticipants();
 await session.close();
 ```
 
@@ -47,7 +55,8 @@ await session.close();
 - Omit voice-channel members who should remain on Discord's regular mix.
 - Send complete source snapshots. Coalesce movement updates to `maxUpdatesPerSecond` and never exceed `maxSources`.
 - `initialParticipants` is the roster captured at session creation. Call `session.getParticipants()` for a fresh roster.
-- `session.onSpeaking()` returns an async unsubscribe function and combines Discord's speaking-start/stop events into one boolean callback.
+- `session.onParticipantsChanged()` emits complete current-roster snapshots for joins, leaves, and mute/deaf voice-state changes.
+- `session.onSpeakingStart()` and `session.onSpeakingStop()` expose the individual binary transitions. `session.onSpeaking()` is the boolean convenience wrapper over both.
 - `suspend()`, `resume()`, speaking cleanup, and `close()` are idempotent. Always close the session during Activity teardown or an unrecoverable error.
 
 Room size, reflections, normalized voice levels, raw PCM, microphone capture, and control of other listeners are not part of the initial capability.

@@ -147,6 +147,7 @@ export const GetSpatialVoiceCapabilitiesResponseSchema = z.object({
   room_size: z.boolean(),
   reflections: z.boolean(),
   binary_speaking: z.boolean(),
+  participant_updates: z.boolean(),
   max_sources: z.number().int(),
   max_updates_per_second: z.number().int(),
 });
@@ -186,6 +187,7 @@ export const StartSpatialVoiceSessionResponseSchema = z
       room_size: z.boolean(),
       reflections: z.boolean(),
       binary_speaking: z.boolean(),
+      participant_updates: z.boolean(),
       max_sources: z.number().int(),
       max_updates_per_second: z.number().int(),
     }),

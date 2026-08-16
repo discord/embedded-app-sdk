@@ -177,6 +177,7 @@
         "room_size": {"type": "boolean"},
         "reflections": {"type": "boolean"},
         "binary_speaking": {"type": "boolean"},
+        "participant_updates": {"type": "boolean"},
         "max_sources": {"type": "integer"},
         "max_updates_per_second": {"type": "integer"}
       },
@@ -189,6 +190,7 @@
         "room_size",
         "reflections",
         "binary_speaking",
+        "participant_updates",
         "max_sources",
         "max_updates_per_second"
       ],
@@ -254,6 +256,7 @@
             "room_size": {"type": "boolean"},
             "reflections": {"type": "boolean"},
             "binary_speaking": {"type": "boolean"},
+            "participant_updates": {"type": "boolean"},
             "max_sources": {"type": "integer"},
             "max_updates_per_second": {"type": "integer"}
           },
@@ -266,6 +269,7 @@
             "room_size",
             "reflections",
             "binary_speaking",
+            "participant_updates",
             "max_sources",
             "max_updates_per_second"
           ],
