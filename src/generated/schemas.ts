@@ -86,6 +86,8 @@ export const AuthenticateResponseSchema = z
             'sdk.social_layer',
             'lobbies.write',
             'application_identities.write',
+            'managed_platform.application_identities.write',
+            'vibegrations.projects',
           ])
           .or(z.literal(-1))
           .default(-1),
@@ -134,6 +136,143 @@ export const GetActivityInstanceConnectedParticipantsResponseSchema = z
 export type GetActivityInstanceConnectedParticipantsResponse = zInfer<
   typeof GetActivityInstanceConnectedParticipantsResponseSchema
 >;
+
+// GET_SPATIAL_VOICE_CAPABILITIES
+export const GetSpatialVoiceCapabilitiesResponseSchema = z.object({
+  available: z.boolean(),
+  source_positioning: z.boolean(),
+  source_gain: z.boolean(),
+  source_spatial_blend: z.boolean(),
+  listener_pose: z.boolean(),
+  room_size: z.boolean(),
+  reflections: z.boolean(),
+  binary_speaking: z.boolean(),
+  max_sources: z.number().int(),
+  max_updates_per_second: z.number().int(),
+});
+export type GetSpatialVoiceCapabilitiesResponse = zInfer<typeof GetSpatialVoiceCapabilitiesResponseSchema>;
+
+// GET_SPATIAL_VOICE_PARTICIPANTS
+export const GetSpatialVoiceParticipantsResponseSchema = z
+  .object({
+    participants: z.array(
+      z.object({
+        user_id: z.string(),
+        username: z.string(),
+        global_name: z.union([z.string(), z.null()]),
+        avatar: z.union([z.string(), z.null()]),
+        mute: z.boolean(),
+        deaf: z.boolean(),
+        self_mute: z.boolean(),
+        self_deaf: z.boolean(),
+        speaking: z.boolean(),
+      }),
+    ),
+  })
+  .describe('Response for "GET_SPATIAL_VOICE_PARTICIPANTS" Command');
+export type GetSpatialVoiceParticipantsResponse = zInfer<typeof GetSpatialVoiceParticipantsResponseSchema>;
+
+// START_SPATIAL_VOICE_SESSION
+export const StartSpatialVoiceSessionResponseSchema = z
+  .object({
+    session_id: z.string(),
+    channel_id: z.string(),
+    capabilities: z.object({
+      available: z.boolean(),
+      source_positioning: z.boolean(),
+      source_gain: z.boolean(),
+      source_spatial_blend: z.boolean(),
+      listener_pose: z.boolean(),
+      room_size: z.boolean(),
+      reflections: z.boolean(),
+      binary_speaking: z.boolean(),
+      max_sources: z.number().int(),
+      max_updates_per_second: z.number().int(),
+    }),
+    participants: z.array(
+      z.object({
+        user_id: z.string(),
+        username: z.string(),
+        global_name: z.union([z.string(), z.null()]),
+        avatar: z.union([z.string(), z.null()]),
+        mute: z.boolean(),
+        deaf: z.boolean(),
+        self_mute: z.boolean(),
+        self_deaf: z.boolean(),
+        speaking: z.boolean(),
+      }),
+    ),
+  })
+  .describe('Response for "START_SPATIAL_VOICE_SESSION" Command');
+export type StartSpatialVoiceSessionResponse = zInfer<typeof StartSpatialVoiceSessionResponseSchema>;
+
+// UPDATE_SPATIAL_VOICE_SESSION
+export const UpdateSpatialVoiceSessionRequestSchema = z
+  .object({
+    session_id: z.string(),
+    listener: z.object({
+      position: z.object({
+        x: z.number().gte(-100000).lte(100000),
+        y: z.number().gte(-100000).lte(100000),
+        z: z.number().gte(-100000).lte(100000),
+      }),
+      forward: z.object({
+        x: z.number().gte(-100000).lte(100000),
+        y: z.number().gte(-100000).lte(100000),
+        z: z.number().gte(-100000).lte(100000),
+      }),
+    }),
+    sources: z
+      .array(
+        z.object({
+          user_id: z.string(),
+          position: z.object({
+            x: z.number().gte(-100000).lte(100000),
+            y: z.number().gte(-100000).lte(100000),
+            z: z.number().gte(-100000).lte(100000),
+          }),
+          gain: z.number().gte(0).lte(1),
+          spatial_blend: z.number().gte(0).lte(1),
+        }),
+      )
+      .max(50),
+  })
+  .describe('Request for "UPDATE_SPATIAL_VOICE_SESSION" Command');
+export type UpdateSpatialVoiceSessionRequest = zInfer<typeof UpdateSpatialVoiceSessionRequestSchema>;
+export const UpdateSpatialVoiceSessionResponseSchema = z
+  .object({success: z.boolean()})
+  .describe('Response for "UPDATE_SPATIAL_VOICE_SESSION" Command');
+export type UpdateSpatialVoiceSessionResponse = zInfer<typeof UpdateSpatialVoiceSessionResponseSchema>;
+
+// SUSPEND_SPATIAL_VOICE_SESSION
+export const SuspendSpatialVoiceSessionRequestSchema = z
+  .object({session_id: z.string()})
+  .describe('Request for "SUSPEND_SPATIAL_VOICE_SESSION" Command');
+export type SuspendSpatialVoiceSessionRequest = zInfer<typeof SuspendSpatialVoiceSessionRequestSchema>;
+export const SuspendSpatialVoiceSessionResponseSchema = z
+  .object({success: z.boolean()})
+  .describe('Response for "SUSPEND_SPATIAL_VOICE_SESSION" Command');
+export type SuspendSpatialVoiceSessionResponse = zInfer<typeof SuspendSpatialVoiceSessionResponseSchema>;
+
+// RESUME_SPATIAL_VOICE_SESSION
+export const ResumeSpatialVoiceSessionRequestSchema = z
+  .object({session_id: z.string()})
+  .describe('Request for "RESUME_SPATIAL_VOICE_SESSION" Command');
+export type ResumeSpatialVoiceSessionRequest = zInfer<typeof ResumeSpatialVoiceSessionRequestSchema>;
+export const ResumeSpatialVoiceSessionResponseSchema = z
+  .object({success: z.boolean()})
+  .describe('Response for "RESUME_SPATIAL_VOICE_SESSION" Command');
+export type ResumeSpatialVoiceSessionResponse = zInfer<typeof ResumeSpatialVoiceSessionResponseSchema>;
+
+// STOP_SPATIAL_VOICE_SESSION
+export const StopSpatialVoiceSessionRequestSchema = z
+  .object({session_id: z.string()})
+  .describe('Request for "STOP_SPATIAL_VOICE_SESSION" Command');
+export type StopSpatialVoiceSessionRequest = zInfer<typeof StopSpatialVoiceSessionRequestSchema>;
+export const StopSpatialVoiceSessionResponseSchema = z
+  .object({success: z.boolean()})
+  .describe('Response for "STOP_SPATIAL_VOICE_SESSION" Command');
+export type StopSpatialVoiceSessionResponse = zInfer<typeof StopSpatialVoiceSessionResponseSchema>;
 
 // SHARE_INTERACTION
 export const ShareInteractionRequestSchema = z
@@ -359,6 +498,13 @@ export enum Command {
   OPEN_SHARE_MOMENT_DIALOG = 'OPEN_SHARE_MOMENT_DIALOG',
   AUTHENTICATE = 'AUTHENTICATE',
   GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS = 'GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS',
+  GET_SPATIAL_VOICE_CAPABILITIES = 'GET_SPATIAL_VOICE_CAPABILITIES',
+  GET_SPATIAL_VOICE_PARTICIPANTS = 'GET_SPATIAL_VOICE_PARTICIPANTS',
+  START_SPATIAL_VOICE_SESSION = 'START_SPATIAL_VOICE_SESSION',
+  UPDATE_SPATIAL_VOICE_SESSION = 'UPDATE_SPATIAL_VOICE_SESSION',
+  SUSPEND_SPATIAL_VOICE_SESSION = 'SUSPEND_SPATIAL_VOICE_SESSION',
+  RESUME_SPATIAL_VOICE_SESSION = 'RESUME_SPATIAL_VOICE_SESSION',
+  STOP_SPATIAL_VOICE_SESSION = 'STOP_SPATIAL_VOICE_SESSION',
   SHARE_INTERACTION = 'SHARE_INTERACTION',
   SHARE_LINK = 'SHARE_LINK',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
@@ -392,6 +538,34 @@ export const Schemas = {
   [Command.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS]: {
     request: emptyRequestSchema,
     response: GetActivityInstanceConnectedParticipantsResponseSchema,
+  },
+  [Command.GET_SPATIAL_VOICE_CAPABILITIES]: {
+    request: emptyRequestSchema,
+    response: GetSpatialVoiceCapabilitiesResponseSchema,
+  },
+  [Command.GET_SPATIAL_VOICE_PARTICIPANTS]: {
+    request: emptyRequestSchema,
+    response: GetSpatialVoiceParticipantsResponseSchema,
+  },
+  [Command.START_SPATIAL_VOICE_SESSION]: {
+    request: emptyRequestSchema,
+    response: StartSpatialVoiceSessionResponseSchema,
+  },
+  [Command.UPDATE_SPATIAL_VOICE_SESSION]: {
+    request: UpdateSpatialVoiceSessionRequestSchema,
+    response: UpdateSpatialVoiceSessionResponseSchema,
+  },
+  [Command.SUSPEND_SPATIAL_VOICE_SESSION]: {
+    request: SuspendSpatialVoiceSessionRequestSchema,
+    response: SuspendSpatialVoiceSessionResponseSchema,
+  },
+  [Command.RESUME_SPATIAL_VOICE_SESSION]: {
+    request: ResumeSpatialVoiceSessionRequestSchema,
+    response: ResumeSpatialVoiceSessionResponseSchema,
+  },
+  [Command.STOP_SPATIAL_VOICE_SESSION]: {
+    request: StopSpatialVoiceSessionRequestSchema,
+    response: StopSpatialVoiceSessionResponseSchema,
   },
   [Command.SHARE_INTERACTION]: {
     request: ShareInteractionRequestSchema,

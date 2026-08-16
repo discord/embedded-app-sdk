@@ -96,7 +96,9 @@
               "sdk.social_layer_presence",
               "sdk.social_layer",
               "lobbies.write",
-              "application_identities.write"
+              "application_identities.write",
+              "managed_platform.application_identities.write",
+              "vibegrations.projects"
             ]
           }
         },
@@ -159,6 +161,264 @@
         }
       },
       "required": ["participants"],
+      "additionalProperties": false
+    }
+  },
+  "GET_SPATIAL_VOICE_CAPABILITIES": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "properties": {
+        "available": {"type": "boolean"},
+        "source_positioning": {"type": "boolean"},
+        "source_gain": {"type": "boolean"},
+        "source_spatial_blend": {"type": "boolean"},
+        "listener_pose": {"type": "boolean"},
+        "room_size": {"type": "boolean"},
+        "reflections": {"type": "boolean"},
+        "binary_speaking": {"type": "boolean"},
+        "max_sources": {"type": "integer"},
+        "max_updates_per_second": {"type": "integer"}
+      },
+      "required": [
+        "available",
+        "source_positioning",
+        "source_gain",
+        "source_spatial_blend",
+        "listener_pose",
+        "room_size",
+        "reflections",
+        "binary_speaking",
+        "max_sources",
+        "max_updates_per_second"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "GET_SPATIAL_VOICE_PARTICIPANTS": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "description": "Response for \"GET_SPATIAL_VOICE_PARTICIPANTS\" Command",
+      "properties": {
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "user_id": {"type": "string"},
+              "username": {"type": "string"},
+              "global_name": {"type": ["string", "null"]},
+              "avatar": {"type": ["string", "null"]},
+              "mute": {"type": "boolean"},
+              "deaf": {"type": "boolean"},
+              "self_mute": {"type": "boolean"},
+              "self_deaf": {"type": "boolean"},
+              "speaking": {"type": "boolean"}
+            },
+            "required": [
+              "user_id",
+              "username",
+              "global_name",
+              "avatar",
+              "mute",
+              "deaf",
+              "self_mute",
+              "self_deaf",
+              "speaking"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["participants"],
+      "additionalProperties": false
+    }
+  },
+  "START_SPATIAL_VOICE_SESSION": {
+    "request": null,
+    "response": {
+      "type": "object",
+      "description": "Response for \"START_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {
+        "session_id": {"type": "string"},
+        "channel_id": {"type": "string"},
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "available": {"type": "boolean"},
+            "source_positioning": {"type": "boolean"},
+            "source_gain": {"type": "boolean"},
+            "source_spatial_blend": {"type": "boolean"},
+            "listener_pose": {"type": "boolean"},
+            "room_size": {"type": "boolean"},
+            "reflections": {"type": "boolean"},
+            "binary_speaking": {"type": "boolean"},
+            "max_sources": {"type": "integer"},
+            "max_updates_per_second": {"type": "integer"}
+          },
+          "required": [
+            "available",
+            "source_positioning",
+            "source_gain",
+            "source_spatial_blend",
+            "listener_pose",
+            "room_size",
+            "reflections",
+            "binary_speaking",
+            "max_sources",
+            "max_updates_per_second"
+          ],
+          "additionalProperties": false
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "user_id": {"type": "string"},
+              "username": {"type": "string"},
+              "global_name": {"type": ["string", "null"]},
+              "avatar": {"type": ["string", "null"]},
+              "mute": {"type": "boolean"},
+              "deaf": {"type": "boolean"},
+              "self_mute": {"type": "boolean"},
+              "self_deaf": {"type": "boolean"},
+              "speaking": {"type": "boolean"}
+            },
+            "required": [
+              "user_id",
+              "username",
+              "global_name",
+              "avatar",
+              "mute",
+              "deaf",
+              "self_mute",
+              "self_deaf",
+              "speaking"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["session_id", "channel_id", "capabilities", "participants"],
+      "additionalProperties": false
+    }
+  },
+  "UPDATE_SPATIAL_VOICE_SESSION": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"UPDATE_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {
+        "session_id": {"type": "string"},
+        "listener": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "object",
+              "properties": {
+                "x": {"type": "number", "minimum": -100000, "maximum": 100000},
+                "y": {"type": "number", "minimum": -100000, "maximum": 100000},
+                "z": {"type": "number", "minimum": -100000, "maximum": 100000}
+              },
+              "required": ["x", "y", "z"],
+              "additionalProperties": false
+            },
+            "forward": {
+              "type": "object",
+              "properties": {
+                "x": {"type": "number", "minimum": -100000, "maximum": 100000},
+                "y": {"type": "number", "minimum": -100000, "maximum": 100000},
+                "z": {"type": "number", "minimum": -100000, "maximum": 100000}
+              },
+              "required": ["x", "y", "z"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["position", "forward"],
+          "additionalProperties": false
+        },
+        "sources": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "user_id": {"type": "string"},
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": {"type": "number", "minimum": -100000, "maximum": 100000},
+                  "y": {"type": "number", "minimum": -100000, "maximum": 100000},
+                  "z": {"type": "number", "minimum": -100000, "maximum": 100000}
+                },
+                "required": ["x", "y", "z"],
+                "additionalProperties": false
+              },
+              "gain": {"type": "number", "minimum": 0, "maximum": 1},
+              "spatial_blend": {"type": "number", "minimum": 0, "maximum": 1}
+            },
+            "required": ["user_id", "position", "gain", "spatial_blend"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["session_id", "listener", "sources"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"UPDATE_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
+      "additionalProperties": false
+    }
+  },
+  "SUSPEND_SPATIAL_VOICE_SESSION": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"SUSPEND_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"session_id": {"type": "string"}},
+      "required": ["session_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"SUSPEND_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
+      "additionalProperties": false
+    }
+  },
+  "RESUME_SPATIAL_VOICE_SESSION": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"RESUME_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"session_id": {"type": "string"}},
+      "required": ["session_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"RESUME_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
+      "additionalProperties": false
+    }
+  },
+  "STOP_SPATIAL_VOICE_SESSION": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"STOP_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"session_id": {"type": "string"}},
+      "required": ["session_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"STOP_SPATIAL_VOICE_SESSION\" Command",
+      "properties": {"success": {"type": "boolean"}},
+      "required": ["success"],
       "additionalProperties": false
     }
   },

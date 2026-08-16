@@ -14,6 +14,7 @@ Read more about building Discord Activities with the Embedded App SDK on [https:
 
 - **[Embedded App SDK Docs](https://docs.discord.com/developers/developer-tools/embedded-app-sdk)** - Get familiar with the Embedded App SDK
 - **[Activity Examples](https://github.com/discord/embedded-app-sdk-examples)** - Explore examples of Discord Activities
+- **[Spatial Voice](./docs/spatial-voice.md)** - Capability-gated world positioning, gain, and speaking indicators for Discord voice
 - **[Technical chat on Discord](https://discord.com/invite/discord-developers)** - Join us and other devs at DDevs at `#activities-dev-help`
 
 ## Installing this package

@@ -16,6 +16,7 @@ import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {ConsoleLevel, consoleLevels, wrapConsoleMethod} from './utils/console';
 import type {TSendCommand, TSendCommandPayload} from './schema/types';
 import {IDiscordSDK, MaybeZodObjectArray, SdkConfiguration} from './interface';
+import {SpatialVoice} from './spatialVoice';
 import {version as sdkVersion} from '../package.json';
 
 export enum Opcodes {
@@ -108,6 +109,7 @@ export class DiscordSDK implements IDiscordSDK {
   };
 
   commands = commands(this.sendCommand);
+  readonly spatialVoice = new SpatialVoice(this);
 
   constructor(clientId: string, configuration?: SdkConfiguration) {
     this.isReady = false;

@@ -2,6 +2,7 @@ import {Platform, RPCCloseCodes} from './Constants';
 import commands from './commands';
 import {EventArgs, EventSchema} from './schema/events';
 import * as zod from 'zod';
+import type {SpatialVoice} from './spatialVoice';
 
 /**
  * An optional configuration object to customize the sdk options
@@ -27,6 +28,7 @@ export interface IDiscordSDK {
   readonly mobileAppVersion: string | null;
   readonly sdkVersion: string;
   readonly commands: ReturnType<typeof commands>;
+  readonly spatialVoice: SpatialVoice;
   readonly configuration: SdkConfiguration;
   readonly channelId: string | null;
   readonly guildId: string | null;

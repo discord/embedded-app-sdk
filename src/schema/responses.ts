@@ -183,14 +183,21 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.GET_QUEST:
     case Commands.GET_QUEST_ENROLLMENT_STATUS:
     case Commands.GET_RELATIONSHIPS:
+    case Commands.GET_SPATIAL_VOICE_CAPABILITIES:
+    case Commands.GET_SPATIAL_VOICE_PARTICIPANTS:
     case Commands.GET_USER:
     case Commands.INITIATE_IMAGE_UPLOAD:
     case Commands.INVITE_USER_EMBEDDED:
     case Commands.OPEN_SHARE_MOMENT_DIALOG:
     case Commands.QUEST_START_TIMER:
     case Commands.REQUEST_PROXY_TICKET_REFRESH:
+    case Commands.RESUME_SPATIAL_VOICE_SESSION:
     case Commands.SHARE_INTERACTION:
     case Commands.SHARE_LINK:
+    case Commands.START_SPATIAL_VOICE_SESSION:
+    case Commands.STOP_SPATIAL_VOICE_SESSION:
+    case Commands.SUSPEND_SPATIAL_VOICE_SESSION:
+    case Commands.UPDATE_SPATIAL_VOICE_SESSION:
       // END-GENERATED-SECTION
       const {response} = Schemas[cmd];
       return response.parse(data);

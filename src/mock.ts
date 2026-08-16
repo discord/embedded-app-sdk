@@ -8,6 +8,7 @@ import {Platform} from './Constants';
 import getDefaultSdkConfiguration from './utils/getDefaultSdkConfiguration';
 import {IDiscordSDK, MaybeZodObjectArray} from './interface';
 import {ChannelTypesObject} from './schema/common';
+import {SpatialVoice} from './spatialVoice';
 
 export class DiscordSDKMock implements IDiscordSDK {
   readonly clientId: string;
@@ -24,6 +25,7 @@ export class DiscordSDKMock implements IDiscordSDK {
   private frameId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
   private eventBus = new EventEmitter();
   public commands: IDiscordSDK['commands'];
+  readonly spatialVoice = new SpatialVoice(this);
   readonly guildId: string | null;
   readonly channelId: string | null;
   readonly locationId: string | null;
@@ -210,5 +212,41 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       enrolled_at: null,
       completed_at: null,
     }),
+  getSpatialVoiceCapabilities: () =>
+    Promise.resolve({
+      available: false,
+      source_positioning: false,
+      source_gain: false,
+      source_spatial_blend: false,
+      listener_pose: false,
+      room_size: false,
+      reflections: false,
+      binary_speaking: false,
+      max_sources: 0,
+      max_updates_per_second: 0,
+    }),
+  getSpatialVoiceParticipants: () => Promise.resolve({participants: []}),
+  resumeSpatialVoiceSession: () => Promise.resolve({success: true}),
+  startSpatialVoiceSession: () =>
+    Promise.resolve({
+      session_id: 'mock_spatial_voice_session_id',
+      channel_id: 'mock_spatial_voice_channel_id',
+      capabilities: {
+        available: false,
+        source_positioning: false,
+        source_gain: false,
+        source_spatial_blend: false,
+        listener_pose: false,
+        room_size: false,
+        reflections: false,
+        binary_speaking: false,
+        max_sources: 0,
+        max_updates_per_second: 0,
+      },
+      participants: [],
+    }),
+  stopSpatialVoiceSession: () => Promise.resolve({success: true}),
+  suspendSpatialVoiceSession: () => Promise.resolve({success: true}),
+  updateSpatialVoiceSession: () => Promise.resolve({success: true}),
   // END-GENERATED-SECTION
 };

@@ -10,6 +10,7 @@ import PermissionUtils from './utils/PermissionUtils';
 import PriceUtils from './utils/PriceUtils';
 import {DiscordSDKMock} from './mock';
 import {ISDKError} from './error';
+import {SpatialVoice, SpatialVoiceSession} from './spatialVoice';
 import {patchUrlMappings, attemptRemap} from './utils/patchUrlMappings';
 export type {EventPayloadData} from './schema/events';
 
@@ -17,6 +18,8 @@ const {Commands} = Common;
 export {
   DiscordSDK,
   DiscordSDKMock,
+  SpatialVoice,
+  SpatialVoiceSession,
   Events,
   Orientation,
   Platform,
@@ -41,3 +44,14 @@ export type {
   ISDKError,
   Types,
 };
+export type {
+  SpatialVoiceCapabilities,
+  SpatialVoiceListener,
+  SpatialVoiceParticipant,
+  SpatialVoiceSource,
+  SpatialVoiceSpeakingEvent,
+  SpatialVoiceSpeakingListener,
+  SpatialVoiceSpeakingUnsubscribe,
+  SpatialVoiceUpdate,
+  SpatialVoiceVector3,
+} from './spatialVoice';

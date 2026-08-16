@@ -1,0 +1,273 @@
+import type {IDiscordSDK} from './interface';
+import {Events} from './schema/events';
+import type {
+  GetSpatialVoiceCapabilitiesResponse,
+  GetSpatialVoiceParticipantsResponse,
+  StartSpatialVoiceSessionResponse,
+  UpdateSpatialVoiceSessionRequest,
+} from './generated/schemas';
+
+type SpatialVoiceTransport = Pick<IDiscordSDK, 'commands' | 'subscribe' | 'unsubscribe'>;
+type RawCapabilities = GetSpatialVoiceCapabilitiesResponse;
+type RawParticipant = GetSpatialVoiceParticipantsResponse['participants'][number];
+type RawListener = UpdateSpatialVoiceSessionRequest['listener'];
+
+export interface SpatialVoiceVector3 {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface SpatialVoiceListener {
+  position: SpatialVoiceVector3;
+  forward: SpatialVoiceVector3;
+}
+
+export interface SpatialVoiceSource {
+  userId: string;
+  position: SpatialVoiceVector3;
+  gain?: number;
+  spatialBlend?: number;
+}
+
+export interface SpatialVoiceUpdate {
+  listener: SpatialVoiceListener;
+  sources: SpatialVoiceSource[];
+}
+
+export interface SpatialVoiceCapabilities {
+  available: boolean;
+  sourcePositioning: boolean;
+  sourceGain: boolean;
+  sourceSpatialBlend: boolean;
+  listenerPose: boolean;
+  roomSize: boolean;
+  reflections: boolean;
+  binarySpeaking: boolean;
+  maxSources: number;
+  maxUpdatesPerSecond: number;
+}
+
+export interface SpatialVoiceParticipant {
+  userId: string;
+  username: string;
+  globalName: string | null;
+  avatar: string | null;
+  mute: boolean;
+  deaf: boolean;
+  selfMute: boolean;
+  selfDeaf: boolean;
+  speaking: boolean;
+}
+
+export interface SpatialVoiceSpeakingEvent {
+  userId: string;
+  speaking: boolean;
+}
+
+export type SpatialVoiceSpeakingListener = (event: SpatialVoiceSpeakingEvent) => void;
+export type SpatialVoiceSpeakingUnsubscribe = () => Promise<void>;
+
+function mapCapabilities(capabilities: RawCapabilities): SpatialVoiceCapabilities {
+  return {
+    available: capabilities.available,
+    sourcePositioning: capabilities.source_positioning,
+    sourceGain: capabilities.source_gain,
+    sourceSpatialBlend: capabilities.source_spatial_blend,
+    listenerPose: capabilities.listener_pose,
+    roomSize: capabilities.room_size,
+    reflections: capabilities.reflections,
+    binarySpeaking: capabilities.binary_speaking,
+    maxSources: capabilities.max_sources,
+    maxUpdatesPerSecond: capabilities.max_updates_per_second,
+  };
+}
+
+function mapParticipant(participant: RawParticipant): SpatialVoiceParticipant {
+  return {
+    userId: participant.user_id,
+    username: participant.username,
+    globalName: participant.global_name,
+    avatar: participant.avatar,
+    mute: participant.mute,
+    deaf: participant.deaf,
+    selfMute: participant.self_mute,
+    selfDeaf: participant.self_deaf,
+    speaking: participant.speaking,
+  };
+}
+
+export class SpatialVoiceSession {
+  readonly id: string;
+  readonly channelId: string;
+  readonly capabilities: SpatialVoiceCapabilities;
+  readonly initialParticipants: SpatialVoiceParticipant[];
+
+  private suspended = false;
+  private closed = false;
+  private closePromise: Promise<void> | null = null;
+  private readonly speakingUnsubscribers = new Set<SpatialVoiceSpeakingUnsubscribe>();
+
+  /** @internal Sessions are created through `discordSdk.spatialVoice.createSession()`. */
+  constructor(
+    private readonly sdk: SpatialVoiceTransport,
+    response: StartSpatialVoiceSessionResponse,
+    private readonly onClose: () => void,
+  ) {
+    this.id = response.session_id;
+    this.channelId = response.channel_id;
+    this.capabilities = mapCapabilities(response.capabilities);
+    this.initialParticipants = response.participants.map(mapParticipant);
+  }
+
+  get isSuspended(): boolean {
+    return this.suspended;
+  }
+
+  get isClosed(): boolean {
+    return this.closed;
+  }
+
+  async getParticipants(): Promise<SpatialVoiceParticipant[]> {
+    this.assertOpen();
+    const response = await this.sdk.commands.getSpatialVoiceParticipants(undefined);
+    return response.participants.map(mapParticipant);
+  }
+
+  async update({listener, sources}: SpatialVoiceUpdate): Promise<void> {
+    this.assertOpen();
+    await this.sdk.commands.updateSpatialVoiceSession({
+      session_id: this.id,
+      listener: listener as RawListener,
+      sources: sources.map((source) => ({
+        user_id: source.userId,
+        position: source.position,
+        gain: source.gain ?? 1,
+        spatial_blend: source.spatialBlend ?? 1,
+      })),
+    });
+  }
+
+  async suspend(): Promise<void> {
+    this.assertOpen();
+    if (this.suspended) return;
+    await this.sdk.commands.suspendSpatialVoiceSession({session_id: this.id});
+    this.suspended = true;
+  }
+
+  async resume(): Promise<void> {
+    this.assertOpen();
+    if (!this.suspended) return;
+    await this.sdk.commands.resumeSpatialVoiceSession({session_id: this.id});
+    this.suspended = false;
+  }
+
+  async onSpeaking(listener: SpatialVoiceSpeakingListener): Promise<SpatialVoiceSpeakingUnsubscribe> {
+    this.assertOpen();
+    if (!this.capabilities.binarySpeaking) {
+      throw new Error('Binary speaking events are not supported by this client');
+    }
+
+    const onStart = ({user_id}: {user_id: string}) => listener({userId: user_id, speaking: true});
+    const onStop = ({user_id}: {user_id: string}) => listener({userId: user_id, speaking: false});
+    const args = {channel_id: this.channelId};
+
+    await this.sdk.subscribe(Events.SPEAKING_START, onStart, args);
+    try {
+      await this.sdk.subscribe(Events.SPEAKING_STOP, onStop, args);
+    } catch (error) {
+      await this.sdk.unsubscribe(Events.SPEAKING_START, onStart, args);
+      throw error;
+    }
+
+    if (this.closed) {
+      await Promise.all([
+        this.sdk.unsubscribe(Events.SPEAKING_START, onStart, args),
+        this.sdk.unsubscribe(Events.SPEAKING_STOP, onStop, args),
+      ]);
+      throw new Error('Spatial voice session is closed');
+    }
+
+    let active = true;
+    const unsubscribe = async () => {
+      if (!active) return;
+      active = false;
+      this.speakingUnsubscribers.delete(unsubscribe);
+      await Promise.all([
+        this.sdk.unsubscribe(Events.SPEAKING_START, onStart, args),
+        this.sdk.unsubscribe(Events.SPEAKING_STOP, onStop, args),
+      ]);
+    };
+    this.speakingUnsubscribers.add(unsubscribe);
+    return unsubscribe;
+  }
+
+  close(): Promise<void> {
+    this.closePromise ??= this.closeInternal();
+    return this.closePromise;
+  }
+
+  private async closeInternal(): Promise<void> {
+    this.closed = true;
+    const unsubscribers = [...this.speakingUnsubscribers];
+    this.speakingUnsubscribers.clear();
+    await Promise.allSettled(unsubscribers.map((unsubscribe) => unsubscribe()));
+    try {
+      await this.sdk.commands.stopSpatialVoiceSession({session_id: this.id});
+    } finally {
+      this.onClose();
+    }
+  }
+
+  private assertOpen(): void {
+    if (this.closed || this.closePromise != null) {
+      throw new Error('Spatial voice session is closed');
+    }
+  }
+}
+
+export class SpatialVoice {
+  private activeSession: SpatialVoiceSession | null = null;
+  private creatingSession: Promise<SpatialVoiceSession> | null = null;
+
+  constructor(private readonly sdk: SpatialVoiceTransport) {}
+
+  async getCapabilities(): Promise<SpatialVoiceCapabilities> {
+    return mapCapabilities(await this.sdk.commands.getSpatialVoiceCapabilities(undefined));
+  }
+
+  async getParticipants(): Promise<SpatialVoiceParticipant[]> {
+    const response = await this.sdk.commands.getSpatialVoiceParticipants(undefined);
+    return response.participants.map(mapParticipant);
+  }
+
+  async createSession(): Promise<SpatialVoiceSession> {
+    if (this.creatingSession != null) {
+      return this.creatingSession;
+    }
+
+    const creatingSession = this.createSessionInternal();
+    this.creatingSession = creatingSession;
+    try {
+      return await creatingSession;
+    } finally {
+      if (this.creatingSession === creatingSession) {
+        this.creatingSession = null;
+      }
+    }
+  }
+
+  private async createSessionInternal(): Promise<SpatialVoiceSession> {
+    if (this.activeSession != null) {
+      await this.activeSession.close();
+    }
+    const response = await this.sdk.commands.startSpatialVoiceSession(undefined);
+    const session = new SpatialVoiceSession(this.sdk, response, () => {
+      if (this.activeSession === session) {
+        this.activeSession = null;
+      }
+    });
+    this.activeSession = session;
+    return session;
+  }
+}

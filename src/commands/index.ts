@@ -22,14 +22,21 @@ import {getActivityInstanceConnectedParticipants} from './getActivityInstanceCon
 import {getQuest} from './getQuest';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
 import {getRelationships} from './getRelationships';
+import {getSpatialVoiceCapabilities} from './getSpatialVoiceCapabilities';
+import {getSpatialVoiceParticipants} from './getSpatialVoiceParticipants';
 import {getUser} from './getUser';
 import {initiateImageUpload} from './initiateImageUpload';
 import {inviteUserEmbedded} from './inviteUserEmbedded';
 import {openShareMomentDialog} from './openShareMomentDialog';
 import {questStartTimer} from './questStartTimer';
 import {requestProxyTicketRefresh} from './requestProxyTicketRefresh';
+import {resumeSpatialVoiceSession} from './resumeSpatialVoiceSession';
 import {shareInteraction} from './shareInteraction';
 import {shareLink} from './shareLink';
+import {startSpatialVoiceSession} from './startSpatialVoiceSession';
+import {stopSpatialVoiceSession} from './stopSpatialVoiceSession';
+import {suspendSpatialVoiceSession} from './suspendSpatialVoiceSession';
+import {updateSpatialVoiceSession} from './updateSpatialVoiceSession';
 // END-GENERATED-SECTION
 
 export {Commands, SetActivity};
@@ -59,14 +66,21 @@ function commands(sendCommand: TSendCommand) {
     getQuest: getQuest(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
     getRelationships: getRelationships(sendCommand),
+    getSpatialVoiceCapabilities: getSpatialVoiceCapabilities(sendCommand),
+    getSpatialVoiceParticipants: getSpatialVoiceParticipants(sendCommand),
     getUser: getUser(sendCommand),
     initiateImageUpload: initiateImageUpload(sendCommand),
     inviteUserEmbedded: inviteUserEmbedded(sendCommand),
     openShareMomentDialog: openShareMomentDialog(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
     requestProxyTicketRefresh: requestProxyTicketRefresh(sendCommand),
+    resumeSpatialVoiceSession: resumeSpatialVoiceSession(sendCommand),
     shareInteraction: shareInteraction(sendCommand),
     shareLink: shareLink(sendCommand),
+    startSpatialVoiceSession: startSpatialVoiceSession(sendCommand),
+    stopSpatialVoiceSession: stopSpatialVoiceSession(sendCommand),
+    suspendSpatialVoiceSession: suspendSpatialVoiceSession(sendCommand),
+    updateSpatialVoiceSession: updateSpatialVoiceSession(sendCommand),
     // END-GENERATED-SECTION
   };
 }
