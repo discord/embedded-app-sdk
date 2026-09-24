@@ -3,7 +3,7 @@
  */
 import {Opcodes} from '../Discord';
 import {DiscordSDK, Events, Platform} from '../index';
-import {DISPATCH} from '../schema/common';
+import {DISPATCH, Message} from '../schema/common';
 import {version as sdkVersion} from '../../package.json';
 
 describe('DiscordSDK', () => {
@@ -87,5 +87,25 @@ describe('DiscordSDK', () => {
 
     // Verify "READY" event resolves
     await discordSdk.ready();
+  });
+});
+
+describe('Message schema', () => {
+  it('parses a voice channel message from GET_CHANNEL', () => {
+    const message = Message.parse({
+      id: '1',
+      content: 'test message',
+      timestamp: new Date('2025-10-20T07:16:40.668Z'),
+      edited_timestamp: null,
+      tts: false,
+      mention_everyone: false,
+      mentions: [],
+      mention_roles: [],
+      attachments: [],
+      embeds: [],
+      pinned: false,
+      type: 0,
+    });
+    expect(message.timestamp).toBe('2025-10-20T07:16:40.668Z');
   });
 });
