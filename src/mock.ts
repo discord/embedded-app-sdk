@@ -201,7 +201,6 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
     }),
   questStartTimer: () => Promise.resolve({success: true}),
   getActivityInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
-  shareInteraction: () => Promise.resolve({success: false}),
   requestProxyTicketRefresh: () => Promise.resolve({ticket: 'mock_ticket'}),
   getQuest: () =>
     Promise.resolve({

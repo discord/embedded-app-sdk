@@ -189,7 +189,6 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.OPEN_SHARE_MOMENT_DIALOG:
     case Commands.QUEST_START_TIMER:
     case Commands.REQUEST_PROXY_TICKET_REFRESH:
-    case Commands.SHARE_INTERACTION:
     case Commands.SHARE_LINK:
       // END-GENERATED-SECTION
       const {response} = Schemas[cmd];
