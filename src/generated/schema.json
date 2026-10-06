@@ -96,7 +96,19 @@
               "sdk.social_layer_presence",
               "sdk.social_layer",
               "lobbies.write",
-              "application_identities.write"
+              "application_identities.write",
+              "managed_platform.application_identities.write",
+              "vibegrations.projects",
+              "orbs_arcade.play",
+              "personal.relationships.read",
+              "personal.dm_channels.read",
+              "personal.dm_channels.messages.read",
+              "personal.guilds.channels.read",
+              "personal.guilds.channels.messages.read",
+              "personal.activities.write",
+              "personal.mentions.read",
+              "personal.guilds.messages.search",
+              "personal.dm_channels.messages.search"
             ]
           }
         },
@@ -159,72 +171,6 @@
         }
       },
       "required": ["participants"],
-      "additionalProperties": false
-    }
-  },
-  "SHARE_INTERACTION": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"SHARE_INTERACTION\" Command",
-      "properties": {
-        "command": {"type": "string"},
-        "options": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {"name": {"type": "string"}, "value": {"type": "string"}},
-            "required": ["name", "value"],
-            "additionalProperties": false
-          }
-        },
-        "content": {"type": "string", "maxLength": 2000},
-        "require_launch_channel": {"type": "boolean"},
-        "preview_image": {
-          "type": "object",
-          "properties": {"height": {"type": "number"}, "url": {"type": "string"}, "width": {"type": "number"}},
-          "required": ["height", "url", "width"],
-          "additionalProperties": false
-        },
-        "components": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "type": {"const": 1},
-              "components": {
-                "type": "array",
-                "maxItems": 5,
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {"const": 2},
-                    "style": {"type": "number", "minimum": 1, "maximum": 5},
-                    "label": {"type": "string", "description": "Text that appears on the button", "maxLength": 80},
-                    "custom_id": {
-                      "type": "string",
-                      "description": "Developer-defined identifier for the button; max 100 characters",
-                      "maxLength": 100
-                    }
-                  },
-                  "required": ["type", "style"],
-                  "additionalProperties": false
-                }
-              }
-            },
-            "required": ["type"],
-            "additionalProperties": false
-          }
-        },
-        "pid": {"type": "number"}
-      },
-      "required": ["command"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"SHARE_INTERACTION\" Command",
-      "properties": {"success": {"type": "boolean"}},
-      "required": ["success"],
       "additionalProperties": false
     }
   },
