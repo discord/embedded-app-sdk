@@ -1,6 +1,6 @@
 import * as zod from 'zod';
 import {Commands, OrientationLockState} from '../schema/common';
-import {EmptyResponse} from '../schema/responses';
+import {Command, Schemas} from '../generated/schemas';
 import {TSendCommand} from '../schema/types';
 import compatCommandFactory from '../utils/compatCommandFactory';
 
@@ -21,9 +21,13 @@ const fallbackTransform = (args: SetOrientationLockStateInput) => {
 };
 
 export const setOrientationLockState = (sendCommand: TSendCommand) =>
-  compatCommandFactory<SetOrientationLockStateInput, SetOrientationLockStateInputFallback, typeof EmptyResponse>({
+  compatCommandFactory<
+    SetOrientationLockStateInput,
+    SetOrientationLockStateInputFallback,
+    (typeof Schemas)[Command.SET_ORIENTATION_LOCK_STATE]['response']
+  >({
     sendCommand,
     cmd: Commands.SET_ORIENTATION_LOCK_STATE,
-    response: EmptyResponse,
+    response: Schemas[Command.SET_ORIENTATION_LOCK_STATE].response,
     fallbackTransform,
   });

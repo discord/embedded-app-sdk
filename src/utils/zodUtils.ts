@@ -55,3 +55,16 @@ export function fallbackToDefault<T extends ZodDefault<ZodTypeAny>>(schema: T): 
   // transform._def.schema = schema;
   return transform;
 }
+
+/**
+ * A union of objects discriminated by a numeric `type`, which falls back to `{type: -1}` when the value matches
+ * none of them (e.g. a surface type added in a newer Discord client), mirroring the -1 fallback used for enums.
+ */
+export function zodUnionWithUnhandled<T extends [ZodTypeAny, ZodTypeAny, ...ZodTypeAny[]]>(options: T) {
+  return fallbackToDefault(
+    zod
+      .union(options)
+      .or(zod.object({type: zod.literal(-1)}))
+      .default({type: -1}),
+  );
+}

@@ -1,11 +1,5 @@
-import {Commands} from '../schema/common';
-import {GetChannelResponse} from '../schema/responses';
-import {TSendCommand} from '../schema/types';
-import {commandFactory} from '../utils/commandFactory';
-
-export interface GetChannelInput {
-  channel_id: string;
-}
+import {Command} from '../generated/schemas';
+import {schemaCommandFactory} from '../utils/commandFactory';
 
 /**
  *
@@ -27,5 +21,4 @@ export interface GetChannelInput {
  *   channel_id: discordSdk.channelId,
  * });
  */
-export const getChannel = (sendCommand: TSendCommand) =>
-  commandFactory<GetChannelInput, typeof GetChannelResponse>(sendCommand, Commands.GET_CHANNEL, GetChannelResponse);
+export const getChannel = schemaCommandFactory(Command.GET_CHANNEL);

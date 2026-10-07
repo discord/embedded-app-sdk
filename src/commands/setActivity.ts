@@ -1,8 +1,7 @@
 import * as zod from 'zod';
-import {Activity, Commands} from '../schema/common';
-import {SetActivityResponse} from '../schema/responses';
-import {TSendCommand} from '../schema/types';
-import {commandFactory} from '../utils/commandFactory';
+import {Command} from '../generated/schemas';
+import {Activity} from '../schema/common';
+import {schemaCommandFactory} from '../utils/commandFactory';
 
 export const SetActivity = Activity.pick({
   state: true,
@@ -48,5 +47,4 @@ export interface SetActivityInput {
  *   },
  * });
  */
-export const setActivity = (sendCommand: TSendCommand) =>
-  commandFactory<SetActivityInput, typeof SetActivityResponse>(sendCommand, Commands.SET_ACTIVITY, SetActivityResponse);
+export const setActivity = schemaCommandFactory<Command.SET_ACTIVITY, SetActivityInput>(Command.SET_ACTIVITY);
