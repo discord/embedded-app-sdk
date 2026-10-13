@@ -254,6 +254,7 @@ export const GetContextResponseSchema = z.object({
     z.object({type: z.literal(1), channel_id: z.string(), guild_id: z.string().optional()}),
     z.object({type: z.literal(2), channel_id: z.string(), guild_id: z.string().optional()}),
     z.object({type: z.literal(3), channel_id: z.string(), guild_id: z.string().optional()}),
+    z.object({type: z.literal(4)}),
   ]),
   launch: z.object({
     custom_id: z.string().optional(),
@@ -772,6 +773,162 @@ export const GetChannelResponseSchema = z.object({
         ])
         .optional(),
       flags: z.union([z.number(), z.null()]).optional(),
+      application_id: z.string().optional(),
+      sticker_items: z.array(z.object({id: z.string(), name: z.string(), format_type: z.number()})).optional(),
+      poll: z
+        .object({
+          question: z.object({
+            text: z.string().optional(),
+            emoji: z
+              .object({
+                id: z.union([z.string(), z.null()]).optional(),
+                name: z.union([z.string(), z.null()]).optional(),
+                animated: z.union([z.boolean(), z.null()]).optional(),
+              })
+              .optional(),
+          }),
+          answers: z.array(
+            z.object({
+              answer_id: z.number(),
+              poll_media: z.object({
+                text: z.string().optional(),
+                emoji: z
+                  .object({
+                    id: z.union([z.string(), z.null()]).optional(),
+                    name: z.union([z.string(), z.null()]).optional(),
+                    animated: z.union([z.boolean(), z.null()]).optional(),
+                  })
+                  .optional(),
+              }),
+            }),
+          ),
+          expiry: z.string(),
+          allow_multiselect: z.boolean(),
+          layout_type: z.number(),
+          results: z
+            .object({
+              is_finalized: z.boolean(),
+              answer_counts: z.array(z.object({id: z.number(), count: z.number(), me_voted: z.boolean()})),
+            })
+            .optional(),
+        })
+        .optional(),
+      interaction_metadata: z
+        .object({
+          id: z.string(),
+          type: z.number(),
+          user: z
+            .object({
+              id: z.string(),
+              username: z.string(),
+              global_name: z.union([z.string(), z.null()]).optional(),
+              discriminator: z.string(),
+              avatar: z.union([z.string(), z.null()]).optional(),
+              flags: z.number(),
+              public_flags: z.number().optional(),
+              bot: z.boolean(),
+              avatar_decoration_data: z
+                .union([
+                  z.object({
+                    asset: z.string(),
+                    sku_id: z.string().optional(),
+                    expires_at: z.union([z.number(), z.null()]).optional(),
+                  }),
+                  z.null(),
+                ])
+                .optional(),
+            })
+            .optional(),
+          authorizing_integration_owners: z.object({'0': z.string().optional(), '1': z.string().optional()}),
+          original_response_message_id: z.string().optional(),
+          target_user: z
+            .object({
+              id: z.string(),
+              username: z.string(),
+              global_name: z.union([z.string(), z.null()]).optional(),
+              discriminator: z.string(),
+              avatar: z.union([z.string(), z.null()]).optional(),
+              flags: z.number(),
+              public_flags: z.number().optional(),
+              bot: z.boolean(),
+              avatar_decoration_data: z
+                .union([
+                  z.object({
+                    asset: z.string(),
+                    sku_id: z.string().optional(),
+                    expires_at: z.union([z.number(), z.null()]).optional(),
+                  }),
+                  z.null(),
+                ])
+                .optional(),
+            })
+            .optional(),
+          target_message_id: z.string().optional(),
+          interacted_message_id: z.string().optional(),
+          triggering_interaction_metadata: z
+            .object({
+              id: z.string(),
+              type: z.number(),
+              user: z
+                .object({
+                  id: z.string(),
+                  username: z.string(),
+                  global_name: z.union([z.string(), z.null()]).optional(),
+                  discriminator: z.string(),
+                  avatar: z.union([z.string(), z.null()]).optional(),
+                  flags: z.number(),
+                  public_flags: z.number().optional(),
+                  bot: z.boolean(),
+                  avatar_decoration_data: z
+                    .union([
+                      z.object({
+                        asset: z.string(),
+                        sku_id: z.string().optional(),
+                        expires_at: z.union([z.number(), z.null()]).optional(),
+                      }),
+                      z.null(),
+                    ])
+                    .optional(),
+                })
+                .optional(),
+              authorizing_integration_owners: z.object({'0': z.string().optional(), '1': z.string().optional()}),
+              original_response_message_id: z.string().optional(),
+              target_user: z
+                .object({
+                  id: z.string(),
+                  username: z.string(),
+                  global_name: z.union([z.string(), z.null()]).optional(),
+                  discriminator: z.string(),
+                  avatar: z.union([z.string(), z.null()]).optional(),
+                  flags: z.number(),
+                  public_flags: z.number().optional(),
+                  bot: z.boolean(),
+                  avatar_decoration_data: z
+                    .union([
+                      z.object({
+                        asset: z.string(),
+                        sku_id: z.string().optional(),
+                        expires_at: z.union([z.number(), z.null()]).optional(),
+                      }),
+                      z.null(),
+                    ])
+                    .optional(),
+                })
+                .optional(),
+              target_message_id: z.string().optional(),
+              interacted_message_id: z.string().optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+      role_subscription_data: z
+        .object({
+          role_subscription_listing_id: z.string(),
+          tier_name: z.string(),
+          total_months_subscribed: z.number(),
+          is_renewal: z.boolean(),
+        })
+        .optional(),
       blocked: z.boolean().optional(),
       nick: z.union([z.string(), z.null()]).optional(),
       author_color: z.union([z.string(), z.null()]).optional(),

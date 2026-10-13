@@ -370,6 +370,12 @@
               "properties": {"type": {"const": 3}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
               "required": ["type", "channel_id"],
               "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {"type": {"const": 4}},
+              "required": ["type"],
+              "additionalProperties": false
             }
           ]
         },
@@ -1028,6 +1034,277 @@
                 "additionalProperties": false
               },
               "flags": {"type": ["number", "null"]},
+              "application_id": {"type": "string"},
+              "sticker_items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string"},
+                    "name": {"type": "string"},
+                    "format_type": {"type": "number"}
+                  },
+                  "required": ["id", "name", "format_type"],
+                  "additionalProperties": false
+                }
+              },
+              "poll": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "object",
+                    "properties": {
+                      "text": {"type": "string"},
+                      "emoji": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": ["string", "null"]},
+                          "name": {"type": ["string", "null"]},
+                          "animated": {"type": ["boolean", "null"]}
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "answers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "answer_id": {"type": "number"},
+                        "poll_media": {
+                          "type": "object",
+                          "properties": {
+                            "text": {"type": "string"},
+                            "emoji": {
+                              "type": "object",
+                              "properties": {
+                                "id": {"type": ["string", "null"]},
+                                "name": {"type": ["string", "null"]},
+                                "animated": {"type": ["boolean", "null"]}
+                              },
+                              "additionalProperties": false
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": ["answer_id", "poll_media"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "expiry": {"type": "string"},
+                  "allow_multiselect": {"type": "boolean"},
+                  "layout_type": {"type": "number"},
+                  "results": {
+                    "type": "object",
+                    "properties": {
+                      "is_finalized": {"type": "boolean"},
+                      "answer_counts": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {"type": "number"},
+                            "count": {"type": "number"},
+                            "me_voted": {"type": "boolean"}
+                          },
+                          "required": ["id", "count", "me_voted"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": ["is_finalized", "answer_counts"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["question", "answers", "expiry", "allow_multiselect", "layout_type"],
+                "additionalProperties": false
+              },
+              "interaction_metadata": {
+                "type": "object",
+                "properties": {
+                  "id": {"type": "string"},
+                  "type": {"type": "number"},
+                  "user": {
+                    "type": "object",
+                    "description": "Discord User",
+                    "properties": {
+                      "id": {"type": "string", "description": "User ID"},
+                      "username": {"type": "string"},
+                      "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                      "discriminator": {
+                        "type": "string",
+                        "description": "Global name discriminator. Will be 0 if a unique username"
+                      },
+                      "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                      "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                      "public_flags": {"type": "number", "description": "Public user flags"},
+                      "bot": {"type": "boolean", "description": "If a bot user."},
+                      "avatar_decoration_data": {
+                        "type": ["object", "null"],
+                        "description": "Details about avatar decoration",
+                        "properties": {
+                          "asset": {"type": "string"},
+                          "sku_id": {"type": "string"},
+                          "expires_at": {"type": ["number", "null"]}
+                        },
+                        "required": ["asset"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": ["id", "username", "discriminator", "flags", "bot"],
+                    "additionalProperties": false
+                  },
+                  "authorizing_integration_owners": {
+                    "type": "object",
+                    "properties": {
+                      "0": {"type": "string", "description": "ID of the guild the app is installed to"},
+                      "1": {"type": "string", "description": "ID of the user the app is installed to"}
+                    },
+                    "additionalProperties": false
+                  },
+                  "original_response_message_id": {"type": "string"},
+                  "target_user": {
+                    "type": "object",
+                    "description": "Discord User",
+                    "properties": {
+                      "id": {"type": "string", "description": "User ID"},
+                      "username": {"type": "string"},
+                      "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                      "discriminator": {
+                        "type": "string",
+                        "description": "Global name discriminator. Will be 0 if a unique username"
+                      },
+                      "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                      "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                      "public_flags": {"type": "number", "description": "Public user flags"},
+                      "bot": {"type": "boolean", "description": "If a bot user."},
+                      "avatar_decoration_data": {
+                        "type": ["object", "null"],
+                        "description": "Details about avatar decoration",
+                        "properties": {
+                          "asset": {"type": "string"},
+                          "sku_id": {"type": "string"},
+                          "expires_at": {"type": ["number", "null"]}
+                        },
+                        "required": ["asset"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": ["id", "username", "discriminator", "flags", "bot"],
+                    "additionalProperties": false
+                  },
+                  "target_message_id": {"type": "string"},
+                  "interacted_message_id": {"type": "string"},
+                  "triggering_interaction_metadata": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "type": {"type": "number"},
+                      "user": {
+                        "type": "object",
+                        "description": "Discord User",
+                        "properties": {
+                          "id": {"type": "string", "description": "User ID"},
+                          "username": {"type": "string"},
+                          "global_name": {
+                            "type": ["string", "null"],
+                            "description": "Global Discord name. Not unique."
+                          },
+                          "discriminator": {
+                            "type": "string",
+                            "description": "Global name discriminator. Will be 0 if a unique username"
+                          },
+                          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                          "flags": {
+                            "type": "number",
+                            "description": "Public user flags. Deprecated: use public_flags."
+                          },
+                          "public_flags": {"type": "number", "description": "Public user flags"},
+                          "bot": {"type": "boolean", "description": "If a bot user."},
+                          "avatar_decoration_data": {
+                            "type": ["object", "null"],
+                            "description": "Details about avatar decoration",
+                            "properties": {
+                              "asset": {"type": "string"},
+                              "sku_id": {"type": "string"},
+                              "expires_at": {"type": ["number", "null"]}
+                            },
+                            "required": ["asset"],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": ["id", "username", "discriminator", "flags", "bot"],
+                        "additionalProperties": false
+                      },
+                      "authorizing_integration_owners": {
+                        "type": "object",
+                        "properties": {
+                          "0": {"type": "string", "description": "ID of the guild the app is installed to"},
+                          "1": {"type": "string", "description": "ID of the user the app is installed to"}
+                        },
+                        "additionalProperties": false
+                      },
+                      "original_response_message_id": {"type": "string"},
+                      "target_user": {
+                        "type": "object",
+                        "description": "Discord User",
+                        "properties": {
+                          "id": {"type": "string", "description": "User ID"},
+                          "username": {"type": "string"},
+                          "global_name": {
+                            "type": ["string", "null"],
+                            "description": "Global Discord name. Not unique."
+                          },
+                          "discriminator": {
+                            "type": "string",
+                            "description": "Global name discriminator. Will be 0 if a unique username"
+                          },
+                          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                          "flags": {
+                            "type": "number",
+                            "description": "Public user flags. Deprecated: use public_flags."
+                          },
+                          "public_flags": {"type": "number", "description": "Public user flags"},
+                          "bot": {"type": "boolean", "description": "If a bot user."},
+                          "avatar_decoration_data": {
+                            "type": ["object", "null"],
+                            "description": "Details about avatar decoration",
+                            "properties": {
+                              "asset": {"type": "string"},
+                              "sku_id": {"type": "string"},
+                              "expires_at": {"type": ["number", "null"]}
+                            },
+                            "required": ["asset"],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": ["id", "username", "discriminator", "flags", "bot"],
+                        "additionalProperties": false
+                      },
+                      "target_message_id": {"type": "string"},
+                      "interacted_message_id": {"type": "string"}
+                    },
+                    "required": ["id", "type", "authorizing_integration_owners"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["id", "type", "authorizing_integration_owners"],
+                "additionalProperties": false
+              },
+              "role_subscription_data": {
+                "type": "object",
+                "properties": {
+                  "role_subscription_listing_id": {"type": "string"},
+                  "tier_name": {"type": "string"},
+                  "total_months_subscribed": {"type": "number"},
+                  "is_renewal": {"type": "boolean"}
+                },
+                "required": ["role_subscription_listing_id", "tier_name", "total_months_subscribed", "is_renewal"],
+                "additionalProperties": false
+              },
               "blocked": {"type": "boolean"},
               "nick": {"type": ["string", "null"]},
               "author_color": {"type": ["string", "null"]}
