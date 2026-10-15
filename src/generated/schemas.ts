@@ -80,7 +80,6 @@ export const AuthenticateResponseSchema = z.object({
           'lobbies.write',
           'application_identities.write',
           'managed_platform.application_identities.write',
-          'vibegrations.projects',
           'orbs_arcade.play',
           'personal.relationships.read',
           'personal.dm_channels.read',
