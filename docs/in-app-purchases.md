@@ -79,12 +79,13 @@ There are two primary ways to list SKUs from your Application code.
 
 ### `RPCCommands.GET_SKUS`
 
-This RPC command is used from the Application client, and returns a list of [`Sku`](https://github.com/discord/embedded-app-sdk/blob/a975edc55298c0b2e9a006d7b58319d1777f5ef9/src/schema/common.ts#L490-L501) objects. SKUs without prices are automatically filtered out. The Application client must be authenticated by the user to call this command.
+This RPC command is used from the Application client, and returns a list of [`Sku`](https://github.com/discord/embedded-app-sdk/blob/a975edc55298c0b2e9a006d7b58319d1777f5ef9/src/schema/common.ts#L490-L501) objects. SKUs without prices or names are automatically filtered out. The Application client must be authenticated by the user to call this command.
 
 ```js
 import {DiscordSDK} from '@discord/embedded-app-sdk';
 const discordSdk = new DiscordSDK(clientId);
 await discordSdk.ready();
+await discordSdk.commands.authenticate({access_token});
 const skus = await discordSdk.commands.getSkus();
 console.log(`SKUs: ${skus}`);
 ```
@@ -271,12 +272,13 @@ Purchases are accomplished via RPC commands in the client.
 
 ### `RPCCommands.START_PURCHASE`
 
-To initiate a purchase, call the RPC command. This will begin the purchase flow within the Discord client.
+To initiate a purchase, call the RPC command. This will begin the purchase flow within the Discord client. The Application client must be authenticated by the user to call this command.
 
 ```js
 import {DiscordSDK} from '@discord/embedded-app-sdk';
 const discordSdk = new DiscordSDK(clientId);
 await discordSdk.ready();
+await discordSdk.commands.authenticate({access_token});
 await discordSdk.commands.startPurchase({sku_id: skuId});
 ```
 

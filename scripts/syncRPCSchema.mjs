@@ -1,7 +1,7 @@
 // @ts-check
 import 'zx/globals';
 import path from 'path';
-import {parseSchema} from 'json-schema-to-zod';
+import {jsonSchemaToZod, parseSchema} from 'json-schema-to-zod';
 import prettier from 'prettier';
 import camelCase from 'lodash.camelcase';
 
@@ -30,6 +30,17 @@ const PATHS = {
   index: path.join(__dirname, '..', 'src', 'commands', 'index.ts'),
   mock: path.join(__dirname, '..', 'src', 'mock.ts'),
   commandsDir: path.join(__dirname, '..', 'src', 'commands'),
+};
+
+// Matches json-schema-to-zod's output for an enum of numbers (and null), e.g. z.union([z.literal(1), z.literal(null)])
+const NUMERIC_ENUM_REGEX = /z\.union\(\[((?:z\.literal\((?:-?\d+(?:\.\d+)?|null)\)(?:, )?)+)\]\)/g;
+
+// SDK method names which don't match the camelCased RPC command name
+/** @type {Record<string, string>} */
+const COMMAND_NAME_OVERRIDES = {
+  ENCOURAGE_HW_ACCELERATION: 'encourageHardwareAcceleration',
+  GET_ENTITLEMENTS_EMBEDDED: 'getEntitlements',
+  GET_SKUS_EMBEDDED: 'getSkus',
 };
 
 // Templates
@@ -131,7 +142,7 @@ function createSentinelError(filePath, expected, found) {
  */
 function getCommandNames(cmd) {
   return {
-    camelCase: camelCase(cmd),
+    camelCase: COMMAND_NAME_OVERRIDES[cmd] ?? camelCase(cmd),
     original: cmd,
   };
 }
@@ -218,6 +229,9 @@ async function main() {
   enumCode += '}';
   schemaMapCode += '} as const';
 
+  // Only import the zodUtils helpers the generated schemas actually use
+  const zodUtilsImports = ['fallbackToDefault', 'zodUnionWithUnhandled'].filter((name) => zodSchemaCode.includes(`${name}(`));
+
   // Build output file
   const output = `
     /**
@@ -226,7 +240,7 @@ async function main() {
      * @generated
      */
     import { z, infer as zInfer } from 'zod';
-    import {fallbackToDefault} from '../utils/zodUtils';
+    ${zodUtilsImports.length > 0 ? `import {${zodUtilsImports.join(', ')}} from '../utils/zodUtils';` : ''}
   
     ${zodSchemaCode}
   
@@ -404,12 +418,69 @@ async function syncMockCommands(schemas) {
 }
 
 /**
+ * @param {any} member - JSON schema for one member of an `anyOf`
+ * @returns {boolean} Whether the member is an object with a constant numeric `type`
+ */
+function isDiscriminatedMember(member) {
+  return member != null && member.type === 'object' && typeof member.properties?.type?.const === 'number';
+}
+
+/**
+ * Unions of objects discriminated by a constant numeric `type` (e.g. embedded surfaces) fall back to `{type: -1}`
+ * for unknown members, so a type added in a newer Discord client doesn't fail the whole response.
+ *
+ * @type {import('json-schema-to-zod').ParserOverride}
+ */
+function parseDiscriminatedUnionOverride(schema, refs) {
+  const members = schema.anyOf;
+  if (!Array.isArray(members) || members.length < 2) return undefined;
+  if (!members.every(isDiscriminatedMember)) return undefined;
+  // Same recursion as json-schema-to-zod's own anyOf parser, so nested overrides and `seen` tracking still apply
+  const parsedMembers = members.map((member, i) => parseSchema(member, {...refs, path: [...refs.path, 'anyOf', i]}));
+  return `zodUnionWithUnhandled([${parsedMembers.join(', ')}])`;
+}
+
+/**
+ * Objects with a `.default(...)` in rpc-schema fall back to that default whenever the value doesn't parse (e.g. an
+ * older client that returns nothing, which arrives as `null`). Zod's own `.default()` only covers `undefined`.
+ *
+ * @type {import('json-schema-to-zod').ParserOverride}
+ */
+function parseObjectDefaultOverride(schema, refs) {
+  const isObject = schema.type === 'object' || (Array.isArray(schema.type) && schema.type.includes('object'));
+  if (!isObject || !('default' in schema)) {
+    return undefined;
+  }
+  const {default: defaultValue, ...schemaWithoutDefault} = schema;
+  return `fallbackToDefault(${parseSchema(schemaWithoutDefault, refs)}.default(${JSON.stringify(defaultValue)}))`;
+}
+
+/**
+ * Strings marked with `.meta({format: 'bigint'})` in rpc-schema carry a bigint over the wire. Web clients send a
+ * bigint where the engine supports BigInt and the decimal string otherwise; mobile's JSON bridge always sends the
+ * decimal string. Both are passed through unchanged; PermissionUtils and BigFlagUtils accept either.
+ *
+ * @type {import('json-schema-to-zod').ParserOverride}
+ */
+function parseBigIntOverride(schema) {
+  if (schema.format !== 'bigint') return undefined;
+  const bigIntSchema = 'z.bigint().or(z.string())';
+  const nullable = Array.isArray(schema.type) && schema.type.includes('null');
+  return nullable ? `${bigIntSchema}.nullable()` : bigIntSchema;
+}
+
+/**
  * @param {import('json-schema-to-zod').JsonSchema} schema - JSON schema to convert
  * @returns {string} Converted Zod schema code
  */
 function parseZodSchema(schema) {
   return (
-    parseSchema(schema)
+    jsonSchemaToZod(schema, {
+      parserOverride: (node, refs) =>
+        parseBigIntOverride(node, refs) ??
+        parseDiscriminatedUnionOverride(node, refs) ??
+        parseObjectDefaultOverride(node, refs),
+    })
       // Remove never types until this bug is fixed:
       // https://github.com/StefanTerdell/json-schema-to-zod/issues/67
       // @ts-ignore
@@ -419,8 +490,12 @@ function parseZodSchema(schema) {
       // For forwards compatibility, include an "unhandled" value (-1) for enums
       // which will be defaulted to if zod validation fails.
       .replaceAll(/z.enum\(([^)]*)\)/g, 'fallbackToDefault(z.enum($1).or(z.literal(-1)).default(-1))')
+      // Numeric enums are emitted as a union of literals rather than z.enum, so they need the same fallback.
+      .replaceAll(NUMERIC_ENUM_REGEX, (match, literals) =>
+        /z\.literal\(-?\d/.test(literals) ? `fallbackToDefault(z.union([${literals}]).or(z.literal(-1)).default(-1))` : match,
+      )
       // Remove describe metadata annotation since they don't add anything useful to the Zod type.
       // Would be good to extract these into a doc comment in the future.
-      .replaceAll(/\.describe\(['"][\w\s.]+['"]\)/g, '')
+      .replaceAll(/\.describe\((?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')\)/g, '')
   );
 }
