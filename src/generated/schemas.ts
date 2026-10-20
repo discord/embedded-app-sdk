@@ -369,7 +369,7 @@ export type SetConfigResponse = zInfer<typeof SetConfigResponseSchema>;
 // OPEN_INVITE_DIALOG
 
 // OPEN_EXTERNAL_LINK
-export const OpenExternalLinkRequestSchema = z.object({url: z.string()});
+export const OpenExternalLinkRequestSchema = z.object({url: z.string().max(8000)});
 export type OpenExternalLinkRequest = zInfer<typeof OpenExternalLinkRequestSchema>;
 export const OpenExternalLinkResponseSchema = fallbackToDefault(
   z.object({opened: z.union([z.boolean(), z.null()])}).default({opened: null}),
@@ -936,6 +936,57 @@ export const GetChannelResponseSchema = z.object({
 });
 export type GetChannelResponse = zInfer<typeof GetChannelResponseSchema>;
 
+// GET_CHANNELS
+export const GetChannelsRequestSchema = z.object({guild_id: z.union([z.string(), z.null()]).optional()});
+export type GetChannelsRequest = zInfer<typeof GetChannelsRequestSchema>;
+export const GetChannelsResponseSchema = z.object({
+  channels: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      type: fallbackToDefault(
+        z
+          .union([
+            z.literal(1),
+            z.literal(3),
+            z.literal(0),
+            z.literal(2),
+            z.literal(4),
+            z.literal(5),
+            z.literal(6),
+            z.literal(10),
+            z.literal(11),
+            z.literal(12),
+            z.literal(13),
+            z.literal(14),
+            z.literal(15),
+            z.literal(16),
+            z.literal(17),
+            z.literal(18),
+            z.literal(19),
+            z.literal(20),
+            z.literal(21),
+            z.literal(10000),
+          ])
+          .or(z.literal(-1))
+          .default(-1),
+      ),
+    }),
+  ),
+});
+export type GetChannelsResponse = zInfer<typeof GetChannelsResponseSchema>;
+
+// GET_GUILD
+export const GetGuildRequestSchema = z.object({guild_id: z.string(), timeout: z.number().gte(0).lte(60).optional()});
+export type GetGuildRequest = zInfer<typeof GetGuildRequestSchema>;
+export const GetGuildResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon_url: z.union([z.string(), z.null()]),
+  vanity_url_code: z.union([z.string(), z.null()]).optional(),
+});
+export type GetGuildResponse = zInfer<typeof GetGuildResponseSchema>;
+
 // AUTHORIZE
 export const AuthorizeRequestSchema = z.object({
   client_id: z.string().optional(),
@@ -1124,6 +1175,8 @@ export enum Command {
   GET_ENTITLEMENTS_EMBEDDED = 'GET_ENTITLEMENTS_EMBEDDED',
   START_PURCHASE = 'START_PURCHASE',
   GET_CHANNEL = 'GET_CHANNEL',
+  GET_CHANNELS = 'GET_CHANNELS',
+  GET_GUILD = 'GET_GUILD',
   AUTHORIZE = 'AUTHORIZE',
   SET_ACTIVITY = 'SET_ACTIVITY',
 }
@@ -1238,6 +1291,14 @@ export const Schemas = {
   [Command.GET_CHANNEL]: {
     request: GetChannelRequestSchema,
     response: GetChannelResponseSchema,
+  },
+  [Command.GET_CHANNELS]: {
+    request: GetChannelsRequestSchema,
+    response: GetChannelsResponseSchema,
+  },
+  [Command.GET_GUILD]: {
+    request: GetGuildRequestSchema,
+    response: GetGuildResponseSchema,
   },
   [Command.AUTHORIZE]: {
     request: AuthorizeRequestSchema,

@@ -564,7 +564,7 @@
     "request": {
       "type": "object",
       "description": "Request for \"OPEN_EXTERNAL_LINK\" Command",
-      "properties": {"url": {"type": "string"}},
+      "properties": {"url": {"type": "string", "maxLength": 8000}},
       "required": ["url"],
       "additionalProperties": false
     },
@@ -1327,6 +1327,59 @@
         }
       },
       "required": ["id", "type", "voice_states", "messages"],
+      "additionalProperties": false
+    }
+  },
+  "GET_CHANNELS": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"GET_CHANNELS\" Command",
+      "properties": {"guild_id": {"type": ["string", "null"]}},
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"GET_CHANNELS\" Command",
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "name": {"type": "string"},
+              "type": {
+                "type": "number",
+                "enum": [1, 3, 0, 2, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 10000]
+              }
+            },
+            "required": ["id", "name", "type"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["channels"],
+      "additionalProperties": false
+    }
+  },
+  "GET_GUILD": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"GET_GUILD\" Command",
+      "properties": {"guild_id": {"type": "string"}, "timeout": {"type": "number", "minimum": 0, "maximum": 60}},
+      "required": ["guild_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"GET_GUILD\" Command",
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "icon_url": {"type": ["string", "null"]},
+        "vanity_url_code": {"type": ["string", "null"]}
+      },
+      "required": ["id", "name", "icon_url"],
       "additionalProperties": false
     }
   },

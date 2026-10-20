@@ -9,9 +9,11 @@ import {captureLog} from './captureLog';
 import {encourageHardwareAcceleration} from './encourageHardwareAcceleration';
 import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
 import {getChannel} from './getChannel';
+import {getChannels} from './getChannels';
 import {getChannelPermissions} from './getChannelPermissions';
 import {getContext} from './getContext';
 import {getEntitlements} from './getEntitlements';
+import {getGuild} from './getGuild';
 import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {getQuest} from './getQuest';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
@@ -44,9 +46,11 @@ function commands(sendCommand: TSendCommand) {
     encourageHardwareAcceleration: encourageHardwareAcceleration(sendCommand),
     getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
     getChannel: getChannel(sendCommand),
+    getChannels: getChannels(sendCommand),
     getChannelPermissions: getChannelPermissions(sendCommand),
     getContext: getContext(sendCommand),
     getEntitlements: getEntitlements(sendCommand),
+    getGuild: getGuild(sendCommand),
     getPlatformBehaviors: getPlatformBehaviors(sendCommand),
     getQuest: getQuest(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),

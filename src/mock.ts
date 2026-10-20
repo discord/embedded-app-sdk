@@ -213,5 +213,15 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       launch: {},
       platform: 'desktop',
     }),
+  getChannels: () =>
+    Promise.resolve({
+      channels: [{id: 'mock_channel_id', name: 'mock_channel_name', type: ChannelTypesObject.GUILD_TEXT}],
+    }),
+  getGuild: () =>
+    Promise.resolve({
+      id: 'mock_guild_id',
+      name: 'mock_guild_name',
+      icon_url: null,
+    }),
   // END-GENERATED-SECTION
 };

@@ -24,9 +24,11 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.ENCOURAGE_HW_ACCELERATION:
     case Commands.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS:
     case Commands.GET_CHANNEL:
+    case Commands.GET_CHANNELS:
     case Commands.GET_CHANNEL_PERMISSIONS:
     case Commands.GET_CONTEXT:
     case Commands.GET_ENTITLEMENTS_EMBEDDED:
+    case Commands.GET_GUILD:
     case Commands.GET_PLATFORM_BEHAVIORS:
     case Commands.GET_QUEST:
     case Commands.GET_QUEST_ENROLLMENT_STATUS:
