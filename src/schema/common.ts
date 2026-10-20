@@ -178,6 +178,18 @@ export const ChannelTypesObject = {
   GUILD_STAGE_VOICE: 13,
   GUILD_DIRECTORY: 14,
   GUILD_FORUM: 15,
+  GUILD_MEDIA: 16,
+  GUILD_APP: 21,
+} as const;
+
+export const SkuTypeObject = {
+  UNHANDLED: -1,
+  APPLICATION: 1,
+  DLC: 2,
+  CONSUMABLE: 3,
+  BUNDLE: 4,
+  SUBSCRIPTION: 5,
+  SUBSCRIPTION_GROUP: 6,
 } as const;
 
 export const EntitlementTypesObject = {

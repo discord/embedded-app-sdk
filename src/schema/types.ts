@@ -27,6 +27,7 @@ export type Activity = zod.infer<typeof Common.Activity>;
 export type ChannelTypes = typeof Common.ChannelTypesObject;
 
 export type ChannelTypesObject = typeof Common.ChannelTypesObject;
+export type SkuTypeObject = typeof Common.SkuTypeObject;
 export type EntitlementTypesObject = typeof Common.EntitlementTypesObject;
 
 export type VoiceConnectionStatusStateObject = typeof Events.VoiceConnectionStatusStateObject;
