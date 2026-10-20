@@ -29,7 +29,7 @@ export interface SetActivityInput {
 /**
  *
  * @description
- * RPC documentation here: https://discord.com/developers/docs/topics/rpc#setactivity
+ * RPC documentation here: https://docs.discord.com/developers/topics/rpc#setactivity
  * Calling setActivity allows modifying how your activity's rich presence is displayed in the Discord App
  *
  * Supported Platforms
