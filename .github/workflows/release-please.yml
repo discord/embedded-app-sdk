@@ -2,6 +2,17 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Beta version to publish (e.g. 3.0.0-beta.1)'
+        required: true
+        type: string
+      ref:
+        description: 'Branch, tag, or SHA to publish from'
+        required: true
+        default: main
+        type: string
 
 permissions:
   contents: write
@@ -12,6 +23,8 @@ name: release-please
 
 jobs:
   release-please:
+    # Only run the normal release flow on pushes to main, not on manual beta runs
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v4
@@ -40,3 +53,38 @@ jobs:
         run: npm publish --access public --no-git-checks
         env:
           NPM_CONFIG_PROVENANCE: true # Attaches build provenance
+
+  publish-beta:
+    # Manual one-off beta publish. Lives in this file so npm trusted publishing
+    # (which is tied to this workflow filename) keeps working.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Validate version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+            echo "Version must look like X.Y.Z-beta.N (got: $VERSION)"
+            exit 1
+          fi
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm install
+      - name: Set beta version (not committed)
+        env:
+          VERSION: ${{ inputs.version }}
+        run: npm version "$VERSION" --no-git-tag-version
+      - run: npm run build
+      - name: Publish beta 🧪
+        run: npm publish --access public --tag beta --no-git-checks
+        env:
+          NPM_CONFIG_PROVENANCE: true
