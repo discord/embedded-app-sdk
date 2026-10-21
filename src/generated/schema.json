@@ -429,6 +429,36 @@
       "additionalProperties": false
     }
   },
+  "GET_CURRENT_USER": {
+    "request": null,
+    "response": {
+      "type": ["object", "null"],
+      "description": "Discord User",
+      "properties": {
+        "id": {"type": "string", "description": "User ID"},
+        "username": {"type": "string"},
+        "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+        "discriminator": {"type": "string", "description": "Global name discriminator. Will be 0 if a unique username"},
+        "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+        "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+        "public_flags": {"type": "number", "description": "Public user flags"},
+        "bot": {"type": "boolean", "description": "If a bot user."},
+        "avatar_decoration_data": {
+          "type": ["object", "null"],
+          "description": "Details about avatar decoration",
+          "properties": {
+            "asset": {"type": "string"},
+            "sku_id": {"type": "string"},
+            "expires_at": {"type": ["number", "null"]}
+          },
+          "required": ["asset"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["id", "username", "discriminator", "flags", "bot"],
+      "additionalProperties": false
+    }
+  },
   "GET_QUEST_ENROLLMENT_STATUS": {
     "request": {
       "type": "object",
@@ -1380,6 +1410,80 @@
         "vanity_url_code": {"type": ["string", "null"]}
       },
       "required": ["id", "name", "icon_url"],
+      "additionalProperties": false
+    }
+  },
+  "GET_ROLES": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"GET_ROLES\" Command",
+      "properties": {"guild_id": {"type": "string"}},
+      "required": ["guild_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"GET_ROLES\" Command",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "name": {"type": "string"},
+              "color": {"type": "number"},
+              "colors": {
+                "type": "object",
+                "properties": {
+                  "primary_color": {"type": "number"},
+                  "secondary_color": {"type": ["number", "null"]},
+                  "tertiary_color": {"type": ["number", "null"]}
+                },
+                "required": ["primary_color", "secondary_color", "tertiary_color"],
+                "additionalProperties": false
+              },
+              "hoist": {"type": "boolean"},
+              "position": {"type": "number"},
+              "permissions": {"type": "string", "pattern": "^\\d+$", "format": "bigint"},
+              "managed": {"type": "boolean"},
+              "mentionable": {"type": "boolean"},
+              "icon": {"type": ["string", "null"]},
+              "unicode_emoji": {"type": ["string", "null"]},
+              "tags": {
+                "type": "object",
+                "properties": {
+                  "bot_id": {"type": "string"},
+                  "integration_id": {"type": "string"},
+                  "premium_subscriber": {"const": null},
+                  "subscription_listing_id": {"type": "string"},
+                  "available_for_purchase": {"const": null},
+                  "guild_connections": {"const": null}
+                },
+                "additionalProperties": false
+              },
+              "flags": {"type": "number"}
+            },
+            "required": [
+              "id",
+              "name",
+              "color",
+              "colors",
+              "hoist",
+              "position",
+              "permissions",
+              "managed",
+              "mentionable",
+              "icon",
+              "unicode_emoji",
+              "tags",
+              "flags"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["roles"],
       "additionalProperties": false
     }
   },

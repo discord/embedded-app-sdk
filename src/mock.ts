@@ -223,5 +223,34 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       name: 'mock_guild_name',
       icon_url: null,
     }),
+  getCurrentUser: () =>
+    Promise.resolve({
+      username: 'mock_user_username',
+      flags: 0,
+      bot: false,
+      discriminator: 'mock_user_discriminator',
+      id: 'mock_user_id',
+      avatar: null,
+    }),
+  getRoles: () =>
+    Promise.resolve({
+      roles: [
+        {
+          id: 'mock_guild_id',
+          name: '@everyone',
+          color: 0,
+          colors: {primary_color: 0, secondary_color: null, tertiary_color: null},
+          hoist: false,
+          position: 0,
+          permissions: BigInt(1234567890),
+          managed: false,
+          mentionable: false,
+          icon: null,
+          unicode_emoji: null,
+          tags: {},
+          flags: 0,
+        },
+      ],
+    }),
   // END-GENERATED-SECTION
 };
