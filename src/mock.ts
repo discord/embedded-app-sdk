@@ -1,6 +1,5 @@
 import * as zod from 'zod';
 import EventEmitter from 'eventemitter3';
-import bigInt from 'big-integer';
 import transform from 'lodash.transform';
 
 import {EventSchema} from './schema/events';
@@ -85,36 +84,6 @@ export class DiscordSDKMock implements IDiscordSDK {
 }
 /** Default return values for all discord SDK commands */
 export const commandsMockDefault: IDiscordSDK['commands'] = {
-  authorize: () => Promise.resolve({code: 'mock_code'}),
-  setActivity: () =>
-    Promise.resolve({
-      name: 'mock_activity_name',
-      type: 0,
-    }),
-  getChannel: () =>
-    Promise.resolve({
-      id: 'mock_channel_id',
-      name: 'mock_channel_name',
-      type: ChannelTypesObject.GUILD_TEXT,
-      voice_states: [],
-      messages: [],
-    }),
-  getSkus: () => Promise.resolve({skus: []}),
-  getEntitlements: () => Promise.resolve({entitlements: []}),
-  startPurchase: () => Promise.resolve([]),
-  setConfig: () => Promise.resolve({use_interactive_pip: false}),
-  userSettingsGetLocale: () => Promise.resolve({locale: ''}),
-  openExternalLink: () => Promise.resolve({opened: false}),
-  encourageHardwareAcceleration: () => Promise.resolve({enabled: true}),
-  captureLog: () => Promise.resolve(null),
-  setOrientationLockState: () => Promise.resolve(null),
-  openInviteDialog: () => Promise.resolve(null),
-  getPlatformBehaviors: () =>
-    Promise.resolve({
-      iosKeyboardResizesView: true,
-    }),
-  getChannelPermissions: () => Promise.resolve({permissions: bigInt(1234567890) as unknown as bigint}),
-  getInstanceConnectedParticipants: () => Promise.resolve({participants: []}),
   // START-GENERATED-SECTION
   openShareMomentDialog: () => Promise.resolve(null),
   authenticate: () =>
@@ -208,6 +177,80 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
       external_cta_url: 'mock_external_cta_url',
       enrolled_at: null,
       completed_at: null,
+    }),
+  setConfig: () => Promise.resolve({use_interactive_pip: false}),
+  userSettingsGetLocale: () => Promise.resolve({locale: ''}),
+  encourageHardwareAcceleration: () => Promise.resolve({enabled: true}),
+  captureLog: () => Promise.resolve(null),
+  setOrientationLockState: () => Promise.resolve(null),
+  getPlatformBehaviors: () =>
+    Promise.resolve({
+      iosKeyboardResizesView: true,
+    }),
+  openExternalLink: () => Promise.resolve({opened: false}),
+  openInviteDialog: () => Promise.resolve(null),
+  getChannelPermissions: () => Promise.resolve({permissions: BigInt(1234567890)}),
+  getSkus: () => Promise.resolve({skus: []}),
+  getEntitlements: () => Promise.resolve({entitlements: []}),
+  startPurchase: () => Promise.resolve([]),
+  getChannel: () =>
+    Promise.resolve({
+      id: 'mock_channel_id',
+      name: 'mock_channel_name',
+      type: ChannelTypesObject.GUILD_TEXT,
+      voice_states: [],
+      messages: [],
+    }),
+  authorize: () => Promise.resolve({code: 'mock_code'}),
+  setActivity: () =>
+    Promise.resolve({
+      name: 'mock_activity_name',
+      type: 0,
+    }),
+  getContext: () =>
+    Promise.resolve({
+      surface: {type: 2, channel_id: 'mock_channel_id', guild_id: 'mock_guild_id'},
+      launch: {},
+      platform: 'desktop',
+    }),
+  getChannels: () =>
+    Promise.resolve({
+      channels: [{id: 'mock_channel_id', name: 'mock_channel_name', type: ChannelTypesObject.GUILD_TEXT}],
+    }),
+  getGuild: () =>
+    Promise.resolve({
+      id: 'mock_guild_id',
+      name: 'mock_guild_name',
+      icon_url: null,
+    }),
+  getCurrentUser: () =>
+    Promise.resolve({
+      username: 'mock_user_username',
+      flags: 0,
+      bot: false,
+      discriminator: 'mock_user_discriminator',
+      id: 'mock_user_id',
+      avatar: null,
+    }),
+  getRoles: () =>
+    Promise.resolve({
+      roles: [
+        {
+          id: 'mock_guild_id',
+          name: '@everyone',
+          color: 0,
+          colors: {primary_color: 0, secondary_color: null, tertiary_color: null},
+          hoist: false,
+          position: 0,
+          permissions: BigInt(1234567890),
+          managed: false,
+          mentionable: false,
+          icon: null,
+          unicode_emoji: null,
+          tags: {},
+          flags: 0,
+        },
+      ],
     }),
   // END-GENERATED-SECTION
 };

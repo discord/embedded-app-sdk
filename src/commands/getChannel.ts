@@ -1,11 +1,5 @@
-import {Commands} from '../schema/common';
-import {GetChannelResponse} from '../schema/responses';
-import {TSendCommand} from '../schema/types';
-import {commandFactory} from '../utils/commandFactory';
-
-export interface GetChannelInput {
-  channel_id: string;
-}
+import {Command} from '../generated/schemas';
+import {schemaCommandFactory} from '../utils/commandFactory';
 
 /**
  *
@@ -22,10 +16,12 @@ export interface GetChannelInput {
  * - [guilds] for guild channels
  * - [guilds, dm_channels.read] for GDM channels. dm_channels.read requires approval from Discord.
  *
+ * Alternatively, this command can be used to get a channel in the current guild without OAuth,
+ * if the app's bot is installed in it.
+ *
  * @example
  * await discordSdk.commands.getActivity({
  *   channel_id: discordSdk.channelId,
  * });
  */
-export const getChannel = (sendCommand: TSendCommand) =>
-  commandFactory<GetChannelInput, typeof GetChannelResponse>(sendCommand, Commands.GET_CHANNEL, GetChannelResponse);
+export const getChannel = schemaCommandFactory(Command.GET_CHANNEL);

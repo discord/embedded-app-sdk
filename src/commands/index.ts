@@ -1,70 +1,79 @@
 import {Commands} from '../schema/common';
 import {TSendCommand} from '../schema/types';
 
+import {SetActivity} from './setActivity';
+// START-GENERATED-SECTION
+import {authenticate} from './authenticate';
 import {authorize} from './authorize';
 import {captureLog} from './captureLog';
 import {encourageHardwareAcceleration} from './encourageHardwareAcceleration';
-import {getChannel} from './getChannel';
-import {getEntitlements} from './getEntitlements';
-import {getSkus} from './getSkus';
-import {getChannelPermissions} from './getChannelPermissions';
-import {getPlatformBehaviors} from './getPlatformBehaviors';
-import {openExternalLink} from './openExternalLink';
-import {openInviteDialog} from './openInviteDialog';
-import {setActivity, SetActivity} from './setActivity';
-import {setConfig} from './setConfig';
-import {setOrientationLockState} from './setOrientationLockState';
-import {startPurchase} from './startPurchase';
-import {userSettingsGetLocale} from './userSettingsGetLocale';
-// START-GENERATED-SECTION
-import {authenticate} from './authenticate';
 import {getActivityInstanceConnectedParticipants} from './getActivityInstanceConnectedParticipants';
+import {getChannel} from './getChannel';
+import {getChannels} from './getChannels';
+import {getChannelPermissions} from './getChannelPermissions';
+import {getContext} from './getContext';
+import {getCurrentUser} from './getCurrentUser';
+import {getEntitlements} from './getEntitlements';
+import {getGuild} from './getGuild';
+import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {getQuest} from './getQuest';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
 import {getRelationships} from './getRelationships';
+import {getRoles} from './getRoles';
+import {getSkus} from './getSkus';
 import {getUser} from './getUser';
 import {initiateImageUpload} from './initiateImageUpload';
 import {inviteUserEmbedded} from './inviteUserEmbedded';
+import {openExternalLink} from './openExternalLink';
+import {openInviteDialog} from './openInviteDialog';
 import {openShareMomentDialog} from './openShareMomentDialog';
 import {questStartTimer} from './questStartTimer';
 import {requestProxyTicketRefresh} from './requestProxyTicketRefresh';
+import {setActivity} from './setActivity';
+import {setConfig} from './setConfig';
+import {setOrientationLockState} from './setOrientationLockState';
 import {shareLink} from './shareLink';
+import {startPurchase} from './startPurchase';
+import {userSettingsGetLocale} from './userSettingsGetLocale';
 // END-GENERATED-SECTION
 
 export {Commands, SetActivity};
 
 function commands(sendCommand: TSendCommand) {
   return {
+    // START-GENERATED-SECTION
+    authenticate: authenticate(sendCommand),
     authorize: authorize(sendCommand),
     captureLog: captureLog(sendCommand),
     encourageHardwareAcceleration: encourageHardwareAcceleration(sendCommand),
-    getChannel: getChannel(sendCommand),
-    getChannelPermissions: getChannelPermissions(sendCommand),
-    getEntitlements: getEntitlements(sendCommand),
-    getPlatformBehaviors: getPlatformBehaviors(sendCommand),
-    getSkus: getSkus(sendCommand),
-    openExternalLink: openExternalLink(sendCommand),
-    openInviteDialog: openInviteDialog(sendCommand),
-    setActivity: setActivity(sendCommand),
-    setConfig: setConfig(sendCommand),
-    setOrientationLockState: setOrientationLockState(sendCommand),
-    startPurchase: startPurchase(sendCommand),
-    userSettingsGetLocale: userSettingsGetLocale(sendCommand),
-    // Backward compatibility - getInstanceConnectedParticipants is an alias for getActivityInstanceConnectedParticipants
-    getInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
-    // START-GENERATED-SECTION
-    authenticate: authenticate(sendCommand),
     getActivityInstanceConnectedParticipants: getActivityInstanceConnectedParticipants(sendCommand),
+    getChannel: getChannel(sendCommand),
+    getChannels: getChannels(sendCommand),
+    getChannelPermissions: getChannelPermissions(sendCommand),
+    getContext: getContext(sendCommand),
+    getCurrentUser: getCurrentUser(sendCommand),
+    getEntitlements: getEntitlements(sendCommand),
+    getGuild: getGuild(sendCommand),
+    getPlatformBehaviors: getPlatformBehaviors(sendCommand),
     getQuest: getQuest(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
     getRelationships: getRelationships(sendCommand),
+    getRoles: getRoles(sendCommand),
+    getSkus: getSkus(sendCommand),
     getUser: getUser(sendCommand),
     initiateImageUpload: initiateImageUpload(sendCommand),
     inviteUserEmbedded: inviteUserEmbedded(sendCommand),
+    openExternalLink: openExternalLink(sendCommand),
+    openInviteDialog: openInviteDialog(sendCommand),
     openShareMomentDialog: openShareMomentDialog(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
     requestProxyTicketRefresh: requestProxyTicketRefresh(sendCommand),
+    setActivity: setActivity(sendCommand),
+    setConfig: setConfig(sendCommand),
+    setOrientationLockState: setOrientationLockState(sendCommand),
     shareLink: shareLink(sendCommand),
+    startPurchase: startPurchase(sendCommand),
+    userSettingsGetLocale: userSettingsGetLocale(sendCommand),
     // END-GENERATED-SECTION
   };
 }
