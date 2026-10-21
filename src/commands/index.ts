@@ -28,7 +28,6 @@ import {inviteUserEmbedded} from './inviteUserEmbedded';
 import {openShareMomentDialog} from './openShareMomentDialog';
 import {questStartTimer} from './questStartTimer';
 import {requestProxyTicketRefresh} from './requestProxyTicketRefresh';
-import {shareInteraction} from './shareInteraction';
 import {shareLink} from './shareLink';
 // END-GENERATED-SECTION
 
@@ -65,7 +64,6 @@ function commands(sendCommand: TSendCommand) {
     openShareMomentDialog: openShareMomentDialog(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
     requestProxyTicketRefresh: requestProxyTicketRefresh(sendCommand),
-    shareInteraction: shareInteraction(sendCommand),
     shareLink: shareLink(sendCommand),
     // END-GENERATED-SECTION
   };

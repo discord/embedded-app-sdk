@@ -86,6 +86,18 @@ export const AuthenticateResponseSchema = z
             'sdk.social_layer',
             'lobbies.write',
             'application_identities.write',
+            'managed_platform.application_identities.write',
+            'vibegrations.projects',
+            'orbs_arcade.play',
+            'personal.relationships.read',
+            'personal.dm_channels.read',
+            'personal.dm_channels.messages.read',
+            'personal.guilds.channels.read',
+            'personal.guilds.channels.messages.read',
+            'personal.activities.write',
+            'personal.mentions.read',
+            'personal.guilds.messages.search',
+            'personal.dm_channels.messages.search',
           ])
           .or(z.literal(-1))
           .default(-1),
@@ -134,45 +146,6 @@ export const GetActivityInstanceConnectedParticipantsResponseSchema = z
 export type GetActivityInstanceConnectedParticipantsResponse = zInfer<
   typeof GetActivityInstanceConnectedParticipantsResponseSchema
 >;
-
-// SHARE_INTERACTION
-export const ShareInteractionRequestSchema = z
-  .object({
-    command: z.string(),
-    options: z.array(z.object({name: z.string(), value: z.string()})).optional(),
-    content: z.string().max(2000).optional(),
-    require_launch_channel: z.boolean().optional(),
-    preview_image: z.object({height: z.number(), url: z.string(), width: z.number()}).optional(),
-    components: z
-      .array(
-        z.object({
-          type: z.literal(1),
-          components: z
-            .array(
-              z.object({
-                type: z.literal(2),
-                style: z.number().gte(1).lte(5),
-                label: z.string().max(80).optional(),
-                custom_id: z
-                  .string()
-                  .max(100)
-                  .describe('Developer-defined identifier for the button; max 100 characters')
-                  .optional(),
-              }),
-            )
-            .max(5)
-            .optional(),
-        }),
-      )
-      .optional(),
-    pid: z.number().optional(),
-  })
-  .describe('Request for "SHARE_INTERACTION" Command');
-export type ShareInteractionRequest = zInfer<typeof ShareInteractionRequestSchema>;
-export const ShareInteractionResponseSchema = z
-  .object({success: z.boolean()})
-  .describe('Response for "SHARE_INTERACTION" Command');
-export type ShareInteractionResponse = zInfer<typeof ShareInteractionResponseSchema>;
 
 // SHARE_LINK
 export const ShareLinkRequestSchema = z
@@ -359,7 +332,6 @@ export enum Command {
   OPEN_SHARE_MOMENT_DIALOG = 'OPEN_SHARE_MOMENT_DIALOG',
   AUTHENTICATE = 'AUTHENTICATE',
   GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS = 'GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS',
-  SHARE_INTERACTION = 'SHARE_INTERACTION',
   SHARE_LINK = 'SHARE_LINK',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
   INVITE_USER_EMBEDDED = 'INVITE_USER_EMBEDDED',
@@ -392,10 +364,6 @@ export const Schemas = {
   [Command.GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS]: {
     request: emptyRequestSchema,
     response: GetActivityInstanceConnectedParticipantsResponseSchema,
-  },
-  [Command.SHARE_INTERACTION]: {
-    request: ShareInteractionRequestSchema,
-    response: ShareInteractionResponseSchema,
   },
   [Command.SHARE_LINK]: {
     request: ShareLinkRequestSchema,
