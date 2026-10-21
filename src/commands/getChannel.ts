@@ -10,7 +10,7 @@ export interface GetChannelInput {
 /**
  *
  * @description
- * RPC documentation here: https://discord.com/developers/docs/topics/rpc#getchannel
+ * RPC documentation here: https://docs.discord.com/developers/topics/rpc#getchannel
  * Calling getChannel gets info about the requested channel such as the channel name.
  *
  * Supported Platforms

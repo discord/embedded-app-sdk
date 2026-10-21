@@ -38,7 +38,7 @@ export enum Platform {
   DESKTOP = 'desktop',
 }
 
-/** See https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags for more Permissions details */
+/** See https://docs.discord.com/developers/topics/permissions#permissions-bitwise-permission-flags for more Permissions details */
 export const Permissions = Object.freeze({
   CREATE_INSTANT_INVITE: BigFlagUtils.getFlag(0),
   KICK_MEMBERS: BigFlagUtils.getFlag(1),
