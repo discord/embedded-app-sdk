@@ -12,12 +12,14 @@ import {getChannel} from './getChannel';
 import {getChannels} from './getChannels';
 import {getChannelPermissions} from './getChannelPermissions';
 import {getContext} from './getContext';
+import {getCurrentUser} from './getCurrentUser';
 import {getEntitlements} from './getEntitlements';
 import {getGuild} from './getGuild';
 import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {getQuest} from './getQuest';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
 import {getRelationships} from './getRelationships';
+import {getRoles} from './getRoles';
 import {getSkus} from './getSkus';
 import {getUser} from './getUser';
 import {initiateImageUpload} from './initiateImageUpload';
@@ -49,12 +51,14 @@ function commands(sendCommand: TSendCommand) {
     getChannels: getChannels(sendCommand),
     getChannelPermissions: getChannelPermissions(sendCommand),
     getContext: getContext(sendCommand),
+    getCurrentUser: getCurrentUser(sendCommand),
     getEntitlements: getEntitlements(sendCommand),
     getGuild: getGuild(sendCommand),
     getPlatformBehaviors: getPlatformBehaviors(sendCommand),
     getQuest: getQuest(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
     getRelationships: getRelationships(sendCommand),
+    getRoles: getRoles(sendCommand),
     getSkus: getSkus(sendCommand),
     getUser: getUser(sendCommand),
     initiateImageUpload: initiateImageUpload(sendCommand),

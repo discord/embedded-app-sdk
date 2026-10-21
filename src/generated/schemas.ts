@@ -292,6 +292,32 @@ export const GetUserResponseSchema = z.union([
 ]);
 export type GetUserResponse = zInfer<typeof GetUserResponseSchema>;
 
+// GET_CURRENT_USER
+export const GetCurrentUserResponseSchema = z.union([
+  z.object({
+    id: z.string(),
+    username: z.string(),
+    global_name: z.union([z.string(), z.null()]).optional(),
+    discriminator: z.string(),
+    avatar: z.union([z.string(), z.null()]).optional(),
+    flags: z.number(),
+    public_flags: z.number().optional(),
+    bot: z.boolean(),
+    avatar_decoration_data: z
+      .union([
+        z.object({
+          asset: z.string(),
+          sku_id: z.string().optional(),
+          expires_at: z.union([z.number(), z.null()]).optional(),
+        }),
+        z.null(),
+      ])
+      .optional(),
+  }),
+  z.null(),
+]);
+export type GetCurrentUserResponse = zInfer<typeof GetCurrentUserResponseSchema>;
+
 // GET_QUEST_ENROLLMENT_STATUS
 export const GetQuestEnrollmentStatusRequestSchema = z.object({quest_id: z.string()});
 export type GetQuestEnrollmentStatusRequest = zInfer<typeof GetQuestEnrollmentStatusRequestSchema>;
@@ -987,6 +1013,41 @@ export const GetGuildResponseSchema = z.object({
 });
 export type GetGuildResponse = zInfer<typeof GetGuildResponseSchema>;
 
+// GET_ROLES
+export const GetRolesRequestSchema = z.object({guild_id: z.string()});
+export type GetRolesRequest = zInfer<typeof GetRolesRequestSchema>;
+export const GetRolesResponseSchema = z.object({
+  roles: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      color: z.number(),
+      colors: z.object({
+        primary_color: z.number(),
+        secondary_color: z.union([z.number(), z.null()]),
+        tertiary_color: z.union([z.number(), z.null()]),
+      }),
+      hoist: z.boolean(),
+      position: z.number(),
+      permissions: z.bigint().or(z.string()),
+      managed: z.boolean(),
+      mentionable: z.boolean(),
+      icon: z.union([z.string(), z.null()]),
+      unicode_emoji: z.union([z.string(), z.null()]),
+      tags: z.object({
+        bot_id: z.string().optional(),
+        integration_id: z.string().optional(),
+        premium_subscriber: z.literal(null).optional(),
+        subscription_listing_id: z.string().optional(),
+        available_for_purchase: z.literal(null).optional(),
+        guild_connections: z.literal(null).optional(),
+      }),
+      flags: z.number(),
+    }),
+  ),
+});
+export type GetRolesResponse = zInfer<typeof GetRolesResponseSchema>;
+
 // AUTHORIZE
 export const AuthorizeRequestSchema = z.object({
   client_id: z.string().optional(),
@@ -1158,6 +1219,7 @@ export enum Command {
   INVITE_USER_EMBEDDED = 'INVITE_USER_EMBEDDED',
   GET_CONTEXT = 'GET_CONTEXT',
   GET_USER = 'GET_USER',
+  GET_CURRENT_USER = 'GET_CURRENT_USER',
   GET_QUEST_ENROLLMENT_STATUS = 'GET_QUEST_ENROLLMENT_STATUS',
   QUEST_START_TIMER = 'QUEST_START_TIMER',
   GET_QUEST = 'GET_QUEST',
@@ -1177,6 +1239,7 @@ export enum Command {
   GET_CHANNEL = 'GET_CHANNEL',
   GET_CHANNELS = 'GET_CHANNELS',
   GET_GUILD = 'GET_GUILD',
+  GET_ROLES = 'GET_ROLES',
   AUTHORIZE = 'AUTHORIZE',
   SET_ACTIVITY = 'SET_ACTIVITY',
 }
@@ -1223,6 +1286,10 @@ export const Schemas = {
   [Command.GET_USER]: {
     request: GetUserRequestSchema,
     response: GetUserResponseSchema,
+  },
+  [Command.GET_CURRENT_USER]: {
+    request: emptyRequestSchema,
+    response: GetCurrentUserResponseSchema,
   },
   [Command.GET_QUEST_ENROLLMENT_STATUS]: {
     request: GetQuestEnrollmentStatusRequestSchema,
@@ -1299,6 +1366,10 @@ export const Schemas = {
   [Command.GET_GUILD]: {
     request: GetGuildRequestSchema,
     response: GetGuildResponseSchema,
+  },
+  [Command.GET_ROLES]: {
+    request: GetRolesRequestSchema,
+    response: GetRolesResponseSchema,
   },
   [Command.AUTHORIZE]: {
     request: AuthorizeRequestSchema,
