@@ -42,7 +42,7 @@
   ],
   "dependencies": {
     "@types/lodash.transform": "^4.6.6",
-    "@types/uuid": "^10.0.0",
+    "@types/uuid": "^11.0.0",
     "big-integer": "^1.6.48",
     "decimal.js-light": "^2.5.0",
     "eventemitter3": "^5.0.0",
