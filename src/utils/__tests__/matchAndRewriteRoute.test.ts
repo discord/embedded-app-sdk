@@ -193,6 +193,50 @@ describe('matchAndRewriteURL', () => {
       expect(resultURL).toBe(originalURL);
     });
 
+    it('only matches a target against the host and path of the url', () => {
+      const prefixHost = '123456789012345678.discordsays.com';
+      const TEST_CASES: MatchAndRewriteURLInputs[] = [
+        // a subdomain of the target host
+        {originalURL: new URL('https://cdn.example.com/image.png'), prefixHost, prefix: '/api', target: 'example.com'},
+        // a different host that ends with the target host
+        {originalURL: new URL('https://notexample.com/foo'), prefixHost, prefix: '/api', target: 'example.com'},
+        // the target host only appears in the query string
+        {
+          originalURL: new URL('https://other.com/login?next=https://example.com/'),
+          prefixHost,
+          prefix: '/api',
+          target: 'example.com',
+        },
+        // dots in the target are literal
+        {originalURL: new URL('https://exampleXcom/foo'), prefixHost, prefix: '/api', target: 'example.com'},
+        // the url is outside of the target path
+        {originalURL: new URL('https://discord.com/other'), prefixHost, prefix: '/', target: 'discord.com/foo/bar'},
+        {
+          originalURL: new URL('https://discord.com/foo/barbaz'),
+          prefixHost,
+          prefix: '/',
+          target: 'discord.com/foo/bar',
+        },
+      ];
+
+      for (const inputs of TEST_CASES) {
+        const resultURL = matchAndRewriteURL(inputs);
+        expect(resultURL?.toString()).toEqual(inputs.originalURL.toString());
+      }
+    });
+
+    it('remaps a subdomain with its own mapping regardless of order', () => {
+      const mappings = [
+        {prefix: '/api', target: 'example.com'},
+        {prefix: '/cdn', target: 'cdn.example.com'},
+      ];
+      const url = new URL('https://cdn.example.com/image.png');
+      expect(attemptRemap({url, mappings}).toString()).toEqual('https://localhost/cdn/image.png');
+      expect(attemptRemap({url, mappings: [...mappings].reverse()}).toString()).toEqual(
+        'https://localhost/cdn/image.png',
+      );
+    });
+
     it("Doesn't matter what order url mappings are in", () => {
       const url1 = attemptRemap({
         url: new URL('https://foo.googleapis.com/v1/test:url?key=abc123'),

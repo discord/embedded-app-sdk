@@ -9,8 +9,11 @@
  **/
 const SUBSTITUTION_REGEX = /\{([a-z]+)\}/g;
 function regexFromTarget(target: string): RegExp {
-  const regexString = target.replace(SUBSTITUTION_REGEX, (match, name) => `(?<${name}>[\\w-]+)`);
-  return new RegExp(`${regexString}(/|$)`);
+  const regexString = target
+    // Escape regex special characters (except `{` and `}`) so they are matched literally
+    .replace(/[.*+?^$()|[\]\\]/g, '\\$&')
+    .replace(SUBSTITUTION_REGEX, (match, name) => `(?<${name}>[\\w-]+)`);
+  return new RegExp(`^${regexString}(/|$)`);
 }
 
 export interface MatchAndRewriteURLInputs {
@@ -33,8 +36,10 @@ export function matchAndRewriteURL({originalURL, prefix, prefixHost, target}: Ma
   // coerce url with filler https protocol so we can retrieve host and pathname from target
   const targetURL = new URL(`https://${target}`);
   // Depending on the environment, the URL constructor may turn `{` and `}` into `%7B` and `%7D`, respectively
-  const targetRegEx = regexFromTarget(targetURL.host.replace(/%7B/g, '{').replace(/%7D/g, '}'));
-  const match = originalURL.toString().match(targetRegEx);
+  const targetHostAndPath = `${targetURL.host}${targetURL.pathname.replace(/\/$/, '')}`;
+  const targetRegEx = regexFromTarget(targetHostAndPath.replace(/%7B/g, '{').replace(/%7D/g, '}'));
+  // Only match against the host and path, so the target can't match a different host or the query string
+  const match = `${originalURL.host}${originalURL.pathname}`.match(targetRegEx);
   // Null match indicates that this target is not relevant
   if (match == null) return originalURL;
   const newURL = new URL(originalURL.toString());
