@@ -22,7 +22,6 @@ const schemaFilePath = path.join(genDir, 'schema.json');
 const GENERATED_SECTION_START = '// START-GENERATED-SECTION';
 const GENERATED_SECTION_END = '// END-GENERATED-SECTION';
 const SENTINEL_REGEX = /(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/g;
-const SENTINEL_REGEX_SINGLE = /(\/\/ START-GENERATED-SECTION\n)([\s\S]*?)(\/\/ END-GENERATED-SECTION)/;
 
 // File paths
 const PATHS = {
@@ -34,6 +33,10 @@ const PATHS = {
 };
 
 // Templates
+/**
+ * @param {string} cmdName - camelCase command name
+ * @param {string} cmd - Original command name
+ */
 const COMMAND_FILE_TEMPLATE = (cmdName, cmd) => `import {Command} from '../generated/schemas';
 import {schemaCommandFactory} from '../utils/commandFactory';
 
@@ -44,26 +47,69 @@ export const ${cmdName} = schemaCommandFactory(Command.${cmd});
 /**
  * @param {string} filePath - Path to write the file
  * @param {string} content - File content to format and write
+ * @param {string} [parser] - Prettier parser to format with
  */
-async function formatAndWriteFile(filePath, content) {
+async function formatAndWriteFile(filePath, content, parser = 'typescript') {
   const prettierOpts = await prettier.resolveConfig(__dirname);
-  prettierOpts.parser = 'typescript';
+  if (prettierOpts == null) {
+    throw new Error('Unable to resolve prettier config');
+  }
+  prettierOpts.parser = parser;
   const formattedContent = await prettier.format(content, prettierOpts);
   await fs.writeFile(filePath, formattedContent);
+}
+
+/**
+ * Keeps only the commands flagged with `embeddedAppSDK: true` in rpc-schema's definitions,
+ * and strips the flag so the synced schema only contains request/response schemas.
+ *
+ * @param {Record<string, any>} allSchemas - Schema definitions from the monorepo JSON
+ * @returns {Promise<Record<string, any>>} Schemas for commands exposed in the SDK
+ */
+async function filterEmbeddedAppSDKSchemas(allSchemas) {
+  const entries = Object.entries(allSchemas);
+  if (!entries.some(([, schema]) => 'embeddedAppSDK' in schema)) {
+    throw new Error('No commands in the JSON Schema have an "embeddedAppSDK" flag.');
+  }
+
+  /** @type {Record<string, any>} */
+  const schemas = {};
+  for (const [cmd, {embeddedAppSDK, ...schema}] of entries) {
+    if (embeddedAppSDK) {
+      schemas[cmd] = schema;
+    }
+  }
+
+  // Warn when a previously synced command is no longer exposed, since its hand-maintained
+  // command file and mock are not removed automatically.
+  if (await fs.pathExists(schemaFilePath)) {
+    const previous = JSON.parse(await fs.readFile(schemaFilePath, 'utf-8'));
+    const removed = Object.keys(previous).filter((cmd) => !(cmd in schemas));
+    if (removed.length > 0) {
+      console.warn(
+        `> WARNING: ${removed.length} command(s) are no longer flagged embeddedAppSDK and were removed from the schema:`,
+        removed,
+        '\n  Delete their files in src/commands/ and entries in src/mock.ts if they should no longer be exposed.',
+      );
+    }
+  }
+
+  console.log(`> Exposing ${Object.keys(schemas).length} of ${entries.length} commands flagged embeddedAppSDK`);
+  return schemas;
 }
 
 /**
  * @param {string} content - File content to search
  * @param {string} filePath - File path for error messages
  * @param {number} expectedCount - Expected number of sentinel pairs
- * @returns {RegExpMatchArray | RegExpMatchArray[]} Single match or array of matches
+ * @returns {RegExpMatchArray[]} Matches, one per sentinel pair
  */
 function findSentinelSections(content, filePath, expectedCount = 1) {
   const matches = [...content.matchAll(SENTINEL_REGEX)];
   if (matches.length !== expectedCount) {
     throw createSentinelError(filePath, expectedCount, matches.length);
   }
-  return expectedCount === 1 ? matches[0] : matches;
+  return matches;
 }
 
 /**
@@ -128,13 +174,15 @@ async function main() {
     await $`git fetch ${branchToCheckout.split('/')}`;
   }
   await $`git checkout ${branchToCheckout} -- ${filePath}`;
-  await fs.copyFile(filePath, schemaFilePath);
+  const allSchemas = JSON.parse(await fs.readFile(filePath, 'utf-8'));
   // Restore the original file
   await $`git checkout HEAD -- ${filePath}`;
 
+  const schemas = await filterEmbeddedAppSDKSchemas(allSchemas);
+  await formatAndWriteFile(schemaFilePath, JSON.stringify(schemas), 'json');
+
   // Generate Zod Schemas
   console.log('> Generating Zod Schemas');
-  const schemas = JSON.parse(await fs.readFile(schemaFilePath, 'utf-8'));
   let zodSchemaCode = '';
   // Open brackets to code blocks
   let enumCode = `export enum Command {`;
@@ -197,13 +245,7 @@ async function main() {
   `;
 
   // Write to file and format with prettier
-  const prettierOpts = await prettier.resolveConfig(__dirname);
-  if (prettierOpts == null) {
-    throw new Error('Unable to resolve prettier config');
-  }
-  prettierOpts.parser = 'typescript';
-  const formattedCode = await prettier.format(output, prettierOpts);
-  await fs.writeFile(path.join(genDir, 'schemas.ts'), formattedCode);
+  await formatAndWriteFile(path.join(genDir, 'schemas.ts'), output);
 
   // Auto-sync Commands enum and response parsing
   console.log('> Auto-syncing Commands enum and response parsing');
@@ -240,7 +282,7 @@ async function syncCommandsEnum(schemas) {
     );
   }
 
-  const [fullMatch, beforeSection, generatedSection, afterSection] = enumMatch;
+  const [fullMatch, beforeSection, , afterSection] = enumMatch;
 
   // Generate ALL schema commands (sorted alphabetically)
   const allCommandEntries = Object.keys(schemas).sort().map((cmd) => `  ${cmd} = '${cmd}',`);
@@ -260,7 +302,7 @@ async function syncCommandsEnum(schemas) {
 async function syncResponseParsing(schemas) {
   const content = await fs.readFile(PATHS.responses, 'utf-8');
 
-  const [fullMatch, beforeSection, generatedSection, afterSection] = findSentinelSections(content, PATHS.responses);
+  const [[fullMatch, beforeSection, , afterSection]] = findSentinelSections(content, PATHS.responses);
 
   // Generate ALL schema case statements (sorted alphabetically)
   const allCaseStatements = Object.keys(schemas).sort().map((cmd) => `    case Commands.${cmd}:`);
@@ -336,7 +378,7 @@ async function generateCommandFiles(schemas) {
 async function syncMockCommands(schemas) {
   const content = await fs.readFile(PATHS.mock, 'utf-8');
 
-  const [fullMatch, beforeSection, generatedSection, afterSection] = findSentinelSections(content, PATHS.mock);
+  const [[fullMatch, beforeSection, generatedSection, afterSection]] = findSentinelSections(content, PATHS.mock);
 
   // Extract existing mock commands from generated section
   const existingMocks = extractExistingItems(generatedSection, /(\w+):\s*\(\)/g);
@@ -362,12 +404,12 @@ async function syncMockCommands(schemas) {
 }
 
 /**
- * @param {string} code - JSON schema code to parse
+ * @param {import('json-schema-to-zod').JsonSchema} schema - JSON schema to convert
  * @returns {string} Converted Zod schema code
  */
-function parseZodSchema(code) {
+function parseZodSchema(schema) {
   return (
-    parseSchema(code)
+    parseSchema(schema)
       // Remove never types until this bug is fixed:
       // https://github.com/StefanTerdell/json-schema-to-zod/issues/67
       // @ts-ignore
