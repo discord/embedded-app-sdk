@@ -573,14 +573,6 @@ export const ThermalStateTypeObject = {
 
 export const ThermalState = zodCoerceUnhandledValue(ThermalStateTypeObject);
 
-export const OrientationTypeObject = {
-  UNHANDLED: -1,
-  PORTRAIT: 0,
-  LANDSCAPE: 1,
-} as const;
-
-export const Orientation = zodCoerceUnhandledValue(OrientationTypeObject);
-
 export const LayoutModeTypeObject = {
   UNHANDLED: -1,
   FOCUSED: 0,

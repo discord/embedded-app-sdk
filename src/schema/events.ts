@@ -1,10 +1,8 @@
 import * as zod from 'zod';
-import {Orientation} from '../Constants';
 import {DISPATCH, GuildMemberRPC, Relationship, UserVoiceState} from './common';
 import {zodCoerceUnhandledValue} from '../utils/zodUtils';
 import {
   Entitlement,
-  OrientationTypeObject,
   LayoutModeTypeObject,
   ReceiveFramePayload as ReceiveFrame,
   ThermalState,
@@ -21,7 +19,6 @@ export enum Events {
   SPEAKING_START = 'SPEAKING_START',
   SPEAKING_STOP = 'SPEAKING_STOP',
   ACTIVITY_LAYOUT_MODE_UPDATE = 'ACTIVITY_LAYOUT_MODE_UPDATE',
-  ORIENTATION_UPDATE = 'ORIENTATION_UPDATE',
   CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE',
   CURRENT_GUILD_MEMBER_UPDATE = 'CURRENT_GUILD_MEMBER_UPDATE',
   ENTITLEMENT_CREATE = 'ENTITLEMENT_CREATE',
@@ -182,18 +179,6 @@ export const EventSchema = {
       evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
       data: zod.object({
         layout_mode: zodCoerceUnhandledValue(LayoutModeTypeObject),
-      }),
-    }),
-  },
-  [Events.ORIENTATION_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ORIENTATION_UPDATE),
-      data: zod.object({
-        screen_orientation: zodCoerceUnhandledValue(OrientationTypeObject),
-        /**
-         * @deprecated use screen_orientation instead
-         */
-        orientation: zod.nativeEnum(Orientation),
       }),
     }),
   },
