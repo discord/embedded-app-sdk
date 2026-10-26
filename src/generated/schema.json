@@ -198,6 +198,22 @@
       "additionalProperties": false
     }
   },
+  "OPEN_USER_PROFILE": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"OPEN_USER_PROFILE\" Command",
+      "properties": {"user_id": {"type": "string", "maxLength": 64}},
+      "required": ["user_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Response for \"OPEN_USER_PROFILE\" Command",
+      "properties": {"opened": {"type": "boolean"}},
+      "required": ["opened"],
+      "additionalProperties": false
+    }
+  },
   "GET_RELATIONSHIPS": {
     "request": null,
     "response": {
@@ -1484,6 +1500,110 @@
         }
       },
       "required": ["roles"],
+      "additionalProperties": false
+    }
+  },
+  "GET_CURRENT_USER_GUILD_MEMBER": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"GET_CURRENT_USER_GUILD_MEMBER\" Command",
+      "properties": {"guild_id": {"type": "string"}},
+      "required": ["guild_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": ["object", "null"],
+      "description": "Response for \"GET_CURRENT_USER_GUILD_MEMBER\" Command",
+      "properties": {
+        "user_id": {"type": "string"},
+        "guild_id": {"type": "string"},
+        "nick": {"type": ["string", "null"]},
+        "avatar": {"type": ["string", "null"]},
+        "avatar_decoration_data": {
+          "type": ["object", "null"],
+          "description": "Details about avatar decoration",
+          "properties": {
+            "asset": {"type": "string"},
+            "sku_id": {"type": "string"},
+            "expires_at": {"type": ["number", "null"]}
+          },
+          "required": ["asset"],
+          "additionalProperties": false
+        },
+        "banner": {"type": ["string", "null"]},
+        "roles": {"type": "array", "items": {"type": "string"}},
+        "joined_at": {"type": ["string", "null"]},
+        "premium_since": {"type": ["string", "null"]},
+        "communication_disabled_until": {"type": ["string", "null"]},
+        "pending": {"type": "boolean"},
+        "flags": {"type": "number"}
+      },
+      "required": [
+        "user_id",
+        "guild_id",
+        "nick",
+        "avatar",
+        "avatar_decoration_data",
+        "banner",
+        "roles",
+        "joined_at",
+        "premium_since",
+        "communication_disabled_until",
+        "pending",
+        "flags"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "GET_GUILD_MEMBER": {
+    "request": {
+      "type": "object",
+      "description": "Request for \"GET_GUILD_MEMBER\" Command",
+      "properties": {"guild_id": {"type": "string"}, "user_id": {"type": "string"}},
+      "required": ["guild_id", "user_id"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": ["object", "null"],
+      "description": "Response for \"GET_GUILD_MEMBER\" Command",
+      "properties": {
+        "user_id": {"type": "string"},
+        "guild_id": {"type": "string"},
+        "nick": {"type": ["string", "null"]},
+        "avatar": {"type": ["string", "null"]},
+        "avatar_decoration_data": {
+          "type": ["object", "null"],
+          "description": "Details about avatar decoration",
+          "properties": {
+            "asset": {"type": "string"},
+            "sku_id": {"type": "string"},
+            "expires_at": {"type": ["number", "null"]}
+          },
+          "required": ["asset"],
+          "additionalProperties": false
+        },
+        "banner": {"type": ["string", "null"]},
+        "roles": {"type": "array", "items": {"type": "string"}},
+        "joined_at": {"type": ["string", "null"]},
+        "premium_since": {"type": ["string", "null"]},
+        "communication_disabled_until": {"type": ["string", "null"]},
+        "pending": {"type": "boolean"},
+        "flags": {"type": "number"}
+      },
+      "required": [
+        "user_id",
+        "guild_id",
+        "nick",
+        "avatar",
+        "avatar_decoration_data",
+        "banner",
+        "roles",
+        "joined_at",
+        "premium_since",
+        "communication_disabled_until",
+        "pending",
+        "flags"
+      ],
       "additionalProperties": false
     }
   },

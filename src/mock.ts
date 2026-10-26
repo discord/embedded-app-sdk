@@ -252,5 +252,36 @@ export const commandsMockDefault: IDiscordSDK['commands'] = {
         },
       ],
     }),
+  getCurrentUserGuildMember: () =>
+    Promise.resolve({
+      user_id: 'mock_user_id',
+      guild_id: 'mock_guild_id',
+      nick: null,
+      avatar: null,
+      avatar_decoration_data: null,
+      banner: null,
+      roles: [],
+      joined_at: '2021-06-29T00:32:37.180813+00:00',
+      premium_since: null,
+      communication_disabled_until: null,
+      pending: false,
+      flags: 0,
+    }),
+  getGuildMember: () =>
+    Promise.resolve({
+      user_id: 'mock_friend_id_1',
+      guild_id: 'mock_guild_id',
+      nick: null,
+      avatar: null,
+      avatar_decoration_data: null,
+      banner: null,
+      roles: [],
+      joined_at: '2021-06-29T00:32:37.180813+00:00',
+      premium_since: null,
+      communication_disabled_until: null,
+      pending: false,
+      flags: 0,
+    }),
+  openUserProfile: () => Promise.resolve({opened: true}),
   // END-GENERATED-SECTION
 };

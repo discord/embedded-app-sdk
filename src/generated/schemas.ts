@@ -150,6 +150,12 @@ export const ShareLinkResponseSchema = z.object({
 });
 export type ShareLinkResponse = zInfer<typeof ShareLinkResponseSchema>;
 
+// OPEN_USER_PROFILE
+export const OpenUserProfileRequestSchema = z.object({user_id: z.string().max(64)});
+export type OpenUserProfileRequest = zInfer<typeof OpenUserProfileRequestSchema>;
+export const OpenUserProfileResponseSchema = z.object({opened: z.boolean()});
+export type OpenUserProfileResponse = zInfer<typeof OpenUserProfileResponseSchema>;
+
 // GET_RELATIONSHIPS
 export const GetRelationshipsResponseSchema = z.object({
   relationships: z.array(
@@ -1048,6 +1054,64 @@ export const GetRolesResponseSchema = z.object({
 });
 export type GetRolesResponse = zInfer<typeof GetRolesResponseSchema>;
 
+// GET_CURRENT_USER_GUILD_MEMBER
+export const GetCurrentUserGuildMemberRequestSchema = z.object({guild_id: z.string()});
+export type GetCurrentUserGuildMemberRequest = zInfer<typeof GetCurrentUserGuildMemberRequestSchema>;
+export const GetCurrentUserGuildMemberResponseSchema = z.union([
+  z.object({
+    user_id: z.string(),
+    guild_id: z.string(),
+    nick: z.union([z.string(), z.null()]),
+    avatar: z.union([z.string(), z.null()]),
+    avatar_decoration_data: z.union([
+      z.object({
+        asset: z.string(),
+        sku_id: z.string().optional(),
+        expires_at: z.union([z.number(), z.null()]).optional(),
+      }),
+      z.null(),
+    ]),
+    banner: z.union([z.string(), z.null()]),
+    roles: z.array(z.string()),
+    joined_at: z.union([z.string(), z.null()]),
+    premium_since: z.union([z.string(), z.null()]),
+    communication_disabled_until: z.union([z.string(), z.null()]),
+    pending: z.boolean(),
+    flags: z.number(),
+  }),
+  z.null(),
+]);
+export type GetCurrentUserGuildMemberResponse = zInfer<typeof GetCurrentUserGuildMemberResponseSchema>;
+
+// GET_GUILD_MEMBER
+export const GetGuildMemberRequestSchema = z.object({guild_id: z.string(), user_id: z.string()});
+export type GetGuildMemberRequest = zInfer<typeof GetGuildMemberRequestSchema>;
+export const GetGuildMemberResponseSchema = z.union([
+  z.object({
+    user_id: z.string(),
+    guild_id: z.string(),
+    nick: z.union([z.string(), z.null()]),
+    avatar: z.union([z.string(), z.null()]),
+    avatar_decoration_data: z.union([
+      z.object({
+        asset: z.string(),
+        sku_id: z.string().optional(),
+        expires_at: z.union([z.number(), z.null()]).optional(),
+      }),
+      z.null(),
+    ]),
+    banner: z.union([z.string(), z.null()]),
+    roles: z.array(z.string()),
+    joined_at: z.union([z.string(), z.null()]),
+    premium_since: z.union([z.string(), z.null()]),
+    communication_disabled_until: z.union([z.string(), z.null()]),
+    pending: z.boolean(),
+    flags: z.number(),
+  }),
+  z.null(),
+]);
+export type GetGuildMemberResponse = zInfer<typeof GetGuildMemberResponseSchema>;
+
 // AUTHORIZE
 export const AuthorizeRequestSchema = z.object({
   client_id: z.string().optional(),
@@ -1215,6 +1279,7 @@ export enum Command {
   AUTHENTICATE = 'AUTHENTICATE',
   GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS = 'GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS',
   SHARE_LINK = 'SHARE_LINK',
+  OPEN_USER_PROFILE = 'OPEN_USER_PROFILE',
   GET_RELATIONSHIPS = 'GET_RELATIONSHIPS',
   INVITE_USER_EMBEDDED = 'INVITE_USER_EMBEDDED',
   GET_CONTEXT = 'GET_CONTEXT',
@@ -1240,6 +1305,8 @@ export enum Command {
   GET_CHANNELS = 'GET_CHANNELS',
   GET_GUILD = 'GET_GUILD',
   GET_ROLES = 'GET_ROLES',
+  GET_CURRENT_USER_GUILD_MEMBER = 'GET_CURRENT_USER_GUILD_MEMBER',
+  GET_GUILD_MEMBER = 'GET_GUILD_MEMBER',
   AUTHORIZE = 'AUTHORIZE',
   SET_ACTIVITY = 'SET_ACTIVITY',
 }
@@ -1270,6 +1337,10 @@ export const Schemas = {
   [Command.SHARE_LINK]: {
     request: ShareLinkRequestSchema,
     response: ShareLinkResponseSchema,
+  },
+  [Command.OPEN_USER_PROFILE]: {
+    request: OpenUserProfileRequestSchema,
+    response: OpenUserProfileResponseSchema,
   },
   [Command.GET_RELATIONSHIPS]: {
     request: emptyRequestSchema,
@@ -1370,6 +1441,14 @@ export const Schemas = {
   [Command.GET_ROLES]: {
     request: GetRolesRequestSchema,
     response: GetRolesResponseSchema,
+  },
+  [Command.GET_CURRENT_USER_GUILD_MEMBER]: {
+    request: GetCurrentUserGuildMemberRequestSchema,
+    response: GetCurrentUserGuildMemberResponseSchema,
+  },
+  [Command.GET_GUILD_MEMBER]: {
+    request: GetGuildMemberRequestSchema,
+    response: GetGuildMemberResponseSchema,
   },
   [Command.AUTHORIZE]: {
     request: AuthorizeRequestSchema,

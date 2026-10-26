@@ -13,8 +13,10 @@ import {getChannels} from './getChannels';
 import {getChannelPermissions} from './getChannelPermissions';
 import {getContext} from './getContext';
 import {getCurrentUser} from './getCurrentUser';
+import {getCurrentUserGuildMember} from './getCurrentUserGuildMember';
 import {getEntitlements} from './getEntitlements';
 import {getGuild} from './getGuild';
+import {getGuildMember} from './getGuildMember';
 import {getPlatformBehaviors} from './getPlatformBehaviors';
 import {getQuest} from './getQuest';
 import {getQuestEnrollmentStatus} from './getQuestEnrollmentStatus';
@@ -27,6 +29,7 @@ import {inviteUserEmbedded} from './inviteUserEmbedded';
 import {openExternalLink} from './openExternalLink';
 import {openInviteDialog} from './openInviteDialog';
 import {openShareMomentDialog} from './openShareMomentDialog';
+import {openUserProfile} from './openUserProfile';
 import {questStartTimer} from './questStartTimer';
 import {requestProxyTicketRefresh} from './requestProxyTicketRefresh';
 import {setActivity} from './setActivity';
@@ -52,8 +55,10 @@ function commands(sendCommand: TSendCommand) {
     getChannelPermissions: getChannelPermissions(sendCommand),
     getContext: getContext(sendCommand),
     getCurrentUser: getCurrentUser(sendCommand),
+    getCurrentUserGuildMember: getCurrentUserGuildMember(sendCommand),
     getEntitlements: getEntitlements(sendCommand),
     getGuild: getGuild(sendCommand),
+    getGuildMember: getGuildMember(sendCommand),
     getPlatformBehaviors: getPlatformBehaviors(sendCommand),
     getQuest: getQuest(sendCommand),
     getQuestEnrollmentStatus: getQuestEnrollmentStatus(sendCommand),
@@ -66,6 +71,7 @@ function commands(sendCommand: TSendCommand) {
     openExternalLink: openExternalLink(sendCommand),
     openInviteDialog: openInviteDialog(sendCommand),
     openShareMomentDialog: openShareMomentDialog(sendCommand),
+    openUserProfile: openUserProfile(sendCommand),
     questStartTimer: questStartTimer(sendCommand),
     requestProxyTicketRefresh: requestProxyTicketRefresh(sendCommand),
     setActivity: setActivity(sendCommand),

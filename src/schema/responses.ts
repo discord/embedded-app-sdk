@@ -28,8 +28,10 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.GET_CHANNEL_PERMISSIONS:
     case Commands.GET_CONTEXT:
     case Commands.GET_CURRENT_USER:
+    case Commands.GET_CURRENT_USER_GUILD_MEMBER:
     case Commands.GET_ENTITLEMENTS_EMBEDDED:
     case Commands.GET_GUILD:
+    case Commands.GET_GUILD_MEMBER:
     case Commands.GET_PLATFORM_BEHAVIORS:
     case Commands.GET_QUEST:
     case Commands.GET_QUEST_ENROLLMENT_STATUS:
@@ -42,6 +44,7 @@ function parseResponseData({cmd, data}: zod.infer<typeof ResponseFrame>) {
     case Commands.OPEN_EXTERNAL_LINK:
     case Commands.OPEN_INVITE_DIALOG:
     case Commands.OPEN_SHARE_MOMENT_DIALOG:
+    case Commands.OPEN_USER_PROFILE:
     case Commands.QUEST_START_TIMER:
     case Commands.REQUEST_PROXY_TICKET_REFRESH:
     case Commands.SET_ACTIVITY:
