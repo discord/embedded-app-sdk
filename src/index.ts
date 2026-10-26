@@ -5,7 +5,7 @@ import {CommandTypes, CommandResponseTypes, CommandResponse, CommandInputTypes, 
 import {Events} from './schema/events';
 import * as Common from './schema/common';
 import * as Responses from './schema/responses';
-import {Orientation, Permissions, Platform, RPCCloseCodes, RPCErrorCodes} from './Constants';
+import {Permissions, Platform, RPCCloseCodes, RPCErrorCodes} from './Constants';
 import PermissionUtils from './utils/PermissionUtils';
 import PriceUtils from './utils/PriceUtils';
 import {DiscordSDKMock} from './mock';
@@ -18,7 +18,6 @@ export {
   DiscordSDK,
   DiscordSDKMock,
   Events,
-  Orientation,
   Platform,
   Common,
   Commands,

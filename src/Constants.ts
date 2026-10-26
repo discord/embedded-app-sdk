@@ -25,14 +25,6 @@ export enum RPCErrorCodes {
   INVALID_USER = 4010,
 }
 
-/**
- * @deprecated use OrientationTypeObject instead
- */
-export enum Orientation {
-  LANDSCAPE = 'landscape',
-  PORTRAIT = 'portrait',
-}
-
 export enum Platform {
   MOBILE = 'mobile',
   DESKTOP = 'desktop',

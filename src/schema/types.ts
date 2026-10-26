@@ -66,7 +66,6 @@ export type ActivityJoinIntentObject = typeof Events.ActivityJoinIntentObject;
 
 export type OrientationLockStateTypeObject = typeof Common.OrientationLockStateTypeObject;
 export type ThermalStateTypeObject = typeof Common.ThermalStateTypeObject;
-export type OrientationTypeObject = typeof Common.OrientationTypeObject;
 export type LayoutModeTypeObject = typeof Common.LayoutModeTypeObject;
 
 export type OAuthScopes =
