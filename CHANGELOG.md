@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.0](https://github.com/discord/embedded-app-sdk/compare/v2.5.0...v3.0.0) (2026-10-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate remaining commands to schema ([#377](https://github.com/discord/embedded-app-sdk/issues/377))
+* schema sync filtering and remove shareInteraction ([#376](https://github.com/discord/embedded-app-sdk/issues/376))
+* remove ORIENTATION_UPDATE event ([#387](https://github.com/discord/embedded-app-sdk/issues/387))
+
+### Features
+
+* migrate remaining commands to schema ([#377](https://github.com/discord/embedded-app-sdk/issues/377)) ([b5f4774](https://github.com/discord/embedded-app-sdk/commit/b5f47744b50161610c7841cb2986a87041db061d))
+* remove ORIENTATION_UPDATE event ([#387](https://github.com/discord/embedded-app-sdk/issues/387)) ([cb6a6e7](https://github.com/discord/embedded-app-sdk/commit/cb6a6e74840a5df9834b9450a64de309e8bc71f6))
+* schema sync filtering and remove shareInteraction ([#376](https://github.com/discord/embedded-app-sdk/issues/376)) ([408e7a8](https://github.com/discord/embedded-app-sdk/commit/408e7a81fe71139f8042fd284a1c777355cf5a40))
+
 ## [2.5.0](https://github.com/discord/embedded-app-sdk/compare/v2.4.1...v2.5.0) (2026-05-04)
 
 
