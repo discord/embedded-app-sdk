@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {fallbackToDefault} from '../zodUtils';
+import {fallbackToDefault, zodUnionWithUnhandled} from '../zodUtils';
 
 describe('fallbackToDefault', () => {
   const schema = fallbackToDefault(z.enum(['hi', 'hello', 'UNKNOWN']).default('UNKNOWN'));
@@ -26,5 +26,25 @@ describe('fallbackToDefault', () => {
     expect(overlaySchema.safeParse(undefined)).toEqual({success: true, data: 'UNKNOWN'});
     expect(overlaySchema.safeParse(null)).toEqual(expect.objectContaining({success: false}));
     expect(overlaySchema.safeParse('bad')).toEqual(expect.objectContaining({success: false}));
+  });
+});
+
+describe('zodUnionWithUnhandled', () => {
+  const schema = zodUnionWithUnhandled([
+    z.object({type: z.literal(0), guild_id: z.string().optional()}),
+    z.object({type: z.literal(1), channel_id: z.string()}),
+  ]);
+
+  it('passes through known members', () => {
+    expect(schema.parse({type: 0})).toEqual({type: 0});
+    expect(schema.parse({type: 1, channel_id: 'c'})).toEqual({type: 1, channel_id: 'c'});
+  });
+
+  it('falls back to {type: -1} for unknown types', () => {
+    expect(schema.parse({type: 99, channel_id: 'c'})).toEqual({type: -1});
+  });
+
+  it('falls back to {type: -1} when a known type is missing required fields', () => {
+    expect(schema.parse({type: 1})).toEqual({type: -1});
   });
 });
