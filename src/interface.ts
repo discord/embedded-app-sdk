@@ -13,6 +13,12 @@ export interface SdkConfiguration {
    * Setting this flag to true will disable this functionality
    */
   readonly disableConsoleLogOverride: boolean;
+  /**
+   * Enables automatic proxy token refresh to maintain long-running embedded activities.
+   * When enabled, the SDK will monitor proxy token expiration and automatically refresh
+   * tokens before they expire. Defaults to false for backwards compatibility.
+   */
+  readonly autoRefreshProxyToken?: boolean;
 }
 
 export type MaybeZodObjectArray<T extends EventArgs> =
@@ -45,4 +51,5 @@ export interface IDiscordSDK {
     ...unsubscribeArgs: MaybeZodObjectArray<(typeof EventSchema)[K]>
   ): Promise<unknown>;
   ready(): Promise<void>;
+  refreshProxyToken(): Promise<boolean>;
 }
