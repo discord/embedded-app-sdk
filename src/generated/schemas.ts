@@ -457,7 +457,11 @@ export const GetEntitlementsEmbeddedResponseSchema = z.object({
             z.literal(10),
             z.literal(11),
             z.literal(12),
+            z.literal(13),
+            z.literal(14),
+            z.literal(15),
             z.literal(16),
+            z.literal(17),
           ])
           .or(z.literal(-1))
           .default(-1),
@@ -501,7 +505,11 @@ export const StartPurchaseResponseSchema = z.union([
             z.literal(10),
             z.literal(11),
             z.literal(12),
+            z.literal(13),
+            z.literal(14),
+            z.literal(15),
             z.literal(16),
+            z.literal(17),
           ])
           .or(z.literal(-1))
           .default(-1),
@@ -1078,6 +1086,7 @@ export const GetCurrentUserGuildMemberResponseSchema = z.union([
     communication_disabled_until: z.union([z.string(), z.null()]),
     pending: z.boolean(),
     flags: z.number(),
+    color_string: z.union([z.string(), z.null()]).optional(),
   }),
   z.null(),
 ]);
@@ -1107,6 +1116,7 @@ export const GetGuildMemberResponseSchema = z.union([
     communication_disabled_until: z.union([z.string(), z.null()]),
     pending: z.boolean(),
     flags: z.number(),
+    color_string: z.union([z.string(), z.null()]).optional(),
   }),
   z.null(),
 ]);
@@ -1189,7 +1199,7 @@ export const SetActivityRequestSchema = z.object({
             .array(
               fallbackToDefault(
                 z
-                  .enum(['desktop', 'xbox', 'samsung', 'ios', 'android', 'embedded', 'ps4', 'ps5', 'meta_quest'])
+                  .enum(['xbox', 'desktop', 'samsung', 'ios', 'android', 'ps4', 'ps5', 'embedded', 'meta_quest'])
                   .or(z.literal(-1))
                   .default(-1),
               ),
@@ -1269,6 +1279,315 @@ export const SetActivityResponseSchema = z.union([
   z.null(),
 ]);
 export type SetActivityResponse = zInfer<typeof SetActivityResponseSchema>;
+
+// VOICE_STATE_UPDATE
+export const VoiceStateUpdateSubscribeArgsSchema = z.object({channel_id: z.string()});
+export type VoiceStateUpdateSubscribeArgs = zInfer<typeof VoiceStateUpdateSubscribeArgsSchema>;
+export const VoiceStateUpdatePayloadSchema = z.object({
+  nick: z.string(),
+  mute: z.boolean(),
+  volume: z.number(),
+  pan: z.object({left: z.number(), right: z.number()}),
+  voice_state: z.object({
+    mute: z.boolean(),
+    deaf: z.boolean(),
+    self_mute: z.boolean(),
+    self_deaf: z.boolean(),
+    suppress: z.boolean(),
+  }),
+  user: z.object({
+    id: z.string(),
+    username: z.string(),
+    global_name: z.union([z.string(), z.null()]).optional(),
+    discriminator: z.string(),
+    avatar: z.union([z.string(), z.null()]).optional(),
+    flags: z.number(),
+    public_flags: z.number().optional(),
+    bot: z.boolean(),
+    avatar_decoration_data: z
+      .union([
+        z.object({
+          asset: z.string(),
+          sku_id: z.string().optional(),
+          expires_at: z.union([z.number(), z.null()]).optional(),
+        }),
+        z.null(),
+      ])
+      .optional(),
+  }),
+  channel_id: z.string().optional(),
+});
+export type VoiceStateUpdatePayload = zInfer<typeof VoiceStateUpdatePayloadSchema>;
+
+// SPEAKING_START
+export const SpeakingStartSubscribeArgsSchema = z.object({channel_id: z.union([z.string(), z.null()]).optional()});
+export type SpeakingStartSubscribeArgs = zInfer<typeof SpeakingStartSubscribeArgsSchema>;
+export const SpeakingStartPayloadSchema = z.object({
+  channel_id: z.union([z.string(), z.null()]).optional(),
+  user_id: z.string(),
+});
+export type SpeakingStartPayload = zInfer<typeof SpeakingStartPayloadSchema>;
+
+// SPEAKING_STOP
+export const SpeakingStopSubscribeArgsSchema = z.object({channel_id: z.union([z.string(), z.null()]).optional()});
+export type SpeakingStopSubscribeArgs = zInfer<typeof SpeakingStopSubscribeArgsSchema>;
+export const SpeakingStopPayloadSchema = z.object({
+  channel_id: z.union([z.string(), z.null()]).optional(),
+  user_id: z.string(),
+});
+export type SpeakingStopPayload = zInfer<typeof SpeakingStopPayloadSchema>;
+
+// ACTIVITY_LAYOUT_MODE_UPDATE
+export const ActivityLayoutModeUpdatePayloadSchema = z.object({
+  layout_mode: fallbackToDefault(
+    z
+      .union([z.literal(0), z.literal(1), z.literal(2)])
+      .or(z.literal(-1))
+      .default(-1),
+  ),
+});
+export type ActivityLayoutModeUpdatePayload = zInfer<typeof ActivityLayoutModeUpdatePayloadSchema>;
+
+// CURRENT_USER_UPDATE
+export const CurrentUserUpdatePayloadSchema = z.object({
+  id: z.string(),
+  username: z.string(),
+  global_name: z.union([z.string(), z.null()]).optional(),
+  discriminator: z.string(),
+  avatar: z.union([z.string(), z.null()]).optional(),
+  flags: z.number(),
+  public_flags: z.number().optional(),
+  bot: z.boolean(),
+  avatar_decoration_data: z
+    .union([
+      z.object({
+        asset: z.string(),
+        sku_id: z.string().optional(),
+        expires_at: z.union([z.number(), z.null()]).optional(),
+      }),
+      z.null(),
+    ])
+    .optional(),
+});
+export type CurrentUserUpdatePayload = zInfer<typeof CurrentUserUpdatePayloadSchema>;
+
+// CURRENT_GUILD_MEMBER_UPDATE
+export const CurrentGuildMemberUpdateSubscribeArgsSchema = z.object({guild_id: z.string()});
+export type CurrentGuildMemberUpdateSubscribeArgs = zInfer<typeof CurrentGuildMemberUpdateSubscribeArgsSchema>;
+export const CurrentGuildMemberUpdatePayloadSchema = z.object({
+  user_id: z.string(),
+  guild_id: z.string(),
+  nick: z.union([z.string(), z.null()]).optional(),
+  avatar: z.union([z.string(), z.null()]).optional(),
+  avatar_decoration_data: z.union([
+    z.object({
+      asset: z.string(),
+      sku_id: z.string().optional(),
+      expires_at: z.union([z.number(), z.null()]).optional(),
+    }),
+    z.null(),
+  ]),
+  banner: z.union([z.string(), z.null()]).optional(),
+  roles: z.array(z.string()).optional(),
+  joined_at: z.union([z.string(), z.null()]).optional(),
+  premium_since: z.union([z.string(), z.null()]).optional(),
+  communication_disabled_until: z.union([z.string(), z.null()]).optional(),
+  pending: z.boolean().optional(),
+  flags: z.number().optional(),
+  color_string: z.union([z.string(), z.null()]).optional(),
+});
+export type CurrentGuildMemberUpdatePayload = zInfer<typeof CurrentGuildMemberUpdatePayloadSchema>;
+
+// ENTITLEMENT_CREATE
+export const EntitlementCreatePayloadSchema = z.object({
+  entitlement: z.object({
+    id: z.string(),
+    sku_id: z.string(),
+    application_id: z.string(),
+    user_id: z.string(),
+    gift_code_flags: z.number(),
+    type: fallbackToDefault(
+      z
+        .union([
+          z.literal(1),
+          z.literal(2),
+          z.literal(3),
+          z.literal(4),
+          z.literal(5),
+          z.literal(6),
+          z.literal(7),
+          z.literal(8),
+          z.literal(9),
+          z.literal(10),
+          z.literal(11),
+          z.literal(12),
+          z.literal(13),
+          z.literal(14),
+          z.literal(15),
+          z.literal(16),
+          z.literal(17),
+        ])
+        .or(z.literal(-1))
+        .default(-1),
+    ),
+    gifter_user_id: z.union([z.string(), z.null()]).optional(),
+    branches: z.union([z.array(z.string()), z.null()]).optional(),
+    starts_at: z.union([z.string(), z.null()]).optional(),
+    ends_at: z.union([z.string(), z.null()]).optional(),
+    parent_id: z.union([z.string(), z.null()]).optional(),
+    consumed: z.union([z.boolean(), z.null()]).optional(),
+    deleted: z.union([z.boolean(), z.null()]).optional(),
+    gift_code_batch_id: z.union([z.string(), z.null()]).optional(),
+  }),
+});
+export type EntitlementCreatePayload = zInfer<typeof EntitlementCreatePayloadSchema>;
+
+// THERMAL_STATE_UPDATE
+export const ThermalStateUpdatePayloadSchema = z.object({
+  thermal_state: fallbackToDefault(
+    z
+      .union([z.literal(-1), z.literal(0), z.literal(1), z.literal(2), z.literal(3)])
+      .or(z.literal(-1))
+      .default(-1),
+  ),
+});
+export type ThermalStateUpdatePayload = zInfer<typeof ThermalStateUpdatePayloadSchema>;
+
+// ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE
+export const ActivityInstanceParticipantsUpdatePayloadSchema = z.object({
+  participants: z.array(
+    z.object({
+      id: z.string(),
+      username: z.string(),
+      global_name: z.union([z.string(), z.null()]).optional(),
+      discriminator: z.string(),
+      avatar: z.union([z.string(), z.null()]).optional(),
+      flags: z.number(),
+      public_flags: z.number().optional(),
+      bot: z.boolean(),
+      avatar_decoration_data: z
+        .union([
+          z.object({
+            asset: z.string(),
+            sku_id: z.string().optional(),
+            expires_at: z.union([z.number(), z.null()]).optional(),
+          }),
+          z.null(),
+        ])
+        .optional(),
+      nickname: z.string().optional(),
+    }),
+  ),
+});
+export type ActivityInstanceParticipantsUpdatePayload = zInfer<typeof ActivityInstanceParticipantsUpdatePayloadSchema>;
+
+// RELATIONSHIP_UPDATE
+export const RelationshipUpdatePayloadSchema = z.object({
+  type: z.number(),
+  user: z.object({
+    id: z.string(),
+    username: z.string(),
+    global_name: z.union([z.string(), z.null()]).optional(),
+    discriminator: z.string(),
+    avatar: z.union([z.string(), z.null()]).optional(),
+    flags: z.number(),
+    public_flags: z.number().optional(),
+    bot: z.boolean(),
+    avatar_decoration_data: z
+      .union([
+        z.object({
+          asset: z.string(),
+          sku_id: z.string().optional(),
+          expires_at: z.union([z.number(), z.null()]).optional(),
+        }),
+        z.null(),
+      ])
+      .optional(),
+  }),
+  presence: z
+    .object({
+      status: z.string(),
+      activity: z
+        .union([
+          z.object({
+            session_id: z.string().optional(),
+            type: z.number().optional(),
+            name: z.string(),
+            url: z.union([z.string(), z.null()]).optional(),
+            application_id: z.string().optional(),
+            status_display_type: z.number().optional(),
+            state: z.string().optional(),
+            state_url: z.string().optional(),
+            details: z.string().optional(),
+            details_url: z.string().optional(),
+            emoji: z
+              .union([
+                z.object({
+                  name: z.string(),
+                  id: z.union([z.string(), z.null()]).optional(),
+                  animated: z.union([z.boolean(), z.null()]).optional(),
+                }),
+                z.null(),
+              ])
+              .optional(),
+            assets: z
+              .object({
+                large_image: z.string().optional(),
+                large_text: z.string().optional(),
+                large_url: z.string().optional(),
+                small_image: z.string().optional(),
+                small_text: z.string().optional(),
+                small_url: z.string().optional(),
+              })
+              .optional(),
+            timestamps: z.object({start: z.number().optional(), end: z.number().optional()}).optional(),
+            party: z
+              .object({
+                id: z.string().optional(),
+                size: z.array(z.number()).min(2).max(2).optional(),
+                privacy: z.number().optional(),
+              })
+              .optional(),
+            secrets: z.object({match: z.string().optional(), join: z.string().optional()}).optional(),
+            sync_id: z.string().optional(),
+            created_at: z.number().optional(),
+            instance: z.boolean().optional(),
+            flags: z.number().optional(),
+            metadata: z.object({button_urls: z.array(z.string()).optional()}).optional(),
+            platform: z.string().optional(),
+            supported_platforms: z.array(z.string()).optional(),
+            buttons: z.array(z.string()).optional(),
+          }),
+          z.null(),
+        ])
+        .optional(),
+    })
+    .optional(),
+});
+export type RelationshipUpdatePayload = zInfer<typeof RelationshipUpdatePayloadSchema>;
+
+// ACTIVITY_JOIN
+export const ActivityJoinPayloadSchema = z.object({
+  application_id: z.string(),
+  secret: z.string(),
+  intent: fallbackToDefault(
+    z
+      .union([z.literal(0), z.literal(1)])
+      .or(z.literal(-1))
+      .default(-1),
+  ).optional(),
+});
+export type ActivityJoinPayload = zInfer<typeof ActivityJoinPayloadSchema>;
+
+// QUEST_ENROLLMENT_STATUS_UPDATE
+export const QuestEnrollmentStatusUpdateSubscribeArgsSchema = z.object({quest_id: z.string()});
+export type QuestEnrollmentStatusUpdateSubscribeArgs = zInfer<typeof QuestEnrollmentStatusUpdateSubscribeArgsSchema>;
+export const QuestEnrollmentStatusUpdatePayloadSchema = z.object({
+  quest_id: z.string(),
+  is_enrolled: z.boolean(),
+  enrolled_at: z.union([z.string(), z.null()]).optional(),
+});
+export type QuestEnrollmentStatusUpdatePayload = zInfer<typeof QuestEnrollmentStatusUpdatePayloadSchema>;
 
 /**
  * RPC Commands which support schemas.
@@ -1457,5 +1776,29 @@ export const Schemas = {
   [Command.SET_ACTIVITY]: {
     request: SetActivityRequestSchema,
     response: SetActivityResponseSchema,
+  },
+} as const;
+
+/**
+ * Subscribe args & payload schemas for each supported RPC Event.
+ */
+export const EventSchemas = {
+  VOICE_STATE_UPDATE: {subscribeArgs: VoiceStateUpdateSubscribeArgsSchema, payload: VoiceStateUpdatePayloadSchema},
+  SPEAKING_START: {subscribeArgs: SpeakingStartSubscribeArgsSchema, payload: SpeakingStartPayloadSchema},
+  SPEAKING_STOP: {subscribeArgs: SpeakingStopSubscribeArgsSchema, payload: SpeakingStopPayloadSchema},
+  ACTIVITY_LAYOUT_MODE_UPDATE: {payload: ActivityLayoutModeUpdatePayloadSchema},
+  CURRENT_USER_UPDATE: {payload: CurrentUserUpdatePayloadSchema},
+  CURRENT_GUILD_MEMBER_UPDATE: {
+    subscribeArgs: CurrentGuildMemberUpdateSubscribeArgsSchema,
+    payload: CurrentGuildMemberUpdatePayloadSchema,
+  },
+  ENTITLEMENT_CREATE: {payload: EntitlementCreatePayloadSchema},
+  THERMAL_STATE_UPDATE: {payload: ThermalStateUpdatePayloadSchema},
+  ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE: {payload: ActivityInstanceParticipantsUpdatePayloadSchema},
+  RELATIONSHIP_UPDATE: {payload: RelationshipUpdatePayloadSchema},
+  ACTIVITY_JOIN: {payload: ActivityJoinPayloadSchema},
+  QUEST_ENROLLMENT_STATUS_UPDATE: {
+    subscribeArgs: QuestEnrollmentStatusUpdateSubscribeArgsSchema,
+    payload: QuestEnrollmentStatusUpdatePayloadSchema,
   },
 } as const;

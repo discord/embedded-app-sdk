@@ -1,876 +1,233 @@
 {
-  "INITIATE_IMAGE_UPLOAD": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"INITIATE_IMAGE_UPLOAD\" Command",
-      "properties": {"image_url": {"type": "string"}},
-      "required": ["image_url"],
-      "additionalProperties": false
-    }
-  },
-  "OPEN_SHARE_MOMENT_DIALOG": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"OPEN_SHARE_MOMENT_DIALOG\" Command",
-      "properties": {"mediaUrl": {"type": "string", "maxLength": 1024}},
-      "required": ["mediaUrl"],
-      "additionalProperties": false
-    },
-    "response": null
-  },
-  "AUTHENTICATE": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"AUTHENTICATE\" Command",
-      "properties": {"access_token": {"type": ["string", "null"]}},
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"AUTHENTICATE\" Command",
-      "properties": {
-        "access_token": {"type": "string"},
-        "user": {
-          "type": "object",
-          "properties": {
-            "username": {"type": "string"},
-            "discriminator": {"type": "string"},
-            "id": {"type": "string"},
-            "avatar": {"type": ["string", "null"]},
-            "public_flags": {"type": "number"},
-            "global_name": {"type": ["string", "null"]}
-          },
-          "required": ["username", "discriminator", "id", "public_flags"],
-          "additionalProperties": false
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "identify",
-              "identify.premium",
-              "email",
-              "connections",
-              "guilds",
-              "guilds.join",
-              "guilds.members.read",
-              "guilds.channels.read",
-              "gdm.join",
-              "bot",
-              "rpc",
-              "rpc.notifications.read",
-              "rpc.voice.read",
-              "rpc.voice.write",
-              "rpc.video.read",
-              "rpc.video.write",
-              "rpc.screenshare.read",
-              "rpc.screenshare.write",
-              "rpc.activities.write",
-              "webhook.incoming",
-              "messages.read",
-              "applications.builds.upload",
-              "applications.builds.read",
-              "applications.commands",
-              "applications.commands.permissions.update",
-              "applications.commands.update",
-              "applications.store.update",
-              "applications.entitlements",
-              "activities.read",
-              "activities.write",
-              "activities.invites.write",
-              "relationships.read",
-              "relationships.write",
-              "voice",
-              "dm_channels.read",
-              "role_connections.write",
-              "presences.read",
-              "presences.write",
-              "openid",
-              "dm_channels.messages.read",
-              "dm_channels.messages.write",
-              "gateway.connect",
-              "account.global_name.update",
-              "payment_sources.country_code",
-              "sdk.social_layer_presence",
-              "sdk.social_layer",
-              "lobbies.write",
-              "application_identities.write",
-              "managed_platform.application_identities.write",
-              "orbs_arcade.play",
-              "personal.relationships.read",
-              "personal.dm_channels.read",
-              "personal.dm_channels.messages.read",
-              "personal.guilds.channels.read",
-              "personal.guilds.channels.messages.read",
-              "personal.activities.write",
-              "personal.mentions.read",
-              "personal.guilds.messages.search",
-              "personal.dm_channels.messages.search"
-            ]
-          }
-        },
-        "expires": {"type": "string"},
-        "application": {
-          "type": "object",
-          "properties": {
-            "description": {"type": "string"},
-            "icon": {"type": ["string", "null"]},
-            "id": {"type": "string"},
-            "rpc_origins": {"type": "array", "items": {"type": "string"}},
-            "name": {"type": "string"}
-          },
-          "required": ["description", "id", "name"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["access_token", "user", "scopes", "expires", "application"],
-      "additionalProperties": false
-    }
-  },
-  "GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS\" Command",
-      "properties": {
-        "participants": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "description": "Discord User",
-            "properties": {
-              "id": {"type": "string", "description": "User ID"},
-              "username": {"type": "string"},
-              "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-              "discriminator": {
-                "type": "string",
-                "description": "Global name discriminator. Will be 0 if a unique username"
-              },
-              "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-              "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-              "public_flags": {"type": "number", "description": "Public user flags"},
-              "bot": {"type": "boolean", "description": "If a bot user."},
-              "avatar_decoration_data": {
-                "type": ["object", "null"],
-                "description": "Details about avatar decoration",
-                "properties": {
-                  "asset": {"type": "string"},
-                  "sku_id": {"type": "string"},
-                  "expires_at": {"type": ["number", "null"]}
-                },
-                "required": ["asset"],
-                "additionalProperties": false
-              },
-              "nickname": {"type": "string", "description": "Server nickname. Not unique."}
-            },
-            "required": ["id", "username", "discriminator", "flags", "bot"],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": ["participants"],
-      "additionalProperties": false
-    }
-  },
-  "SHARE_LINK": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"SHARE_LINK\" Command",
-      "properties": {
-        "custom_id": {"type": "string", "maxLength": 64},
-        "message": {"type": "string", "maxLength": 1000},
-        "link_id": {"type": "string", "maxLength": 64}
-      },
-      "required": ["message"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"SHARE_LINK\" Command",
-      "properties": {
-        "success": {"type": "boolean"},
-        "didCopyLink": {"type": "boolean"},
-        "didSendMessage": {"type": "boolean"}
-      },
-      "required": ["success", "didCopyLink", "didSendMessage"],
-      "additionalProperties": false
-    }
-  },
-  "OPEN_USER_PROFILE": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"OPEN_USER_PROFILE\" Command",
-      "properties": {"user_id": {"type": "string", "maxLength": 64}},
-      "required": ["user_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"OPEN_USER_PROFILE\" Command",
-      "properties": {"opened": {"type": "boolean"}},
-      "required": ["opened"],
-      "additionalProperties": false
-    }
-  },
-  "GET_RELATIONSHIPS": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_RELATIONSHIPS\" Command",
-      "properties": {
-        "relationships": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "type": {"type": "number"},
-              "user": {
-                "type": "object",
-                "description": "Discord User",
-                "properties": {
-                  "id": {"type": "string", "description": "User ID"},
-                  "username": {"type": "string"},
-                  "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-                  "discriminator": {
-                    "type": "string",
-                    "description": "Global name discriminator. Will be 0 if a unique username"
-                  },
-                  "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                  "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-                  "public_flags": {"type": "number", "description": "Public user flags"},
-                  "bot": {"type": "boolean", "description": "If a bot user."},
-                  "avatar_decoration_data": {
-                    "type": ["object", "null"],
-                    "description": "Details about avatar decoration",
-                    "properties": {
-                      "asset": {"type": "string"},
-                      "sku_id": {"type": "string"},
-                      "expires_at": {"type": ["number", "null"]}
-                    },
-                    "required": ["asset"],
-                    "additionalProperties": false
-                  }
-                },
-                "required": ["id", "username", "discriminator", "flags", "bot"],
-                "additionalProperties": false
-              },
-              "presence": {
-                "type": "object",
-                "properties": {
-                  "status": {"type": "string"},
-                  "activity": {
-                    "type": ["object", "null"],
-                    "properties": {
-                      "session_id": {"type": "string"},
-                      "type": {"type": "number"},
-                      "name": {"type": "string"},
-                      "url": {"type": ["string", "null"]},
-                      "application_id": {"type": "string"},
-                      "status_display_type": {"type": "number"},
-                      "state": {"type": "string"},
-                      "state_url": {"type": "string"},
-                      "details": {"type": "string"},
-                      "details_url": {"type": "string"},
-                      "emoji": {
-                        "type": ["object", "null"],
-                        "properties": {
-                          "name": {"type": "string"},
-                          "id": {"type": ["string", "null"]},
-                          "animated": {"type": ["boolean", "null"]}
-                        },
-                        "required": ["name"],
-                        "additionalProperties": false
-                      },
-                      "assets": {
-                        "type": "object",
-                        "properties": {
-                          "large_image": {"type": "string"},
-                          "large_text": {"type": "string"},
-                          "large_url": {"type": "string"},
-                          "small_image": {"type": "string"},
-                          "small_text": {"type": "string"},
-                          "small_url": {"type": "string"}
-                        },
-                        "additionalProperties": false
-                      },
-                      "timestamps": {
-                        "type": "object",
-                        "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
-                        "additionalProperties": false
-                      },
-                      "party": {
-                        "type": "object",
-                        "properties": {
-                          "id": {"type": "string"},
-                          "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
-                          "privacy": {"type": "number"}
-                        },
-                        "additionalProperties": false
-                      },
-                      "secrets": {
-                        "type": "object",
-                        "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
-                        "additionalProperties": false
-                      },
-                      "sync_id": {"type": "string"},
-                      "created_at": {"type": "number"},
-                      "instance": {"type": "boolean"},
-                      "flags": {"type": "number"},
-                      "metadata": {
-                        "type": "object",
-                        "properties": {"button_urls": {"type": "array", "items": {"type": "string"}}},
-                        "additionalProperties": false
-                      },
-                      "platform": {"type": "string"},
-                      "supported_platforms": {"type": "array", "items": {"type": "string"}},
-                      "buttons": {"type": "array", "items": {"type": "string"}}
-                    },
-                    "required": ["name"],
-                    "additionalProperties": false
-                  }
-                },
-                "required": ["status"],
-                "additionalProperties": false
-              }
-            },
-            "required": ["type", "user"],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": ["relationships"],
-      "additionalProperties": false
-    }
-  },
-  "INVITE_USER_EMBEDDED": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"INVITE_USER_EMBEDDED\" Command",
-      "properties": {"user_id": {"type": "string"}, "content": {"type": "string", "minLength": 0, "maxLength": 1024}},
-      "required": ["user_id"],
-      "additionalProperties": false
-    },
-    "response": null
-  },
-  "GET_CONTEXT": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_CONTEXT\" Command",
-      "properties": {
-        "surface": {
-          "anyOf": [
-            {
-              "type": "object",
-              "properties": {"type": {"const": 0}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
-              "required": ["type"],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {"type": {"const": 1}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
-              "required": ["type", "channel_id"],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {"type": {"const": 2}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
-              "required": ["type", "channel_id"],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {"type": {"const": 3}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
-              "required": ["type", "channel_id"],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {"type": {"const": 4}},
-              "required": ["type"],
-              "additionalProperties": false
-            }
-          ]
-        },
-        "launch": {
-          "type": "object",
-          "properties": {
-            "custom_id": {"type": "string"},
-            "referrer_id": {"type": "string"},
-            "interaction_id": {"type": "string"}
-          },
-          "additionalProperties": false
-        },
-        "platform": {"type": "string", "enum": ["desktop", "mobile"]}
-      },
-      "required": ["surface", "launch", "platform"],
-      "additionalProperties": false
-    }
-  },
-  "GET_USER": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_USER\" Command",
-      "properties": {"id": {"type": "string", "maxLength": 64}},
-      "required": ["id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": ["object", "null"],
-      "description": "Discord User",
-      "properties": {
-        "id": {"type": "string", "description": "User ID"},
-        "username": {"type": "string"},
-        "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-        "discriminator": {"type": "string", "description": "Global name discriminator. Will be 0 if a unique username"},
-        "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-        "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-        "public_flags": {"type": "number", "description": "Public user flags"},
-        "bot": {"type": "boolean", "description": "If a bot user."},
-        "avatar_decoration_data": {
-          "type": ["object", "null"],
-          "description": "Details about avatar decoration",
-          "properties": {
-            "asset": {"type": "string"},
-            "sku_id": {"type": "string"},
-            "expires_at": {"type": ["number", "null"]}
-          },
-          "required": ["asset"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["id", "username", "discriminator", "flags", "bot"],
-      "additionalProperties": false
-    }
-  },
-  "GET_CURRENT_USER": {
-    "request": null,
-    "response": {
-      "type": ["object", "null"],
-      "description": "Discord User",
-      "properties": {
-        "id": {"type": "string", "description": "User ID"},
-        "username": {"type": "string"},
-        "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-        "discriminator": {"type": "string", "description": "Global name discriminator. Will be 0 if a unique username"},
-        "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-        "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-        "public_flags": {"type": "number", "description": "Public user flags"},
-        "bot": {"type": "boolean", "description": "If a bot user."},
-        "avatar_decoration_data": {
-          "type": ["object", "null"],
-          "description": "Details about avatar decoration",
-          "properties": {
-            "asset": {"type": "string"},
-            "sku_id": {"type": "string"},
-            "expires_at": {"type": ["number", "null"]}
-          },
-          "required": ["asset"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["id", "username", "discriminator", "flags", "bot"],
-      "additionalProperties": false
-    }
-  },
-  "GET_QUEST_ENROLLMENT_STATUS": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_QUEST_ENROLLMENT_STATUS\" Command",
-      "properties": {"quest_id": {"type": "string"}},
-      "required": ["quest_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_QUEST_ENROLLMENT_STATUS\" Command",
-      "properties": {
-        "quest_id": {"type": "string"},
-        "is_enrolled": {"type": "boolean"},
-        "enrolled_at": {"type": ["string", "null"]}
-      },
-      "required": ["quest_id", "is_enrolled"],
-      "additionalProperties": false
-    }
-  },
-  "QUEST_START_TIMER": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"QUEST_START_TIMER\" Command",
-      "properties": {"quest_id": {"type": "string"}},
-      "required": ["quest_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"QUEST_START_TIMER\" Command",
-      "properties": {"success": {"type": "boolean"}},
-      "required": ["success"],
-      "additionalProperties": false
-    }
-  },
-  "GET_QUEST": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_QUEST\" Command",
-      "properties": {
-        "quest_id": {"type": "string"},
-        "enrolled_at": {"type": ["string", "null"]},
-        "completed_at": {"type": ["string", "null"]},
-        "external_cta_url": {"type": "string"}
-      },
-      "required": ["quest_id", "external_cta_url"],
-      "additionalProperties": false
-    }
-  },
-  "REQUEST_PROXY_TICKET_REFRESH": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"REQUEST_PROXY_TICKET_REFRESH\" Command",
-      "properties": {"ticket": {"type": "string"}},
-      "required": ["ticket"],
-      "additionalProperties": false
-    }
-  },
-  "CAPTURE_LOG": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"CAPTURE_LOG\" Command",
-      "properties": {"level": {"type": "string", "maxLength": 10}, "message": {"type": "string", "maxLength": 1000}},
-      "required": ["level", "message"],
-      "additionalProperties": false
-    },
-    "response": null
-  },
-  "ENCOURAGE_HW_ACCELERATION": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"ENCOURAGE_HW_ACCELERATION\" Command",
-      "properties": {"enabled": {"type": "boolean"}},
-      "required": ["enabled"],
-      "additionalProperties": false
-    }
-  },
-  "GET_PLATFORM_BEHAVIORS": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_PLATFORM_BEHAVIORS\" Command",
-      "properties": {"iosKeyboardResizesView": {"type": "boolean"}},
-      "additionalProperties": false
-    }
-  },
-  "USER_SETTINGS_GET_LOCALE": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"USER_SETTINGS_GET_LOCALE\" Command",
-      "properties": {"locale": {"type": "string"}},
-      "required": ["locale"],
-      "additionalProperties": false
-    }
-  },
-  "SET_ORIENTATION_LOCK_STATE": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"SET_ORIENTATION_LOCK_STATE\" Command",
-      "properties": {
-        "lock_state": {"type": "number", "enum": [1, 2, 3]},
-        "picture_in_picture_lock_state": {"type": ["number", "null"], "enum": [1, 2, 3, null]},
-        "grid_lock_state": {"type": ["number", "null"], "enum": [1, 2, 3, null]}
-      },
-      "required": ["lock_state"],
-      "additionalProperties": false
-    },
-    "response": null
-  },
-  "SET_CONFIG": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"SET_CONFIG\" Command",
-      "properties": {"use_interactive_pip": {"type": "boolean"}},
-      "required": ["use_interactive_pip"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"SET_CONFIG\" Command",
-      "properties": {"use_interactive_pip": {"type": "boolean"}},
-      "required": ["use_interactive_pip"],
-      "additionalProperties": false
-    }
-  },
-  "OPEN_INVITE_DIALOG": {"request": null, "response": null},
-  "OPEN_EXTERNAL_LINK": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"OPEN_EXTERNAL_LINK\" Command",
-      "properties": {"url": {"type": "string", "maxLength": 8000}},
-      "required": ["url"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"OPEN_EXTERNAL_LINK\" Command",
-      "default": {"opened": null},
-      "properties": {"opened": {"type": ["boolean", "null"]}},
-      "required": ["opened"],
-      "additionalProperties": false
-    }
-  },
-  "GET_CHANNEL_PERMISSIONS": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_CHANNEL_PERMISSIONS\" Command",
-      "properties": {"permissions": {"type": "string", "pattern": "^\\d+$", "format": "bigint"}},
-      "required": ["permissions"],
-      "additionalProperties": false
-    }
-  },
-  "GET_SKUS_EMBEDDED": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_SKUS_EMBEDDED\" Command",
-      "properties": {
-        "skus": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "name": {"type": "string"},
-              "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6]},
-              "price": {
-                "type": "object",
-                "properties": {"amount": {"type": "number"}, "currency": {"type": "string"}},
-                "required": ["amount", "currency"],
-                "additionalProperties": false
-              },
-              "application_id": {"type": "string"},
-              "flags": {"type": "number"},
-              "release_date": {"type": ["string", "null"]}
-            },
-            "required": ["id", "name", "type", "price", "application_id", "flags", "release_date"],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": ["skus"],
-      "additionalProperties": false
-    }
-  },
-  "GET_ENTITLEMENTS_EMBEDDED": {
-    "request": null,
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_ENTITLEMENTS_EMBEDDED\" Command",
-      "properties": {
-        "entitlements": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "sku_id": {"type": "string"},
-              "application_id": {"type": "string"},
-              "user_id": {"type": "string"},
-              "gift_code_flags": {"type": "number"},
-              "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16]},
-              "gifter_user_id": {"type": ["string", "null"]},
-              "branches": {"type": ["array", "null"], "items": {"type": "string"}},
-              "starts_at": {"type": ["string", "null"]},
-              "ends_at": {"type": ["string", "null"]},
-              "parent_id": {"type": ["string", "null"]},
-              "consumed": {"type": ["boolean", "null"]},
-              "deleted": {"type": ["boolean", "null"]},
-              "gift_code_batch_id": {"type": ["string", "null"]}
-            },
-            "required": ["id", "sku_id", "application_id", "user_id", "gift_code_flags", "type"],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": ["entitlements"],
-      "additionalProperties": false
-    }
-  },
-  "START_PURCHASE": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"START_PURCHASE\" Command",
-      "properties": {"sku_id": {"type": "string"}, "pid": {"type": "number", "minimum": 0}},
-      "required": ["sku_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": ["array", "null"],
-      "description": "Response for \"START_PURCHASE\" Command",
-      "items": {
+  "commands": {
+    "INITIATE_IMAGE_UPLOAD": {
+      "request": null,
+      "response": {
         "type": "object",
-        "properties": {
-          "id": {"type": "string"},
-          "sku_id": {"type": "string"},
-          "application_id": {"type": "string"},
-          "user_id": {"type": "string"},
-          "gift_code_flags": {"type": "number"},
-          "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16]},
-          "gifter_user_id": {"type": ["string", "null"]},
-          "branches": {"type": ["array", "null"], "items": {"type": "string"}},
-          "starts_at": {"type": ["string", "null"]},
-          "ends_at": {"type": ["string", "null"]},
-          "parent_id": {"type": ["string", "null"]},
-          "consumed": {"type": ["boolean", "null"]},
-          "deleted": {"type": ["boolean", "null"]},
-          "gift_code_batch_id": {"type": ["string", "null"]}
-        },
-        "required": ["id", "sku_id", "application_id", "user_id", "gift_code_flags", "type"],
+        "description": "Response for \"INITIATE_IMAGE_UPLOAD\" Command",
+        "properties": {"image_url": {"type": "string"}},
+        "required": ["image_url"],
         "additionalProperties": false
       }
-    }
-  },
-  "GET_CHANNEL": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_CHANNEL\" Command",
-      "properties": {"channel_id": {"type": "string"}},
-      "required": ["channel_id"],
-      "additionalProperties": false
     },
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_CHANNEL\" Command",
-      "properties": {
-        "id": {"type": "string"},
-        "type": {
-          "type": "number",
-          "enum": [1, 3, 0, 2, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 10000]
-        },
-        "guild_id": {"type": ["string", "null"]},
-        "name": {"type": ["string", "null"]},
-        "topic": {"type": ["string", "null"]},
-        "bitrate": {"type": ["number", "null"]},
-        "user_limit": {"type": ["number", "null"]},
-        "position": {"type": ["number", "null"]},
-        "voice_states": {
-          "type": "array",
-          "items": {
+    "OPEN_SHARE_MOMENT_DIALOG": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"OPEN_SHARE_MOMENT_DIALOG\" Command",
+        "properties": {"mediaUrl": {"type": "string", "maxLength": 1024}},
+        "required": ["mediaUrl"],
+        "additionalProperties": false
+      },
+      "response": null
+    },
+    "AUTHENTICATE": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"AUTHENTICATE\" Command",
+        "properties": {"access_token": {"type": ["string", "null"]}},
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"AUTHENTICATE\" Command",
+        "properties": {
+          "access_token": {"type": "string"},
+          "user": {
             "type": "object",
             "properties": {
-              "mute": {"type": "boolean"},
-              "nick": {"type": "string"},
-              "user": {
-                "type": "object",
-                "description": "Discord User",
-                "properties": {
-                  "id": {"type": "string", "description": "User ID"},
-                  "username": {"type": "string"},
-                  "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-                  "discriminator": {
-                    "type": "string",
-                    "description": "Global name discriminator. Will be 0 if a unique username"
-                  },
-                  "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                  "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-                  "public_flags": {"type": "number", "description": "Public user flags"},
-                  "bot": {"type": "boolean", "description": "If a bot user."},
-                  "avatar_decoration_data": {
-                    "type": ["object", "null"],
-                    "description": "Details about avatar decoration",
-                    "properties": {
-                      "asset": {"type": "string"},
-                      "sku_id": {"type": "string"},
-                      "expires_at": {"type": ["number", "null"]}
-                    },
-                    "required": ["asset"],
-                    "additionalProperties": false
-                  }
-                },
-                "required": ["id", "username", "discriminator", "flags", "bot"],
-                "additionalProperties": false
-              },
-              "voice_state": {
-                "type": "object",
-                "properties": {
-                  "mute": {"type": "boolean"},
-                  "deaf": {"type": "boolean"},
-                  "self_mute": {"type": "boolean"},
-                  "self_deaf": {"type": "boolean"},
-                  "suppress": {"type": "boolean"}
-                },
-                "required": ["mute", "deaf", "self_mute", "self_deaf", "suppress"],
-                "additionalProperties": false
-              },
-              "volume": {"type": "number"}
+              "username": {"type": "string"},
+              "discriminator": {"type": "string"},
+              "id": {"type": "string"},
+              "avatar": {"type": ["string", "null"]},
+              "public_flags": {"type": "number"},
+              "global_name": {"type": ["string", "null"]}
             },
-            "required": ["mute", "nick", "user", "voice_state", "volume"],
+            "required": ["username", "discriminator", "id", "public_flags"],
+            "additionalProperties": false
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "identify",
+                "identify.premium",
+                "email",
+                "connections",
+                "guilds",
+                "guilds.join",
+                "guilds.members.read",
+                "guilds.channels.read",
+                "gdm.join",
+                "bot",
+                "rpc",
+                "rpc.notifications.read",
+                "rpc.voice.read",
+                "rpc.voice.write",
+                "rpc.video.read",
+                "rpc.video.write",
+                "rpc.screenshare.read",
+                "rpc.screenshare.write",
+                "rpc.activities.write",
+                "webhook.incoming",
+                "messages.read",
+                "applications.builds.upload",
+                "applications.builds.read",
+                "applications.commands",
+                "applications.commands.permissions.update",
+                "applications.commands.update",
+                "applications.store.update",
+                "applications.entitlements",
+                "activities.read",
+                "activities.write",
+                "activities.invites.write",
+                "relationships.read",
+                "relationships.write",
+                "voice",
+                "dm_channels.read",
+                "role_connections.write",
+                "presences.read",
+                "presences.write",
+                "openid",
+                "dm_channels.messages.read",
+                "dm_channels.messages.write",
+                "gateway.connect",
+                "account.global_name.update",
+                "payment_sources.country_code",
+                "sdk.social_layer_presence",
+                "sdk.social_layer",
+                "lobbies.write",
+                "application_identities.write",
+                "managed_platform.application_identities.write",
+                "orbs_arcade.play",
+                "personal.relationships.read",
+                "personal.dm_channels.read",
+                "personal.dm_channels.messages.read",
+                "personal.guilds.channels.read",
+                "personal.guilds.channels.messages.read",
+                "personal.activities.write",
+                "personal.mentions.read",
+                "personal.guilds.messages.search",
+                "personal.dm_channels.messages.search"
+              ]
+            }
+          },
+          "expires": {"type": "string"},
+          "application": {
+            "type": "object",
+            "properties": {
+              "description": {"type": "string"},
+              "icon": {"type": ["string", "null"]},
+              "id": {"type": "string"},
+              "rpc_origins": {"type": "array", "items": {"type": "string"}},
+              "name": {"type": "string"}
+            },
+            "required": ["description", "id", "name"],
             "additionalProperties": false
           }
         },
-        "messages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "channel_id": {"type": "string"},
-              "guild_id": {"type": ["string", "null"]},
-              "author": {
-                "type": ["object", "null"],
-                "description": "Discord User",
-                "properties": {
-                  "id": {"type": "string", "description": "User ID"},
-                  "username": {"type": "string"},
-                  "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-                  "discriminator": {
-                    "type": "string",
-                    "description": "Global name discriminator. Will be 0 if a unique username"
+        "required": ["access_token", "user", "scopes", "expires", "application"],
+        "additionalProperties": false
+      }
+    },
+    "GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_ACTIVITY_INSTANCE_CONNECTED_PARTICIPANTS\" Command",
+        "properties": {
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Discord User",
+              "properties": {
+                "id": {"type": "string", "description": "User ID"},
+                "username": {"type": "string"},
+                "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                "discriminator": {
+                  "type": "string",
+                  "description": "Global name discriminator. Will be 0 if a unique username"
+                },
+                "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                "public_flags": {"type": "number", "description": "Public user flags"},
+                "bot": {"type": "boolean", "description": "If a bot user."},
+                "avatar_decoration_data": {
+                  "type": ["object", "null"],
+                  "description": "Details about avatar decoration",
+                  "properties": {
+                    "asset": {"type": "string"},
+                    "sku_id": {"type": "string"},
+                    "expires_at": {"type": ["number", "null"]}
                   },
-                  "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                  "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-                  "public_flags": {"type": "number", "description": "Public user flags"},
-                  "bot": {"type": "boolean", "description": "If a bot user."},
-                  "avatar_decoration_data": {
-                    "type": ["object", "null"],
-                    "description": "Details about avatar decoration",
-                    "properties": {
-                      "asset": {"type": "string"},
-                      "sku_id": {"type": "string"},
-                      "expires_at": {"type": ["number", "null"]}
-                    },
-                    "required": ["asset"],
-                    "additionalProperties": false
-                  }
+                  "required": ["asset"],
+                  "additionalProperties": false
                 },
-                "required": ["id", "username", "discriminator", "flags", "bot"],
-                "additionalProperties": false
+                "nickname": {"type": "string", "description": "Server nickname. Not unique."}
               },
-              "member": {
-                "type": ["object", "null"],
-                "properties": {
-                  "nick": {"type": ["string", "null"]},
-                  "roles": {"type": "array", "items": {"type": "string"}},
-                  "joined_at": {"type": "string"},
-                  "deaf": {"type": "boolean"},
-                  "mute": {"type": "boolean"}
-                },
-                "required": ["roles", "joined_at", "deaf", "mute"],
-                "additionalProperties": false
-              },
-              "content": {"type": "string"},
-              "timestamp": {"type": "string"},
-              "edited_timestamp": {"type": ["string", "null"]},
-              "tts": {"type": "boolean"},
-              "mention_everyone": {"type": "boolean"},
-              "mentions": {
-                "type": "array",
-                "items": {
+              "required": ["id", "username", "discriminator", "flags", "bot"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["participants"],
+        "additionalProperties": false
+      }
+    },
+    "SHARE_LINK": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"SHARE_LINK\" Command",
+        "properties": {
+          "custom_id": {"type": "string", "maxLength": 64},
+          "message": {"type": "string", "maxLength": 1000},
+          "link_id": {"type": "string", "maxLength": 64}
+        },
+        "required": ["message"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"SHARE_LINK\" Command",
+        "properties": {
+          "success": {"type": "boolean"},
+          "didCopyLink": {"type": "boolean"},
+          "didSendMessage": {"type": "boolean"}
+        },
+        "required": ["success", "didCopyLink", "didSendMessage"],
+        "additionalProperties": false
+      }
+    },
+    "OPEN_USER_PROFILE": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"OPEN_USER_PROFILE\" Command",
+        "properties": {"user_id": {"type": "string", "maxLength": 64}},
+        "required": ["user_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"OPEN_USER_PROFILE\" Command",
+        "properties": {"opened": {"type": "boolean"}},
+        "required": ["opened"],
+        "additionalProperties": false
+      }
+    },
+    "GET_RELATIONSHIPS": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_RELATIONSHIPS\" Command",
+        "properties": {
+          "relationships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {"type": "number"},
+                "user": {
                   "type": "object",
                   "description": "Discord User",
                   "properties": {
@@ -899,207 +256,789 @@
                   },
                   "required": ["id", "username", "discriminator", "flags", "bot"],
                   "additionalProperties": false
-                }
-              },
-              "mention_roles": {"type": "array", "items": {"type": "string"}},
-              "mention_channels": {
-                "type": "array",
-                "items": {
+                },
+                "presence": {
                   "type": "object",
                   "properties": {
-                    "id": {"type": "string"},
-                    "guild_id": {"type": "string"},
-                    "type": {"type": "number"},
-                    "name": {"type": "string"}
-                  },
-                  "required": ["id", "guild_id", "type", "name"],
-                  "additionalProperties": false
-                }
-              },
-              "attachments": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {"type": "string"},
-                    "filename": {"type": "string"},
-                    "size": {"type": "number"},
-                    "url": {"type": "string"},
-                    "proxy_url": {"type": "string"},
-                    "height": {"type": ["number", "null"]},
-                    "width": {"type": ["number", "null"]}
-                  },
-                  "required": ["id", "filename", "size", "url", "proxy_url"],
-                  "additionalProperties": false
-                }
-              },
-              "embeds": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "title": {"type": ["string", "null"]},
-                    "type": {"type": ["string", "null"]},
-                    "description": {"type": ["string", "null"]},
-                    "url": {"type": ["string", "null"]},
-                    "timestamp": {"type": ["string", "null"]},
-                    "color": {"type": ["number", "null"]},
-                    "footer": {
+                    "status": {"type": "string"},
+                    "activity": {
                       "type": ["object", "null"],
                       "properties": {
-                        "text": {"type": "string"},
-                        "icon_url": {"type": ["string", "null"]},
-                        "proxy_icon_url": {"type": ["string", "null"]}
-                      },
-                      "required": ["text"],
-                      "additionalProperties": false
-                    },
-                    "image": {
-                      "type": ["object", "null"],
-                      "properties": {
+                        "session_id": {"type": "string"},
+                        "type": {"type": "number"},
+                        "name": {"type": "string"},
                         "url": {"type": ["string", "null"]},
-                        "proxy_url": {"type": ["string", "null"]},
-                        "height": {"type": ["number", "null"]},
-                        "width": {"type": ["number", "null"]}
-                      },
-                      "additionalProperties": false
-                    },
-                    "thumbnail": {
-                      "type": ["object", "null"],
-                      "properties": {
-                        "url": {"type": ["string", "null"]},
-                        "proxy_url": {"type": ["string", "null"]},
-                        "height": {"type": ["number", "null"]},
-                        "width": {"type": ["number", "null"]}
-                      },
-                      "additionalProperties": false
-                    },
-                    "video": {
-                      "type": ["object", "null"],
-                      "properties": {
-                        "url": {"type": ["string", "null"]},
-                        "proxy_url": {"type": ["string", "null"]},
-                        "height": {"type": ["number", "null"]},
-                        "width": {"type": ["number", "null"]}
-                      },
-                      "additionalProperties": false
-                    },
-                    "provider": {
-                      "type": ["object", "null"],
-                      "properties": {"name": {"type": ["string", "null"]}, "url": {"type": ["string", "null"]}},
-                      "additionalProperties": false
-                    },
-                    "author": {
-                      "type": ["object", "null"],
-                      "properties": {
-                        "name": {"type": ["string", "null"]},
-                        "url": {"type": ["string", "null"]},
-                        "icon_url": {"type": ["string", "null"]},
-                        "proxy_icon_url": {"type": ["string", "null"]}
-                      },
-                      "additionalProperties": false
-                    },
-                    "fields": {
-                      "type": ["array", "null"],
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {"type": "string"},
-                          "value": {"type": "string"},
-                          "inline": {"type": ["boolean", "null"]}
+                        "application_id": {"type": "string"},
+                        "status_display_type": {"type": "number"},
+                        "state": {"type": "string"},
+                        "state_url": {"type": "string"},
+                        "details": {"type": "string"},
+                        "details_url": {"type": "string"},
+                        "emoji": {
+                          "type": ["object", "null"],
+                          "properties": {
+                            "name": {"type": "string"},
+                            "id": {"type": ["string", "null"]},
+                            "animated": {"type": ["boolean", "null"]}
+                          },
+                          "required": ["name"],
+                          "additionalProperties": false
                         },
-                        "required": ["name", "value"],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              },
-              "components": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {"type": {"type": "number"}},
-                  "required": ["type"],
-                  "additionalProperties": true
-                }
-              },
-              "reactions": {
-                "type": ["array", "null"],
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "count": {"type": "number"},
-                    "me": {"type": "boolean"},
-                    "emoji": {
-                      "type": "object",
-                      "properties": {
-                        "id": {"type": ["string", "null"]},
-                        "name": {"type": ["string", "null"]},
-                        "animated": {"type": ["boolean", "null"]}
+                        "assets": {
+                          "type": "object",
+                          "properties": {
+                            "large_image": {"type": "string"},
+                            "large_text": {"type": "string"},
+                            "large_url": {"type": "string"},
+                            "small_image": {"type": "string"},
+                            "small_text": {"type": "string"},
+                            "small_url": {"type": "string"}
+                          },
+                          "additionalProperties": false
+                        },
+                        "timestamps": {
+                          "type": "object",
+                          "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
+                          "additionalProperties": false
+                        },
+                        "party": {
+                          "type": "object",
+                          "properties": {
+                            "id": {"type": "string"},
+                            "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
+                            "privacy": {"type": "number"}
+                          },
+                          "additionalProperties": false
+                        },
+                        "secrets": {
+                          "type": "object",
+                          "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
+                          "additionalProperties": false
+                        },
+                        "sync_id": {"type": "string"},
+                        "created_at": {"type": "number"},
+                        "instance": {"type": "boolean"},
+                        "flags": {"type": "number"},
+                        "metadata": {
+                          "type": "object",
+                          "properties": {"button_urls": {"type": "array", "items": {"type": "string"}}},
+                          "additionalProperties": false
+                        },
+                        "platform": {"type": "string"},
+                        "supported_platforms": {"type": "array", "items": {"type": "string"}},
+                        "buttons": {"type": "array", "items": {"type": "string"}}
                       },
-                      "required": ["id", "name"],
+                      "required": ["name"],
                       "additionalProperties": false
                     }
                   },
-                  "required": ["count", "me", "emoji"],
+                  "required": ["status"],
                   "additionalProperties": false
                 }
               },
-              "nonce": {"anyOf": [{"type": "string"}, {"type": "number"}, {"const": null}]},
-              "pinned": {"type": "boolean"},
-              "webhook_id": {"type": ["string", "null"]},
-              "type": {"type": "number"},
-              "activity": {
-                "type": ["object", "null"],
-                "properties": {"type": {"type": "number"}, "party_id": {"type": ["string", "null"]}},
+              "required": ["type", "user"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["relationships"],
+        "additionalProperties": false
+      }
+    },
+    "INVITE_USER_EMBEDDED": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"INVITE_USER_EMBEDDED\" Command",
+        "properties": {"user_id": {"type": "string"}, "content": {"type": "string", "minLength": 0, "maxLength": 1024}},
+        "required": ["user_id"],
+        "additionalProperties": false
+      },
+      "response": null
+    },
+    "GET_CONTEXT": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_CONTEXT\" Command",
+        "properties": {
+          "surface": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {"type": {"const": 0}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
                 "required": ["type"],
                 "additionalProperties": false
               },
-              "application": {
-                "type": ["object", "null"],
-                "properties": {
-                  "id": {"type": "string"},
-                  "cover_image": {"type": ["string", "null"]},
-                  "description": {"type": "string"},
-                  "icon": {"type": ["string", "null"]},
-                  "name": {"type": "string"}
-                },
-                "required": ["id", "description", "name"],
+              {
+                "type": "object",
+                "properties": {"type": {"const": 1}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
+                "required": ["type", "channel_id"],
                 "additionalProperties": false
               },
-              "message_reference": {
-                "type": ["object", "null"],
-                "properties": {
-                  "message_id": {"type": ["string", "null"]},
-                  "channel_id": {"type": ["string", "null"]},
-                  "guild_id": {"type": ["string", "null"]}
-                },
+              {
+                "type": "object",
+                "properties": {"type": {"const": 2}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
+                "required": ["type", "channel_id"],
                 "additionalProperties": false
               },
-              "flags": {"type": ["number", "null"]},
-              "application_id": {"type": "string"},
-              "sticker_items": {
-                "type": "array",
-                "items": {
+              {
+                "type": "object",
+                "properties": {"type": {"const": 3}, "channel_id": {"type": "string"}, "guild_id": {"type": "string"}},
+                "required": ["type", "channel_id"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {"type": {"const": 4}},
+                "required": ["type"],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "launch": {
+            "type": "object",
+            "properties": {
+              "custom_id": {"type": "string"},
+              "referrer_id": {"type": "string"},
+              "interaction_id": {"type": "string"}
+            },
+            "additionalProperties": false
+          },
+          "platform": {"type": "string", "enum": ["desktop", "mobile"]}
+        },
+        "required": ["surface", "launch", "platform"],
+        "additionalProperties": false
+      }
+    },
+    "GET_USER": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_USER\" Command",
+        "properties": {"id": {"type": "string", "maxLength": 64}},
+        "required": ["id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": ["object", "null"],
+        "description": "Discord User",
+        "properties": {
+          "id": {"type": "string", "description": "User ID"},
+          "username": {"type": "string"},
+          "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+          "discriminator": {
+            "type": "string",
+            "description": "Global name discriminator. Will be 0 if a unique username"
+          },
+          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+          "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+          "public_flags": {"type": "number", "description": "Public user flags"},
+          "bot": {"type": "boolean", "description": "If a bot user."},
+          "avatar_decoration_data": {
+            "type": ["object", "null"],
+            "description": "Details about avatar decoration",
+            "properties": {
+              "asset": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "expires_at": {"type": ["number", "null"]}
+            },
+            "required": ["asset"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "username", "discriminator", "flags", "bot"],
+        "additionalProperties": false
+      }
+    },
+    "GET_CURRENT_USER": {
+      "request": null,
+      "response": {
+        "type": ["object", "null"],
+        "description": "Discord User",
+        "properties": {
+          "id": {"type": "string", "description": "User ID"},
+          "username": {"type": "string"},
+          "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+          "discriminator": {
+            "type": "string",
+            "description": "Global name discriminator. Will be 0 if a unique username"
+          },
+          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+          "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+          "public_flags": {"type": "number", "description": "Public user flags"},
+          "bot": {"type": "boolean", "description": "If a bot user."},
+          "avatar_decoration_data": {
+            "type": ["object", "null"],
+            "description": "Details about avatar decoration",
+            "properties": {
+              "asset": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "expires_at": {"type": ["number", "null"]}
+            },
+            "required": ["asset"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "username", "discriminator", "flags", "bot"],
+        "additionalProperties": false
+      }
+    },
+    "GET_QUEST_ENROLLMENT_STATUS": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_QUEST_ENROLLMENT_STATUS\" Command",
+        "properties": {"quest_id": {"type": "string"}},
+        "required": ["quest_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_QUEST_ENROLLMENT_STATUS\" Command",
+        "properties": {
+          "quest_id": {"type": "string"},
+          "is_enrolled": {"type": "boolean"},
+          "enrolled_at": {"type": ["string", "null"]}
+        },
+        "required": ["quest_id", "is_enrolled"],
+        "additionalProperties": false
+      }
+    },
+    "QUEST_START_TIMER": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"QUEST_START_TIMER\" Command",
+        "properties": {"quest_id": {"type": "string"}},
+        "required": ["quest_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"QUEST_START_TIMER\" Command",
+        "properties": {"success": {"type": "boolean"}},
+        "required": ["success"],
+        "additionalProperties": false
+      }
+    },
+    "GET_QUEST": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_QUEST\" Command",
+        "properties": {
+          "quest_id": {"type": "string"},
+          "enrolled_at": {"type": ["string", "null"]},
+          "completed_at": {"type": ["string", "null"]},
+          "external_cta_url": {"type": "string"}
+        },
+        "required": ["quest_id", "external_cta_url"],
+        "additionalProperties": false
+      }
+    },
+    "REQUEST_PROXY_TICKET_REFRESH": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"REQUEST_PROXY_TICKET_REFRESH\" Command",
+        "properties": {"ticket": {"type": "string"}},
+        "required": ["ticket"],
+        "additionalProperties": false
+      }
+    },
+    "CAPTURE_LOG": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"CAPTURE_LOG\" Command",
+        "properties": {"level": {"type": "string", "maxLength": 10}, "message": {"type": "string", "maxLength": 1000}},
+        "required": ["level", "message"],
+        "additionalProperties": false
+      },
+      "response": null
+    },
+    "ENCOURAGE_HW_ACCELERATION": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"ENCOURAGE_HW_ACCELERATION\" Command",
+        "properties": {"enabled": {"type": "boolean"}},
+        "required": ["enabled"],
+        "additionalProperties": false
+      }
+    },
+    "GET_PLATFORM_BEHAVIORS": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_PLATFORM_BEHAVIORS\" Command",
+        "properties": {"iosKeyboardResizesView": {"type": "boolean"}},
+        "additionalProperties": false
+      }
+    },
+    "USER_SETTINGS_GET_LOCALE": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"USER_SETTINGS_GET_LOCALE\" Command",
+        "properties": {"locale": {"type": "string"}},
+        "required": ["locale"],
+        "additionalProperties": false
+      }
+    },
+    "SET_ORIENTATION_LOCK_STATE": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"SET_ORIENTATION_LOCK_STATE\" Command",
+        "properties": {
+          "lock_state": {"type": "number", "enum": [1, 2, 3]},
+          "picture_in_picture_lock_state": {"type": ["number", "null"], "enum": [1, 2, 3, null]},
+          "grid_lock_state": {"type": ["number", "null"], "enum": [1, 2, 3, null]}
+        },
+        "required": ["lock_state"],
+        "additionalProperties": false
+      },
+      "response": null
+    },
+    "SET_CONFIG": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"SET_CONFIG\" Command",
+        "properties": {"use_interactive_pip": {"type": "boolean"}},
+        "required": ["use_interactive_pip"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"SET_CONFIG\" Command",
+        "properties": {"use_interactive_pip": {"type": "boolean"}},
+        "required": ["use_interactive_pip"],
+        "additionalProperties": false
+      }
+    },
+    "OPEN_INVITE_DIALOG": {"request": null, "response": null},
+    "OPEN_EXTERNAL_LINK": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"OPEN_EXTERNAL_LINK\" Command",
+        "properties": {"url": {"type": "string", "maxLength": 8000}},
+        "required": ["url"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"OPEN_EXTERNAL_LINK\" Command",
+        "default": {"opened": null},
+        "properties": {"opened": {"type": ["boolean", "null"]}},
+        "required": ["opened"],
+        "additionalProperties": false
+      }
+    },
+    "GET_CHANNEL_PERMISSIONS": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_CHANNEL_PERMISSIONS\" Command",
+        "properties": {"permissions": {"type": "string", "pattern": "^\\d+$", "format": "bigint"}},
+        "required": ["permissions"],
+        "additionalProperties": false
+      }
+    },
+    "GET_SKUS_EMBEDDED": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_SKUS_EMBEDDED\" Command",
+        "properties": {
+          "skus": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6]},
+                "price": {
+                  "type": "object",
+                  "properties": {"amount": {"type": "number"}, "currency": {"type": "string"}},
+                  "required": ["amount", "currency"],
+                  "additionalProperties": false
+                },
+                "application_id": {"type": "string"},
+                "flags": {"type": "number"},
+                "release_date": {"type": ["string", "null"]}
+              },
+              "required": ["id", "name", "type", "price", "application_id", "flags", "release_date"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["skus"],
+        "additionalProperties": false
+      }
+    },
+    "GET_ENTITLEMENTS_EMBEDDED": {
+      "request": null,
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_ENTITLEMENTS_EMBEDDED\" Command",
+        "properties": {
+          "entitlements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "sku_id": {"type": "string"},
+                "application_id": {"type": "string"},
+                "user_id": {"type": "string"},
+                "gift_code_flags": {"type": "number"},
+                "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]},
+                "gifter_user_id": {"type": ["string", "null"]},
+                "branches": {"type": ["array", "null"], "items": {"type": "string"}},
+                "starts_at": {"type": ["string", "null"]},
+                "ends_at": {"type": ["string", "null"]},
+                "parent_id": {"type": ["string", "null"]},
+                "consumed": {"type": ["boolean", "null"]},
+                "deleted": {"type": ["boolean", "null"]},
+                "gift_code_batch_id": {"type": ["string", "null"]}
+              },
+              "required": ["id", "sku_id", "application_id", "user_id", "gift_code_flags", "type"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["entitlements"],
+        "additionalProperties": false
+      }
+    },
+    "START_PURCHASE": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"START_PURCHASE\" Command",
+        "properties": {"sku_id": {"type": "string"}, "pid": {"type": "number", "minimum": 0}},
+        "required": ["sku_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": ["array", "null"],
+        "description": "Response for \"START_PURCHASE\" Command",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {"type": "string"},
+            "sku_id": {"type": "string"},
+            "application_id": {"type": "string"},
+            "user_id": {"type": "string"},
+            "gift_code_flags": {"type": "number"},
+            "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]},
+            "gifter_user_id": {"type": ["string", "null"]},
+            "branches": {"type": ["array", "null"], "items": {"type": "string"}},
+            "starts_at": {"type": ["string", "null"]},
+            "ends_at": {"type": ["string", "null"]},
+            "parent_id": {"type": ["string", "null"]},
+            "consumed": {"type": ["boolean", "null"]},
+            "deleted": {"type": ["boolean", "null"]},
+            "gift_code_batch_id": {"type": ["string", "null"]}
+          },
+          "required": ["id", "sku_id", "application_id", "user_id", "gift_code_flags", "type"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "GET_CHANNEL": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_CHANNEL\" Command",
+        "properties": {"channel_id": {"type": "string"}},
+        "required": ["channel_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_CHANNEL\" Command",
+        "properties": {
+          "id": {"type": "string"},
+          "type": {
+            "type": "number",
+            "enum": [1, 3, 0, 2, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 10000]
+          },
+          "guild_id": {"type": ["string", "null"]},
+          "name": {"type": ["string", "null"]},
+          "topic": {"type": ["string", "null"]},
+          "bitrate": {"type": ["number", "null"]},
+          "user_limit": {"type": ["number", "null"]},
+          "position": {"type": ["number", "null"]},
+          "voice_states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "mute": {"type": "boolean"},
+                "nick": {"type": "string"},
+                "user": {
+                  "type": "object",
+                  "description": "Discord User",
+                  "properties": {
+                    "id": {"type": "string", "description": "User ID"},
+                    "username": {"type": "string"},
+                    "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                    "discriminator": {
+                      "type": "string",
+                      "description": "Global name discriminator. Will be 0 if a unique username"
+                    },
+                    "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                    "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                    "public_flags": {"type": "number", "description": "Public user flags"},
+                    "bot": {"type": "boolean", "description": "If a bot user."},
+                    "avatar_decoration_data": {
+                      "type": ["object", "null"],
+                      "description": "Details about avatar decoration",
+                      "properties": {
+                        "asset": {"type": "string"},
+                        "sku_id": {"type": "string"},
+                        "expires_at": {"type": ["number", "null"]}
+                      },
+                      "required": ["asset"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["id", "username", "discriminator", "flags", "bot"],
+                  "additionalProperties": false
+                },
+                "voice_state": {
                   "type": "object",
                   "properties": {
-                    "id": {"type": "string"},
-                    "name": {"type": "string"},
-                    "format_type": {"type": "number"}
+                    "mute": {"type": "boolean"},
+                    "deaf": {"type": "boolean"},
+                    "self_mute": {"type": "boolean"},
+                    "self_deaf": {"type": "boolean"},
+                    "suppress": {"type": "boolean"}
                   },
-                  "required": ["id", "name", "format_type"],
+                  "required": ["mute", "deaf", "self_mute", "self_deaf", "suppress"],
                   "additionalProperties": false
-                }
+                },
+                "volume": {"type": "number"}
               },
-              "poll": {
-                "type": "object",
-                "properties": {
-                  "question": {
+              "required": ["mute", "nick", "user", "voice_state", "volume"],
+              "additionalProperties": false
+            }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "channel_id": {"type": "string"},
+                "guild_id": {"type": ["string", "null"]},
+                "author": {
+                  "type": ["object", "null"],
+                  "description": "Discord User",
+                  "properties": {
+                    "id": {"type": "string", "description": "User ID"},
+                    "username": {"type": "string"},
+                    "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                    "discriminator": {
+                      "type": "string",
+                      "description": "Global name discriminator. Will be 0 if a unique username"
+                    },
+                    "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                    "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                    "public_flags": {"type": "number", "description": "Public user flags"},
+                    "bot": {"type": "boolean", "description": "If a bot user."},
+                    "avatar_decoration_data": {
+                      "type": ["object", "null"],
+                      "description": "Details about avatar decoration",
+                      "properties": {
+                        "asset": {"type": "string"},
+                        "sku_id": {"type": "string"},
+                        "expires_at": {"type": ["number", "null"]}
+                      },
+                      "required": ["asset"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["id", "username", "discriminator", "flags", "bot"],
+                  "additionalProperties": false
+                },
+                "member": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "nick": {"type": ["string", "null"]},
+                    "roles": {"type": "array", "items": {"type": "string"}},
+                    "joined_at": {"type": "string"},
+                    "deaf": {"type": "boolean"},
+                    "mute": {"type": "boolean"}
+                  },
+                  "required": ["roles", "joined_at", "deaf", "mute"],
+                  "additionalProperties": false
+                },
+                "content": {"type": "string"},
+                "timestamp": {"type": "string"},
+                "edited_timestamp": {"type": ["string", "null"]},
+                "tts": {"type": "boolean"},
+                "mention_everyone": {"type": "boolean"},
+                "mentions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Discord User",
+                    "properties": {
+                      "id": {"type": "string", "description": "User ID"},
+                      "username": {"type": "string"},
+                      "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                      "discriminator": {
+                        "type": "string",
+                        "description": "Global name discriminator. Will be 0 if a unique username"
+                      },
+                      "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                      "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                      "public_flags": {"type": "number", "description": "Public user flags"},
+                      "bot": {"type": "boolean", "description": "If a bot user."},
+                      "avatar_decoration_data": {
+                        "type": ["object", "null"],
+                        "description": "Details about avatar decoration",
+                        "properties": {
+                          "asset": {"type": "string"},
+                          "sku_id": {"type": "string"},
+                          "expires_at": {"type": ["number", "null"]}
+                        },
+                        "required": ["asset"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": ["id", "username", "discriminator", "flags", "bot"],
+                    "additionalProperties": false
+                  }
+                },
+                "mention_roles": {"type": "array", "items": {"type": "string"}},
+                "mention_channels": {
+                  "type": "array",
+                  "items": {
                     "type": "object",
                     "properties": {
-                      "text": {"type": "string"},
+                      "id": {"type": "string"},
+                      "guild_id": {"type": "string"},
+                      "type": {"type": "number"},
+                      "name": {"type": "string"}
+                    },
+                    "required": ["id", "guild_id", "type", "name"],
+                    "additionalProperties": false
+                  }
+                },
+                "attachments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "filename": {"type": "string"},
+                      "size": {"type": "number"},
+                      "url": {"type": "string"},
+                      "proxy_url": {"type": "string"},
+                      "height": {"type": ["number", "null"]},
+                      "width": {"type": ["number", "null"]}
+                    },
+                    "required": ["id", "filename", "size", "url", "proxy_url"],
+                    "additionalProperties": false
+                  }
+                },
+                "embeds": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {"type": ["string", "null"]},
+                      "type": {"type": ["string", "null"]},
+                      "description": {"type": ["string", "null"]},
+                      "url": {"type": ["string", "null"]},
+                      "timestamp": {"type": ["string", "null"]},
+                      "color": {"type": ["number", "null"]},
+                      "footer": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "text": {"type": "string"},
+                          "icon_url": {"type": ["string", "null"]},
+                          "proxy_icon_url": {"type": ["string", "null"]}
+                        },
+                        "required": ["text"],
+                        "additionalProperties": false
+                      },
+                      "image": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "url": {"type": ["string", "null"]},
+                          "proxy_url": {"type": ["string", "null"]},
+                          "height": {"type": ["number", "null"]},
+                          "width": {"type": ["number", "null"]}
+                        },
+                        "additionalProperties": false
+                      },
+                      "thumbnail": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "url": {"type": ["string", "null"]},
+                          "proxy_url": {"type": ["string", "null"]},
+                          "height": {"type": ["number", "null"]},
+                          "width": {"type": ["number", "null"]}
+                        },
+                        "additionalProperties": false
+                      },
+                      "video": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "url": {"type": ["string", "null"]},
+                          "proxy_url": {"type": ["string", "null"]},
+                          "height": {"type": ["number", "null"]},
+                          "width": {"type": ["number", "null"]}
+                        },
+                        "additionalProperties": false
+                      },
+                      "provider": {
+                        "type": ["object", "null"],
+                        "properties": {"name": {"type": ["string", "null"]}, "url": {"type": ["string", "null"]}},
+                        "additionalProperties": false
+                      },
+                      "author": {
+                        "type": ["object", "null"],
+                        "properties": {
+                          "name": {"type": ["string", "null"]},
+                          "url": {"type": ["string", "null"]},
+                          "icon_url": {"type": ["string", "null"]},
+                          "proxy_icon_url": {"type": ["string", "null"]}
+                        },
+                        "additionalProperties": false
+                      },
+                      "fields": {
+                        "type": ["array", "null"],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {"type": "string"},
+                            "value": {"type": "string"},
+                            "inline": {"type": ["boolean", "null"]}
+                          },
+                          "required": ["name", "value"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {"type": {"type": "number"}},
+                    "required": ["type"],
+                    "additionalProperties": true
+                  }
+                },
+                "reactions": {
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "count": {"type": "number"},
+                      "me": {"type": "boolean"},
                       "emoji": {
                         "type": "object",
                         "properties": {
@@ -1107,683 +1046,1179 @@
                           "name": {"type": ["string", "null"]},
                           "animated": {"type": ["boolean", "null"]}
                         },
+                        "required": ["id", "name"],
                         "additionalProperties": false
                       }
                     },
-                    "additionalProperties": false
-                  },
-                  "answers": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "answer_id": {"type": "number"},
-                        "poll_media": {
-                          "type": "object",
-                          "properties": {
-                            "text": {"type": "string"},
-                            "emoji": {
-                              "type": "object",
-                              "properties": {
-                                "id": {"type": ["string", "null"]},
-                                "name": {"type": ["string", "null"]},
-                                "animated": {"type": ["boolean", "null"]}
-                              },
-                              "additionalProperties": false
-                            }
-                          },
-                          "additionalProperties": false
-                        }
-                      },
-                      "required": ["answer_id", "poll_media"],
-                      "additionalProperties": false
-                    }
-                  },
-                  "expiry": {"type": "string"},
-                  "allow_multiselect": {"type": "boolean"},
-                  "layout_type": {"type": "number"},
-                  "results": {
-                    "type": "object",
-                    "properties": {
-                      "is_finalized": {"type": "boolean"},
-                      "answer_counts": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {"type": "number"},
-                            "count": {"type": "number"},
-                            "me_voted": {"type": "boolean"}
-                          },
-                          "required": ["id", "count", "me_voted"],
-                          "additionalProperties": false
-                        }
-                      }
-                    },
-                    "required": ["is_finalized", "answer_counts"],
+                    "required": ["count", "me", "emoji"],
                     "additionalProperties": false
                   }
                 },
-                "required": ["question", "answers", "expiry", "allow_multiselect", "layout_type"],
-                "additionalProperties": false
-              },
-              "interaction_metadata": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "string"},
-                  "type": {"type": "number"},
-                  "user": {
-                    "type": "object",
-                    "description": "Discord User",
-                    "properties": {
-                      "id": {"type": "string", "description": "User ID"},
-                      "username": {"type": "string"},
-                      "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-                      "discriminator": {
-                        "type": "string",
-                        "description": "Global name discriminator. Will be 0 if a unique username"
-                      },
-                      "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                      "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-                      "public_flags": {"type": "number", "description": "Public user flags"},
-                      "bot": {"type": "boolean", "description": "If a bot user."},
-                      "avatar_decoration_data": {
-                        "type": ["object", "null"],
-                        "description": "Details about avatar decoration",
-                        "properties": {
-                          "asset": {"type": "string"},
-                          "sku_id": {"type": "string"},
-                          "expires_at": {"type": ["number", "null"]}
-                        },
-                        "required": ["asset"],
-                        "additionalProperties": false
-                      }
-                    },
-                    "required": ["id", "username", "discriminator", "flags", "bot"],
-                    "additionalProperties": false
+                "nonce": {"anyOf": [{"type": "string"}, {"type": "number"}, {"const": null}]},
+                "pinned": {"type": "boolean"},
+                "webhook_id": {"type": ["string", "null"]},
+                "type": {"type": "number"},
+                "activity": {
+                  "type": ["object", "null"],
+                  "properties": {"type": {"type": "number"}, "party_id": {"type": ["string", "null"]}},
+                  "required": ["type"],
+                  "additionalProperties": false
+                },
+                "application": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "id": {"type": "string"},
+                    "cover_image": {"type": ["string", "null"]},
+                    "description": {"type": "string"},
+                    "icon": {"type": ["string", "null"]},
+                    "name": {"type": "string"}
                   },
-                  "authorizing_integration_owners": {
-                    "type": "object",
-                    "properties": {
-                      "0": {"type": "string", "description": "ID of the guild the app is installed to"},
-                      "1": {"type": "string", "description": "ID of the user the app is installed to"}
-                    },
-                    "additionalProperties": false
+                  "required": ["id", "description", "name"],
+                  "additionalProperties": false
+                },
+                "message_reference": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "message_id": {"type": ["string", "null"]},
+                    "channel_id": {"type": ["string", "null"]},
+                    "guild_id": {"type": ["string", "null"]}
                   },
-                  "original_response_message_id": {"type": "string"},
-                  "target_user": {
-                    "type": "object",
-                    "description": "Discord User",
-                    "properties": {
-                      "id": {"type": "string", "description": "User ID"},
-                      "username": {"type": "string"},
-                      "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
-                      "discriminator": {
-                        "type": "string",
-                        "description": "Global name discriminator. Will be 0 if a unique username"
-                      },
-                      "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                      "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
-                      "public_flags": {"type": "number", "description": "Public user flags"},
-                      "bot": {"type": "boolean", "description": "If a bot user."},
-                      "avatar_decoration_data": {
-                        "type": ["object", "null"],
-                        "description": "Details about avatar decoration",
-                        "properties": {
-                          "asset": {"type": "string"},
-                          "sku_id": {"type": "string"},
-                          "expires_at": {"type": ["number", "null"]}
-                        },
-                        "required": ["asset"],
-                        "additionalProperties": false
-                      }
-                    },
-                    "required": ["id", "username", "discriminator", "flags", "bot"],
-                    "additionalProperties": false
-                  },
-                  "target_message_id": {"type": "string"},
-                  "interacted_message_id": {"type": "string"},
-                  "triggering_interaction_metadata": {
+                  "additionalProperties": false
+                },
+                "flags": {"type": ["number", "null"]},
+                "application_id": {"type": "string"},
+                "sticker_items": {
+                  "type": "array",
+                  "items": {
                     "type": "object",
                     "properties": {
                       "id": {"type": "string"},
-                      "type": {"type": "number"},
-                      "user": {
-                        "type": "object",
-                        "description": "Discord User",
-                        "properties": {
-                          "id": {"type": "string", "description": "User ID"},
-                          "username": {"type": "string"},
-                          "global_name": {
-                            "type": ["string", "null"],
-                            "description": "Global Discord name. Not unique."
-                          },
-                          "discriminator": {
-                            "type": "string",
-                            "description": "Global name discriminator. Will be 0 if a unique username"
-                          },
-                          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                          "flags": {
-                            "type": "number",
-                            "description": "Public user flags. Deprecated: use public_flags."
-                          },
-                          "public_flags": {"type": "number", "description": "Public user flags"},
-                          "bot": {"type": "boolean", "description": "If a bot user."},
-                          "avatar_decoration_data": {
-                            "type": ["object", "null"],
-                            "description": "Details about avatar decoration",
-                            "properties": {
-                              "asset": {"type": "string"},
-                              "sku_id": {"type": "string"},
-                              "expires_at": {"type": ["number", "null"]}
-                            },
-                            "required": ["asset"],
-                            "additionalProperties": false
-                          }
-                        },
-                        "required": ["id", "username", "discriminator", "flags", "bot"],
-                        "additionalProperties": false
-                      },
-                      "authorizing_integration_owners": {
-                        "type": "object",
-                        "properties": {
-                          "0": {"type": "string", "description": "ID of the guild the app is installed to"},
-                          "1": {"type": "string", "description": "ID of the user the app is installed to"}
-                        },
-                        "additionalProperties": false
-                      },
-                      "original_response_message_id": {"type": "string"},
-                      "target_user": {
-                        "type": "object",
-                        "description": "Discord User",
-                        "properties": {
-                          "id": {"type": "string", "description": "User ID"},
-                          "username": {"type": "string"},
-                          "global_name": {
-                            "type": ["string", "null"],
-                            "description": "Global Discord name. Not unique."
-                          },
-                          "discriminator": {
-                            "type": "string",
-                            "description": "Global name discriminator. Will be 0 if a unique username"
-                          },
-                          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
-                          "flags": {
-                            "type": "number",
-                            "description": "Public user flags. Deprecated: use public_flags."
-                          },
-                          "public_flags": {"type": "number", "description": "Public user flags"},
-                          "bot": {"type": "boolean", "description": "If a bot user."},
-                          "avatar_decoration_data": {
-                            "type": ["object", "null"],
-                            "description": "Details about avatar decoration",
-                            "properties": {
-                              "asset": {"type": "string"},
-                              "sku_id": {"type": "string"},
-                              "expires_at": {"type": ["number", "null"]}
-                            },
-                            "required": ["asset"],
-                            "additionalProperties": false
-                          }
-                        },
-                        "required": ["id", "username", "discriminator", "flags", "bot"],
-                        "additionalProperties": false
-                      },
-                      "target_message_id": {"type": "string"},
-                      "interacted_message_id": {"type": "string"}
+                      "name": {"type": "string"},
+                      "format_type": {"type": "number"}
                     },
-                    "required": ["id", "type", "authorizing_integration_owners"],
+                    "required": ["id", "name", "format_type"],
                     "additionalProperties": false
                   }
                 },
-                "required": ["id", "type", "authorizing_integration_owners"],
-                "additionalProperties": false
-              },
-              "role_subscription_data": {
-                "type": "object",
-                "properties": {
-                  "role_subscription_listing_id": {"type": "string"},
-                  "tier_name": {"type": "string"},
-                  "total_months_subscribed": {"type": "number"},
-                  "is_renewal": {"type": "boolean"}
+                "poll": {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "object",
+                      "properties": {
+                        "text": {"type": "string"},
+                        "emoji": {
+                          "type": "object",
+                          "properties": {
+                            "id": {"type": ["string", "null"]},
+                            "name": {"type": ["string", "null"]},
+                            "animated": {"type": ["boolean", "null"]}
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "answer_id": {"type": "number"},
+                          "poll_media": {
+                            "type": "object",
+                            "properties": {
+                              "text": {"type": "string"},
+                              "emoji": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {"type": ["string", "null"]},
+                                  "name": {"type": ["string", "null"]},
+                                  "animated": {"type": ["boolean", "null"]}
+                                },
+                                "additionalProperties": false
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": ["answer_id", "poll_media"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "expiry": {"type": "string"},
+                    "allow_multiselect": {"type": "boolean"},
+                    "layout_type": {"type": "number"},
+                    "results": {
+                      "type": "object",
+                      "properties": {
+                        "is_finalized": {"type": "boolean"},
+                        "answer_counts": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {"type": "number"},
+                              "count": {"type": "number"},
+                              "me_voted": {"type": "boolean"}
+                            },
+                            "required": ["id", "count", "me_voted"],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": ["is_finalized", "answer_counts"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["question", "answers", "expiry", "allow_multiselect", "layout_type"],
+                  "additionalProperties": false
                 },
-                "required": ["role_subscription_listing_id", "tier_name", "total_months_subscribed", "is_renewal"],
-                "additionalProperties": false
-              },
-              "blocked": {"type": "boolean"},
-              "nick": {"type": ["string", "null"]},
-              "author_color": {"type": ["string", "null"]}
-            },
-            "required": [
-              "id",
-              "channel_id",
-              "content",
-              "timestamp",
-              "tts",
-              "mention_everyone",
-              "mentions",
-              "mention_roles",
-              "attachments",
-              "embeds",
-              "pinned",
-              "type"
-            ],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": ["id", "type", "voice_states", "messages"],
-      "additionalProperties": false
-    }
-  },
-  "GET_CHANNELS": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_CHANNELS\" Command",
-      "properties": {"guild_id": {"type": ["string", "null"]}},
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_CHANNELS\" Command",
-      "properties": {
-        "channels": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "name": {"type": "string"},
-              "type": {
-                "type": "number",
-                "enum": [1, 3, 0, 2, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 10000]
-              }
-            },
-            "required": ["id", "name", "type"],
-            "additionalProperties": false
-          }
-        }
-      },
-      "required": ["channels"],
-      "additionalProperties": false
-    }
-  },
-  "GET_GUILD": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_GUILD\" Command",
-      "properties": {"guild_id": {"type": "string"}, "timeout": {"type": "number", "minimum": 0, "maximum": 60}},
-      "required": ["guild_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_GUILD\" Command",
-      "properties": {
-        "id": {"type": "string"},
-        "name": {"type": "string"},
-        "icon_url": {"type": ["string", "null"]},
-        "vanity_url_code": {"type": ["string", "null"]}
-      },
-      "required": ["id", "name", "icon_url"],
-      "additionalProperties": false
-    }
-  },
-  "GET_ROLES": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_ROLES\" Command",
-      "properties": {"guild_id": {"type": "string"}},
-      "required": ["guild_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": "object",
-      "description": "Response for \"GET_ROLES\" Command",
-      "properties": {
-        "roles": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "name": {"type": "string"},
-              "color": {"type": "number"},
-              "colors": {
-                "type": "object",
-                "properties": {
-                  "primary_color": {"type": "number"},
-                  "secondary_color": {"type": ["number", "null"]},
-                  "tertiary_color": {"type": ["number", "null"]}
+                "interaction_metadata": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string"},
+                    "type": {"type": "number"},
+                    "user": {
+                      "type": "object",
+                      "description": "Discord User",
+                      "properties": {
+                        "id": {"type": "string", "description": "User ID"},
+                        "username": {"type": "string"},
+                        "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                        "discriminator": {
+                          "type": "string",
+                          "description": "Global name discriminator. Will be 0 if a unique username"
+                        },
+                        "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                        "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                        "public_flags": {"type": "number", "description": "Public user flags"},
+                        "bot": {"type": "boolean", "description": "If a bot user."},
+                        "avatar_decoration_data": {
+                          "type": ["object", "null"],
+                          "description": "Details about avatar decoration",
+                          "properties": {
+                            "asset": {"type": "string"},
+                            "sku_id": {"type": "string"},
+                            "expires_at": {"type": ["number", "null"]}
+                          },
+                          "required": ["asset"],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": ["id", "username", "discriminator", "flags", "bot"],
+                      "additionalProperties": false
+                    },
+                    "authorizing_integration_owners": {
+                      "type": "object",
+                      "properties": {
+                        "0": {"type": "string", "description": "ID of the guild the app is installed to"},
+                        "1": {"type": "string", "description": "ID of the user the app is installed to"}
+                      },
+                      "additionalProperties": false
+                    },
+                    "original_response_message_id": {"type": "string"},
+                    "target_user": {
+                      "type": "object",
+                      "description": "Discord User",
+                      "properties": {
+                        "id": {"type": "string", "description": "User ID"},
+                        "username": {"type": "string"},
+                        "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                        "discriminator": {
+                          "type": "string",
+                          "description": "Global name discriminator. Will be 0 if a unique username"
+                        },
+                        "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                        "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                        "public_flags": {"type": "number", "description": "Public user flags"},
+                        "bot": {"type": "boolean", "description": "If a bot user."},
+                        "avatar_decoration_data": {
+                          "type": ["object", "null"],
+                          "description": "Details about avatar decoration",
+                          "properties": {
+                            "asset": {"type": "string"},
+                            "sku_id": {"type": "string"},
+                            "expires_at": {"type": ["number", "null"]}
+                          },
+                          "required": ["asset"],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": ["id", "username", "discriminator", "flags", "bot"],
+                      "additionalProperties": false
+                    },
+                    "target_message_id": {"type": "string"},
+                    "interacted_message_id": {"type": "string"},
+                    "triggering_interaction_metadata": {
+                      "type": "object",
+                      "properties": {
+                        "id": {"type": "string"},
+                        "type": {"type": "number"},
+                        "user": {
+                          "type": "object",
+                          "description": "Discord User",
+                          "properties": {
+                            "id": {"type": "string", "description": "User ID"},
+                            "username": {"type": "string"},
+                            "global_name": {
+                              "type": ["string", "null"],
+                              "description": "Global Discord name. Not unique."
+                            },
+                            "discriminator": {
+                              "type": "string",
+                              "description": "Global name discriminator. Will be 0 if a unique username"
+                            },
+                            "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                            "flags": {
+                              "type": "number",
+                              "description": "Public user flags. Deprecated: use public_flags."
+                            },
+                            "public_flags": {"type": "number", "description": "Public user flags"},
+                            "bot": {"type": "boolean", "description": "If a bot user."},
+                            "avatar_decoration_data": {
+                              "type": ["object", "null"],
+                              "description": "Details about avatar decoration",
+                              "properties": {
+                                "asset": {"type": "string"},
+                                "sku_id": {"type": "string"},
+                                "expires_at": {"type": ["number", "null"]}
+                              },
+                              "required": ["asset"],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": ["id", "username", "discriminator", "flags", "bot"],
+                          "additionalProperties": false
+                        },
+                        "authorizing_integration_owners": {
+                          "type": "object",
+                          "properties": {
+                            "0": {"type": "string", "description": "ID of the guild the app is installed to"},
+                            "1": {"type": "string", "description": "ID of the user the app is installed to"}
+                          },
+                          "additionalProperties": false
+                        },
+                        "original_response_message_id": {"type": "string"},
+                        "target_user": {
+                          "type": "object",
+                          "description": "Discord User",
+                          "properties": {
+                            "id": {"type": "string", "description": "User ID"},
+                            "username": {"type": "string"},
+                            "global_name": {
+                              "type": ["string", "null"],
+                              "description": "Global Discord name. Not unique."
+                            },
+                            "discriminator": {
+                              "type": "string",
+                              "description": "Global name discriminator. Will be 0 if a unique username"
+                            },
+                            "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                            "flags": {
+                              "type": "number",
+                              "description": "Public user flags. Deprecated: use public_flags."
+                            },
+                            "public_flags": {"type": "number", "description": "Public user flags"},
+                            "bot": {"type": "boolean", "description": "If a bot user."},
+                            "avatar_decoration_data": {
+                              "type": ["object", "null"],
+                              "description": "Details about avatar decoration",
+                              "properties": {
+                                "asset": {"type": "string"},
+                                "sku_id": {"type": "string"},
+                                "expires_at": {"type": ["number", "null"]}
+                              },
+                              "required": ["asset"],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": ["id", "username", "discriminator", "flags", "bot"],
+                          "additionalProperties": false
+                        },
+                        "target_message_id": {"type": "string"},
+                        "interacted_message_id": {"type": "string"}
+                      },
+                      "required": ["id", "type", "authorizing_integration_owners"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["id", "type", "authorizing_integration_owners"],
+                  "additionalProperties": false
                 },
-                "required": ["primary_color", "secondary_color", "tertiary_color"],
-                "additionalProperties": false
-              },
-              "hoist": {"type": "boolean"},
-              "position": {"type": "number"},
-              "permissions": {"type": "string", "pattern": "^\\d+$", "format": "bigint"},
-              "managed": {"type": "boolean"},
-              "mentionable": {"type": "boolean"},
-              "icon": {"type": ["string", "null"]},
-              "unicode_emoji": {"type": ["string", "null"]},
-              "tags": {
-                "type": "object",
-                "properties": {
-                  "bot_id": {"type": "string"},
-                  "integration_id": {"type": "string"},
-                  "premium_subscriber": {"const": null},
-                  "subscription_listing_id": {"type": "string"},
-                  "available_for_purchase": {"const": null},
-                  "guild_connections": {"const": null}
+                "role_subscription_data": {
+                  "type": "object",
+                  "properties": {
+                    "role_subscription_listing_id": {"type": "string"},
+                    "tier_name": {"type": "string"},
+                    "total_months_subscribed": {"type": "number"},
+                    "is_renewal": {"type": "boolean"}
+                  },
+                  "required": ["role_subscription_listing_id", "tier_name", "total_months_subscribed", "is_renewal"],
+                  "additionalProperties": false
                 },
-                "additionalProperties": false
+                "blocked": {"type": "boolean"},
+                "nick": {"type": ["string", "null"]},
+                "author_color": {"type": ["string", "null"]}
               },
-              "flags": {"type": "number"}
-            },
-            "required": [
-              "id",
-              "name",
-              "color",
-              "colors",
-              "hoist",
-              "position",
-              "permissions",
-              "managed",
-              "mentionable",
-              "icon",
-              "unicode_emoji",
-              "tags",
-              "flags"
-            ],
-            "additionalProperties": false
+              "required": [
+                "id",
+                "channel_id",
+                "content",
+                "timestamp",
+                "tts",
+                "mention_everyone",
+                "mentions",
+                "mention_roles",
+                "attachments",
+                "embeds",
+                "pinned",
+                "type"
+              ],
+              "additionalProperties": false
+            }
           }
-        }
-      },
-      "required": ["roles"],
-      "additionalProperties": false
-    }
-  },
-  "GET_CURRENT_USER_GUILD_MEMBER": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_CURRENT_USER_GUILD_MEMBER\" Command",
-      "properties": {"guild_id": {"type": "string"}},
-      "required": ["guild_id"],
-      "additionalProperties": false
-    },
-    "response": {
-      "type": ["object", "null"],
-      "description": "Response for \"GET_CURRENT_USER_GUILD_MEMBER\" Command",
-      "properties": {
-        "user_id": {"type": "string"},
-        "guild_id": {"type": "string"},
-        "nick": {"type": ["string", "null"]},
-        "avatar": {"type": ["string", "null"]},
-        "avatar_decoration_data": {
-          "type": ["object", "null"],
-          "description": "Details about avatar decoration",
-          "properties": {
-            "asset": {"type": "string"},
-            "sku_id": {"type": "string"},
-            "expires_at": {"type": ["number", "null"]}
-          },
-          "required": ["asset"],
-          "additionalProperties": false
         },
-        "banner": {"type": ["string", "null"]},
-        "roles": {"type": "array", "items": {"type": "string"}},
-        "joined_at": {"type": ["string", "null"]},
-        "premium_since": {"type": ["string", "null"]},
-        "communication_disabled_until": {"type": ["string", "null"]},
-        "pending": {"type": "boolean"},
-        "flags": {"type": "number"}
-      },
-      "required": [
-        "user_id",
-        "guild_id",
-        "nick",
-        "avatar",
-        "avatar_decoration_data",
-        "banner",
-        "roles",
-        "joined_at",
-        "premium_since",
-        "communication_disabled_until",
-        "pending",
-        "flags"
-      ],
-      "additionalProperties": false
-    }
-  },
-  "GET_GUILD_MEMBER": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"GET_GUILD_MEMBER\" Command",
-      "properties": {"guild_id": {"type": "string"}, "user_id": {"type": "string"}},
-      "required": ["guild_id", "user_id"],
-      "additionalProperties": false
+        "required": ["id", "type", "voice_states", "messages"],
+        "additionalProperties": false
+      }
     },
-    "response": {
-      "type": ["object", "null"],
-      "description": "Response for \"GET_GUILD_MEMBER\" Command",
-      "properties": {
-        "user_id": {"type": "string"},
-        "guild_id": {"type": "string"},
-        "nick": {"type": ["string", "null"]},
-        "avatar": {"type": ["string", "null"]},
-        "avatar_decoration_data": {
-          "type": ["object", "null"],
-          "description": "Details about avatar decoration",
-          "properties": {
-            "asset": {"type": "string"},
-            "sku_id": {"type": "string"},
-            "expires_at": {"type": ["number", "null"]}
-          },
-          "required": ["asset"],
-          "additionalProperties": false
+    "GET_CHANNELS": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_CHANNELS\" Command",
+        "properties": {"guild_id": {"type": ["string", "null"]}},
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_CHANNELS\" Command",
+        "properties": {
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "type": {
+                  "type": "number",
+                  "enum": [1, 3, 0, 2, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 10000]
+                }
+              },
+              "required": ["id", "name", "type"],
+              "additionalProperties": false
+            }
+          }
         },
-        "banner": {"type": ["string", "null"]},
-        "roles": {"type": "array", "items": {"type": "string"}},
-        "joined_at": {"type": ["string", "null"]},
-        "premium_since": {"type": ["string", "null"]},
-        "communication_disabled_until": {"type": ["string", "null"]},
-        "pending": {"type": "boolean"},
-        "flags": {"type": "number"}
-      },
-      "required": [
-        "user_id",
-        "guild_id",
-        "nick",
-        "avatar",
-        "avatar_decoration_data",
-        "banner",
-        "roles",
-        "joined_at",
-        "premium_since",
-        "communication_disabled_until",
-        "pending",
-        "flags"
-      ],
-      "additionalProperties": false
-    }
-  },
-  "AUTHORIZE": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"AUTHORIZE\" Command",
-      "properties": {
-        "client_id": {"type": "string"},
-        "scope": {"anyOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
-        "scopes": {"anyOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
-        "response_type": {"type": "string"},
-        "code_challenge": {"type": "string"},
-        "code_challenge_method": {"type": "string"},
-        "state": {"type": "string"},
-        "prompt": {"type": "string"},
-        "nonce": {"type": "string"}
-      },
-      "additionalProperties": false
+        "required": ["channels"],
+        "additionalProperties": false
+      }
     },
-    "response": {
-      "type": "object",
-      "description": "Response for \"AUTHORIZE\" Command",
-      "properties": {"code": {"type": "string"}},
-      "required": ["code"],
-      "additionalProperties": false
-    }
-  },
-  "SET_ACTIVITY": {
-    "request": {
-      "type": "object",
-      "description": "Request for \"SET_ACTIVITY\" Command",
-      "properties": {
-        "pid": {"type": "number", "minimum": 0},
-        "activity": {
-          "type": ["object", "null"],
-          "properties": {
-            "name": {"type": "string", "minLength": 1, "maxLength": 128},
-            "state": {"type": "string", "minLength": 2, "maxLength": 128},
-            "state_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
-            "details": {"type": "string", "minLength": 2, "maxLength": 128},
-            "details_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
-            "timestamps": {
-              "type": "object",
-              "properties": {"start": {"type": "number", "minimum": 1}, "end": {"type": "number", "minimum": 1}},
-              "additionalProperties": true
-            },
-            "assets": {
-              "type": "object",
-              "properties": {
-                "large_image": {"type": "string", "minLength": 1, "maxLength": 300},
-                "large_text": {"type": "string", "minLength": 2, "maxLength": 128},
-                "large_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
-                "small_image": {"type": "string", "minLength": 1, "maxLength": 300},
-                "small_text": {"type": "string", "minLength": 2, "maxLength": 128},
-                "small_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
-                "invite_cover_image": {"type": "string", "minLength": 1, "maxLength": 300}
-              },
-              "additionalProperties": true
-            },
-            "party": {
+    "GET_GUILD": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_GUILD\" Command",
+        "properties": {"guild_id": {"type": "string"}, "timeout": {"type": "number", "minimum": 0, "maximum": 60}},
+        "required": ["guild_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_GUILD\" Command",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "icon_url": {"type": ["string", "null"]},
+          "vanity_url_code": {"type": ["string", "null"]}
+        },
+        "required": ["id", "name", "icon_url"],
+        "additionalProperties": false
+      }
+    },
+    "GET_ROLES": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_ROLES\" Command",
+        "properties": {"guild_id": {"type": "string"}},
+        "required": ["guild_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"GET_ROLES\" Command",
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
               "type": "object",
               "properties": {
-                "id": {"type": "string", "minLength": 2, "maxLength": 128},
-                "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number", "minimum": 0}},
-                "privacy": {"type": "number", "default": 0, "enum": [0, 1]}
-              },
-              "additionalProperties": true
-            },
-            "secrets": {
-              "type": "object",
-              "properties": {
-                "match": {"type": "string", "minLength": 2, "maxLength": 128},
-                "join": {"type": "string", "minLength": 2, "maxLength": 128},
-                "spectate": {"type": "string", "minLength": 2, "maxLength": 128}
-              },
-              "additionalProperties": true
-            },
-            "buttons": {
-              "type": "array",
-              "minItems": 1,
-              "maxItems": 2,
-              "items": {
-                "type": "object",
-                "properties": {
-                  "label": {"type": "string", "minLength": 1, "maxLength": 32},
-                  "url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 512}
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "color": {"type": "number"},
+                "colors": {
+                  "type": "object",
+                  "properties": {
+                    "primary_color": {"type": "number"},
+                    "secondary_color": {"type": ["number", "null"]},
+                    "tertiary_color": {"type": ["number", "null"]}
+                  },
+                  "required": ["primary_color", "secondary_color", "tertiary_color"],
+                  "additionalProperties": false
                 },
-                "required": ["label", "url"],
+                "hoist": {"type": "boolean"},
+                "position": {"type": "number"},
+                "permissions": {"type": "string", "pattern": "^\\d+$", "format": "bigint"},
+                "managed": {"type": "boolean"},
+                "mentionable": {"type": "boolean"},
+                "icon": {"type": ["string", "null"]},
+                "unicode_emoji": {"type": ["string", "null"]},
+                "tags": {
+                  "type": "object",
+                  "properties": {
+                    "bot_id": {"type": "string"},
+                    "integration_id": {"type": "string"},
+                    "premium_subscriber": {"const": null},
+                    "subscription_listing_id": {"type": "string"},
+                    "available_for_purchase": {"const": null},
+                    "guild_connections": {"const": null}
+                  },
+                  "additionalProperties": false
+                },
+                "flags": {"type": "number"}
+              },
+              "required": [
+                "id",
+                "name",
+                "color",
+                "colors",
+                "hoist",
+                "position",
+                "permissions",
+                "managed",
+                "mentionable",
+                "icon",
+                "unicode_emoji",
+                "tags",
+                "flags"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["roles"],
+        "additionalProperties": false
+      }
+    },
+    "GET_CURRENT_USER_GUILD_MEMBER": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_CURRENT_USER_GUILD_MEMBER\" Command",
+        "properties": {"guild_id": {"type": "string"}},
+        "required": ["guild_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": ["object", "null"],
+        "description": "Response for \"GET_CURRENT_USER_GUILD_MEMBER\" Command",
+        "properties": {
+          "user_id": {"type": "string"},
+          "guild_id": {"type": "string"},
+          "nick": {"type": ["string", "null"]},
+          "avatar": {"type": ["string", "null"]},
+          "avatar_decoration_data": {
+            "type": ["object", "null"],
+            "description": "Details about avatar decoration",
+            "properties": {
+              "asset": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "expires_at": {"type": ["number", "null"]}
+            },
+            "required": ["asset"],
+            "additionalProperties": false
+          },
+          "banner": {"type": ["string", "null"]},
+          "roles": {"type": "array", "items": {"type": "string"}},
+          "joined_at": {"type": ["string", "null"]},
+          "premium_since": {"type": ["string", "null"]},
+          "communication_disabled_until": {"type": ["string", "null"]},
+          "pending": {"type": "boolean"},
+          "flags": {"type": "number"},
+          "color_string": {"type": ["string", "null"]}
+        },
+        "required": [
+          "user_id",
+          "guild_id",
+          "nick",
+          "avatar",
+          "avatar_decoration_data",
+          "banner",
+          "roles",
+          "joined_at",
+          "premium_since",
+          "communication_disabled_until",
+          "pending",
+          "flags"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "GET_GUILD_MEMBER": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"GET_GUILD_MEMBER\" Command",
+        "properties": {"guild_id": {"type": "string"}, "user_id": {"type": "string"}},
+        "required": ["guild_id", "user_id"],
+        "additionalProperties": false
+      },
+      "response": {
+        "type": ["object", "null"],
+        "description": "Response for \"GET_GUILD_MEMBER\" Command",
+        "properties": {
+          "user_id": {"type": "string"},
+          "guild_id": {"type": "string"},
+          "nick": {"type": ["string", "null"]},
+          "avatar": {"type": ["string", "null"]},
+          "avatar_decoration_data": {
+            "type": ["object", "null"],
+            "description": "Details about avatar decoration",
+            "properties": {
+              "asset": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "expires_at": {"type": ["number", "null"]}
+            },
+            "required": ["asset"],
+            "additionalProperties": false
+          },
+          "banner": {"type": ["string", "null"]},
+          "roles": {"type": "array", "items": {"type": "string"}},
+          "joined_at": {"type": ["string", "null"]},
+          "premium_since": {"type": ["string", "null"]},
+          "communication_disabled_until": {"type": ["string", "null"]},
+          "pending": {"type": "boolean"},
+          "flags": {"type": "number"},
+          "color_string": {"type": ["string", "null"]}
+        },
+        "required": [
+          "user_id",
+          "guild_id",
+          "nick",
+          "avatar",
+          "avatar_decoration_data",
+          "banner",
+          "roles",
+          "joined_at",
+          "premium_since",
+          "communication_disabled_until",
+          "pending",
+          "flags"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "AUTHORIZE": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"AUTHORIZE\" Command",
+        "properties": {
+          "client_id": {"type": "string"},
+          "scope": {"anyOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
+          "scopes": {"anyOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
+          "response_type": {"type": "string"},
+          "code_challenge": {"type": "string"},
+          "code_challenge_method": {"type": "string"},
+          "state": {"type": "string"},
+          "prompt": {"type": "string"},
+          "nonce": {"type": "string"}
+        },
+        "additionalProperties": false
+      },
+      "response": {
+        "type": "object",
+        "description": "Response for \"AUTHORIZE\" Command",
+        "properties": {"code": {"type": "string"}},
+        "required": ["code"],
+        "additionalProperties": false
+      }
+    },
+    "SET_ACTIVITY": {
+      "request": {
+        "type": "object",
+        "description": "Request for \"SET_ACTIVITY\" Command",
+        "properties": {
+          "pid": {"type": "number", "minimum": 0},
+          "activity": {
+            "type": ["object", "null"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1, "maxLength": 128},
+              "state": {"type": "string", "minLength": 2, "maxLength": 128},
+              "state_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
+              "details": {"type": "string", "minLength": 2, "maxLength": 128},
+              "details_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
+              "timestamps": {
+                "type": "object",
+                "properties": {"start": {"type": "number", "minimum": 1}, "end": {"type": "number", "minimum": 1}},
                 "additionalProperties": true
-              }
+              },
+              "assets": {
+                "type": "object",
+                "properties": {
+                  "large_image": {"type": "string", "minLength": 1, "maxLength": 300},
+                  "large_text": {"type": "string", "minLength": 2, "maxLength": 128},
+                  "large_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
+                  "small_image": {"type": "string", "minLength": 1, "maxLength": 300},
+                  "small_text": {"type": "string", "minLength": 2, "maxLength": 128},
+                  "small_url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 256},
+                  "invite_cover_image": {"type": "string", "minLength": 1, "maxLength": 300}
+                },
+                "additionalProperties": true
+              },
+              "party": {
+                "type": "object",
+                "properties": {
+                  "id": {"type": "string", "minLength": 2, "maxLength": 128},
+                  "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number", "minimum": 0}},
+                  "privacy": {"type": "number", "default": 0, "enum": [0, 1]}
+                },
+                "additionalProperties": true
+              },
+              "secrets": {
+                "type": "object",
+                "properties": {
+                  "match": {"type": "string", "minLength": 2, "maxLength": 128},
+                  "join": {"type": "string", "minLength": 2, "maxLength": 128},
+                  "spectate": {"type": "string", "minLength": 2, "maxLength": 128}
+                },
+                "additionalProperties": true
+              },
+              "buttons": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {"type": "string", "minLength": 1, "maxLength": 32},
+                    "url": {"type": "string", "format": "uri", "minLength": 1, "maxLength": 512}
+                  },
+                  "required": ["label", "url"],
+                  "additionalProperties": true
+                }
+              },
+              "instance": {"type": "boolean"},
+              "supported_platforms": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 10,
+                "items": {
+                  "type": "string",
+                  "enum": ["xbox", "desktop", "samsung", "ios", "android", "ps4", "ps5", "embedded", "meta_quest"]
+                }
+              },
+              "type": {"type": "number", "default": 0, "enum": [0, 2, 3, 5]},
+              "status_display_type": {"type": "number", "enum": [0, 1, 2]}
             },
-            "instance": {"type": "boolean"},
-            "supported_platforms": {
-              "type": "array",
-              "minItems": 1,
-              "maxItems": 10,
-              "items": {
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "response": {
+        "type": ["object", "null"],
+        "description": "Response for \"SET_ACTIVITY\" Command",
+        "properties": {
+          "session_id": {"type": "string"},
+          "name": {"type": "string"},
+          "url": {"type": ["string", "null"]},
+          "application_id": {"type": "string"},
+          "status_display_type": {"type": "number"},
+          "state": {"type": "string"},
+          "state_url": {"type": "string"},
+          "details": {"type": "string"},
+          "details_url": {"type": "string"},
+          "emoji": {
+            "type": ["object", "null"],
+            "properties": {
+              "name": {"type": "string"},
+              "id": {"type": ["string", "null"]},
+              "animated": {"type": ["boolean", "null"]}
+            },
+            "required": ["name"],
+            "additionalProperties": false
+          },
+          "assets": {
+            "type": "object",
+            "properties": {
+              "large_image": {"type": "string"},
+              "large_text": {"type": "string"},
+              "large_url": {"type": "string"},
+              "small_image": {"type": "string"},
+              "small_text": {"type": "string"},
+              "small_url": {"type": "string"}
+            },
+            "additionalProperties": false
+          },
+          "timestamps": {
+            "type": "object",
+            "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
+            "additionalProperties": false
+          },
+          "party": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
+              "privacy": {"type": "number"}
+            },
+            "additionalProperties": false
+          },
+          "secrets": {
+            "type": "object",
+            "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
+            "additionalProperties": false
+          },
+          "sync_id": {"type": "string"},
+          "created_at": {"type": "number"},
+          "instance": {"type": "boolean"},
+          "flags": {"type": "number"},
+          "metadata": {
+            "type": "object",
+            "properties": {"button_urls": {"type": "array", "items": {"type": "string"}}},
+            "additionalProperties": false
+          },
+          "platform": {"type": "string"},
+          "supported_platforms": {"type": "array", "items": {"type": "string"}},
+          "buttons": {"type": "array", "items": {"type": "string"}},
+          "type": {"type": "number"}
+        },
+        "required": ["name", "type"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "events": {
+    "VOICE_STATE_UPDATE": {
+      "subscribeArgs": {
+        "type": "object",
+        "description": "SubscribeArgs for \"VOICE_STATE_UPDATE\" Event",
+        "properties": {"channel_id": {"type": "string"}},
+        "required": ["channel_id"],
+        "additionalProperties": false
+      },
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"VOICE_STATE_UPDATE\" Event",
+        "properties": {
+          "nick": {"type": "string"},
+          "mute": {"type": "boolean"},
+          "volume": {"type": "number"},
+          "pan": {
+            "type": "object",
+            "properties": {"left": {"type": "number"}, "right": {"type": "number"}},
+            "required": ["left", "right"],
+            "additionalProperties": false
+          },
+          "voice_state": {
+            "type": "object",
+            "properties": {
+              "mute": {"type": "boolean"},
+              "deaf": {"type": "boolean"},
+              "self_mute": {"type": "boolean"},
+              "self_deaf": {"type": "boolean"},
+              "suppress": {"type": "boolean"}
+            },
+            "required": ["mute", "deaf", "self_mute", "self_deaf", "suppress"],
+            "additionalProperties": false
+          },
+          "user": {
+            "type": "object",
+            "description": "Discord User",
+            "properties": {
+              "id": {"type": "string", "description": "User ID"},
+              "username": {"type": "string"},
+              "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+              "discriminator": {
                 "type": "string",
-                "enum": ["desktop", "xbox", "samsung", "ios", "android", "embedded", "ps4", "ps5", "meta_quest"]
+                "description": "Global name discriminator. Will be 0 if a unique username"
+              },
+              "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+              "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+              "public_flags": {"type": "number", "description": "Public user flags"},
+              "bot": {"type": "boolean", "description": "If a bot user."},
+              "avatar_decoration_data": {
+                "type": ["object", "null"],
+                "description": "Details about avatar decoration",
+                "properties": {
+                  "asset": {"type": "string"},
+                  "sku_id": {"type": "string"},
+                  "expires_at": {"type": ["number", "null"]}
+                },
+                "required": ["asset"],
+                "additionalProperties": false
               }
             },
-            "type": {"type": "number", "default": 0, "enum": [0, 2, 3, 5]},
-            "status_display_type": {"type": "number", "enum": [0, 1, 2]}
+            "required": ["id", "username", "discriminator", "flags", "bot"],
+            "additionalProperties": false
           },
-          "additionalProperties": true
-        }
-      },
-      "additionalProperties": false
+          "channel_id": {"type": "string"}
+        },
+        "required": ["nick", "mute", "volume", "pan", "voice_state", "user"],
+        "additionalProperties": false
+      }
     },
-    "response": {
-      "type": ["object", "null"],
-      "description": "Response for \"SET_ACTIVITY\" Command",
-      "properties": {
-        "session_id": {"type": "string"},
-        "name": {"type": "string"},
-        "url": {"type": ["string", "null"]},
-        "application_id": {"type": "string"},
-        "status_display_type": {"type": "number"},
-        "state": {"type": "string"},
-        "state_url": {"type": "string"},
-        "details": {"type": "string"},
-        "details_url": {"type": "string"},
-        "emoji": {
-          "type": ["object", "null"],
-          "properties": {
-            "name": {"type": "string"},
-            "id": {"type": ["string", "null"]},
-            "animated": {"type": ["boolean", "null"]}
-          },
-          "required": ["name"],
-          "additionalProperties": false
-        },
-        "assets": {
-          "type": "object",
-          "properties": {
-            "large_image": {"type": "string"},
-            "large_text": {"type": "string"},
-            "large_url": {"type": "string"},
-            "small_image": {"type": "string"},
-            "small_text": {"type": "string"},
-            "small_url": {"type": "string"}
-          },
-          "additionalProperties": false
-        },
-        "timestamps": {
-          "type": "object",
-          "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
-          "additionalProperties": false
-        },
-        "party": {
-          "type": "object",
-          "properties": {
-            "id": {"type": "string"},
-            "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
-            "privacy": {"type": "number"}
-          },
-          "additionalProperties": false
-        },
-        "secrets": {
-          "type": "object",
-          "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
-          "additionalProperties": false
-        },
-        "sync_id": {"type": "string"},
-        "created_at": {"type": "number"},
-        "instance": {"type": "boolean"},
-        "flags": {"type": "number"},
-        "metadata": {
-          "type": "object",
-          "properties": {"button_urls": {"type": "array", "items": {"type": "string"}}},
-          "additionalProperties": false
-        },
-        "platform": {"type": "string"},
-        "supported_platforms": {"type": "array", "items": {"type": "string"}},
-        "buttons": {"type": "array", "items": {"type": "string"}},
-        "type": {"type": "number"}
+    "SPEAKING_START": {
+      "subscribeArgs": {
+        "type": "object",
+        "description": "SubscribeArgs for \"SPEAKING_START\" Event",
+        "properties": {"channel_id": {"type": ["string", "null"]}},
+        "additionalProperties": false
       },
-      "required": ["name", "type"],
-      "additionalProperties": false
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"SPEAKING_START\" Event",
+        "properties": {"channel_id": {"type": ["string", "null"]}, "user_id": {"type": "string"}},
+        "required": ["user_id"],
+        "additionalProperties": false
+      }
+    },
+    "SPEAKING_STOP": {
+      "subscribeArgs": {
+        "type": "object",
+        "description": "SubscribeArgs for \"SPEAKING_STOP\" Event",
+        "properties": {"channel_id": {"type": ["string", "null"]}},
+        "additionalProperties": false
+      },
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"SPEAKING_STOP\" Event",
+        "properties": {"channel_id": {"type": ["string", "null"]}, "user_id": {"type": "string"}},
+        "required": ["user_id"],
+        "additionalProperties": false
+      }
+    },
+    "ACTIVITY_LAYOUT_MODE_UPDATE": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"ACTIVITY_LAYOUT_MODE_UPDATE\" Event",
+        "properties": {"layout_mode": {"type": "number", "enum": [0, 1, 2]}},
+        "required": ["layout_mode"],
+        "additionalProperties": false
+      }
+    },
+    "CURRENT_USER_UPDATE": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Discord User",
+        "properties": {
+          "id": {"type": "string", "description": "User ID"},
+          "username": {"type": "string"},
+          "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+          "discriminator": {
+            "type": "string",
+            "description": "Global name discriminator. Will be 0 if a unique username"
+          },
+          "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+          "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+          "public_flags": {"type": "number", "description": "Public user flags"},
+          "bot": {"type": "boolean", "description": "If a bot user."},
+          "avatar_decoration_data": {
+            "type": ["object", "null"],
+            "description": "Details about avatar decoration",
+            "properties": {
+              "asset": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "expires_at": {"type": ["number", "null"]}
+            },
+            "required": ["asset"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "username", "discriminator", "flags", "bot"],
+        "additionalProperties": false
+      }
+    },
+    "CURRENT_GUILD_MEMBER_UPDATE": {
+      "subscribeArgs": {
+        "type": "object",
+        "description": "SubscribeArgs for \"CURRENT_GUILD_MEMBER_UPDATE\" Event",
+        "properties": {"guild_id": {"type": "string"}},
+        "required": ["guild_id"],
+        "additionalProperties": false
+      },
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"CURRENT_GUILD_MEMBER_UPDATE\" Event",
+        "properties": {
+          "user_id": {"type": "string"},
+          "guild_id": {"type": "string"},
+          "nick": {"type": ["string", "null"]},
+          "avatar": {"type": ["string", "null"]},
+          "avatar_decoration_data": {
+            "type": ["object", "null"],
+            "description": "Details about avatar decoration",
+            "properties": {
+              "asset": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "expires_at": {"type": ["number", "null"]}
+            },
+            "required": ["asset"],
+            "additionalProperties": false
+          },
+          "banner": {"type": ["string", "null"]},
+          "roles": {"type": "array", "items": {"type": "string"}},
+          "joined_at": {"type": ["string", "null"]},
+          "premium_since": {"type": ["string", "null"]},
+          "communication_disabled_until": {"type": ["string", "null"]},
+          "pending": {"type": "boolean"},
+          "flags": {"type": "number"},
+          "color_string": {"type": ["string", "null"]}
+        },
+        "required": ["user_id", "guild_id", "avatar_decoration_data"],
+        "additionalProperties": false
+      }
+    },
+    "ENTITLEMENT_CREATE": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"ENTITLEMENT_CREATE\" Event",
+        "properties": {
+          "entitlement": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "sku_id": {"type": "string"},
+              "application_id": {"type": "string"},
+              "user_id": {"type": "string"},
+              "gift_code_flags": {"type": "number"},
+              "type": {"type": "number", "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]},
+              "gifter_user_id": {"type": ["string", "null"]},
+              "branches": {"type": ["array", "null"], "items": {"type": "string"}},
+              "starts_at": {"type": ["string", "null"]},
+              "ends_at": {"type": ["string", "null"]},
+              "parent_id": {"type": ["string", "null"]},
+              "consumed": {"type": ["boolean", "null"]},
+              "deleted": {"type": ["boolean", "null"]},
+              "gift_code_batch_id": {"type": ["string", "null"]}
+            },
+            "required": ["id", "sku_id", "application_id", "user_id", "gift_code_flags", "type"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["entitlement"],
+        "additionalProperties": false
+      }
+    },
+    "THERMAL_STATE_UPDATE": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"THERMAL_STATE_UPDATE\" Event",
+        "properties": {"thermal_state": {"type": "number", "enum": [-1, 0, 1, 2, 3]}},
+        "required": ["thermal_state"],
+        "additionalProperties": false
+      }
+    },
+    "ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE\" Event",
+        "properties": {
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Discord User",
+              "properties": {
+                "id": {"type": "string", "description": "User ID"},
+                "username": {"type": "string"},
+                "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+                "discriminator": {
+                  "type": "string",
+                  "description": "Global name discriminator. Will be 0 if a unique username"
+                },
+                "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+                "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+                "public_flags": {"type": "number", "description": "Public user flags"},
+                "bot": {"type": "boolean", "description": "If a bot user."},
+                "avatar_decoration_data": {
+                  "type": ["object", "null"],
+                  "description": "Details about avatar decoration",
+                  "properties": {
+                    "asset": {"type": "string"},
+                    "sku_id": {"type": "string"},
+                    "expires_at": {"type": ["number", "null"]}
+                  },
+                  "required": ["asset"],
+                  "additionalProperties": false
+                },
+                "nickname": {"type": "string", "description": "Server nickname. Not unique."}
+              },
+              "required": ["id", "username", "discriminator", "flags", "bot"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["participants"],
+        "additionalProperties": false
+      }
+    },
+    "RELATIONSHIP_UPDATE": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"RELATIONSHIP_UPDATE\" Event",
+        "properties": {
+          "type": {"type": "number"},
+          "user": {
+            "type": "object",
+            "description": "Discord User",
+            "properties": {
+              "id": {"type": "string", "description": "User ID"},
+              "username": {"type": "string"},
+              "global_name": {"type": ["string", "null"], "description": "Global Discord name. Not unique."},
+              "discriminator": {
+                "type": "string",
+                "description": "Global name discriminator. Will be 0 if a unique username"
+              },
+              "avatar": {"type": ["string", "null"], "description": "User Avatar ID"},
+              "flags": {"type": "number", "description": "Public user flags. Deprecated: use public_flags."},
+              "public_flags": {"type": "number", "description": "Public user flags"},
+              "bot": {"type": "boolean", "description": "If a bot user."},
+              "avatar_decoration_data": {
+                "type": ["object", "null"],
+                "description": "Details about avatar decoration",
+                "properties": {
+                  "asset": {"type": "string"},
+                  "sku_id": {"type": "string"},
+                  "expires_at": {"type": ["number", "null"]}
+                },
+                "required": ["asset"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["id", "username", "discriminator", "flags", "bot"],
+            "additionalProperties": false
+          },
+          "presence": {
+            "type": "object",
+            "properties": {
+              "status": {"type": "string"},
+              "activity": {
+                "type": ["object", "null"],
+                "properties": {
+                  "session_id": {"type": "string"},
+                  "type": {"type": "number"},
+                  "name": {"type": "string"},
+                  "url": {"type": ["string", "null"]},
+                  "application_id": {"type": "string"},
+                  "status_display_type": {"type": "number"},
+                  "state": {"type": "string"},
+                  "state_url": {"type": "string"},
+                  "details": {"type": "string"},
+                  "details_url": {"type": "string"},
+                  "emoji": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "name": {"type": "string"},
+                      "id": {"type": ["string", "null"]},
+                      "animated": {"type": ["boolean", "null"]}
+                    },
+                    "required": ["name"],
+                    "additionalProperties": false
+                  },
+                  "assets": {
+                    "type": "object",
+                    "properties": {
+                      "large_image": {"type": "string"},
+                      "large_text": {"type": "string"},
+                      "large_url": {"type": "string"},
+                      "small_image": {"type": "string"},
+                      "small_text": {"type": "string"},
+                      "small_url": {"type": "string"}
+                    },
+                    "additionalProperties": false
+                  },
+                  "timestamps": {
+                    "type": "object",
+                    "properties": {"start": {"type": "number"}, "end": {"type": "number"}},
+                    "additionalProperties": false
+                  },
+                  "party": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "size": {"type": "array", "maxItems": 2, "minItems": 2, "items": {"type": "number"}},
+                      "privacy": {"type": "number"}
+                    },
+                    "additionalProperties": false
+                  },
+                  "secrets": {
+                    "type": "object",
+                    "properties": {"match": {"type": "string"}, "join": {"type": "string"}},
+                    "additionalProperties": false
+                  },
+                  "sync_id": {"type": "string"},
+                  "created_at": {"type": "number"},
+                  "instance": {"type": "boolean"},
+                  "flags": {"type": "number"},
+                  "metadata": {
+                    "type": "object",
+                    "properties": {"button_urls": {"type": "array", "items": {"type": "string"}}},
+                    "additionalProperties": false
+                  },
+                  "platform": {"type": "string"},
+                  "supported_platforms": {"type": "array", "items": {"type": "string"}},
+                  "buttons": {"type": "array", "items": {"type": "string"}}
+                },
+                "required": ["name"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["status"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["type", "user"],
+        "additionalProperties": false
+      }
+    },
+    "ACTIVITY_JOIN": {
+      "subscribeArgs": null,
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"ACTIVITY_JOIN\" Event",
+        "properties": {
+          "application_id": {"type": "string"},
+          "secret": {"type": "string"},
+          "intent": {"type": "number", "enum": [0, 1]}
+        },
+        "required": ["application_id", "secret"],
+        "additionalProperties": false
+      }
+    },
+    "QUEST_ENROLLMENT_STATUS_UPDATE": {
+      "subscribeArgs": {
+        "type": "object",
+        "description": "SubscribeArgs for \"QUEST_ENROLLMENT_STATUS_UPDATE\" Event",
+        "properties": {"quest_id": {"type": "string"}},
+        "required": ["quest_id"],
+        "additionalProperties": false
+      },
+      "payload": {
+        "type": "object",
+        "description": "Payload for \"QUEST_ENROLLMENT_STATUS_UPDATE\" Event",
+        "properties": {
+          "quest_id": {"type": "string"},
+          "is_enrolled": {"type": "boolean"},
+          "enrolled_at": {"type": ["string", "null"]}
+        },
+        "required": ["quest_id", "is_enrolled"],
+        "additionalProperties": false
+      }
     }
   }
 }

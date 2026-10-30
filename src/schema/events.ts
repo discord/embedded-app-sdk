@@ -1,32 +1,25 @@
 import * as zod from 'zod';
-import {DISPATCH, GuildMemberRPC, Relationship, UserVoiceState} from './common';
-import {zodCoerceUnhandledValue} from '../utils/zodUtils';
-import {
-  Entitlement,
-  LayoutModeTypeObject,
-  ReceiveFramePayload as ReceiveFrame,
-  ThermalState,
-  User,
-  Commands,
-} from './common';
-import {GetActivityInstanceConnectedParticipantsResponseSchema} from '../generated/schemas';
+import {Commands, DISPATCH, ReceiveFramePayload as ReceiveFrame} from './common';
+import {EventSchemas as GeneratedEventSchemas} from '../generated/schemas';
 
 // ERROR is sent as evt but is a special case, so is excluded from Events enum
 export const ERROR = 'ERROR';
 export enum Events {
   READY = 'READY',
-  VOICE_STATE_UPDATE = 'VOICE_STATE_UPDATE',
+  // START-GENERATED-SECTION
+  ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
+  ACTIVITY_JOIN = 'ACTIVITY_JOIN',
+  ACTIVITY_LAYOUT_MODE_UPDATE = 'ACTIVITY_LAYOUT_MODE_UPDATE',
+  CURRENT_GUILD_MEMBER_UPDATE = 'CURRENT_GUILD_MEMBER_UPDATE',
+  CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE',
+  ENTITLEMENT_CREATE = 'ENTITLEMENT_CREATE',
+  QUEST_ENROLLMENT_STATUS_UPDATE = 'QUEST_ENROLLMENT_STATUS_UPDATE',
+  RELATIONSHIP_UPDATE = 'RELATIONSHIP_UPDATE',
   SPEAKING_START = 'SPEAKING_START',
   SPEAKING_STOP = 'SPEAKING_STOP',
-  ACTIVITY_LAYOUT_MODE_UPDATE = 'ACTIVITY_LAYOUT_MODE_UPDATE',
-  CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE',
-  CURRENT_GUILD_MEMBER_UPDATE = 'CURRENT_GUILD_MEMBER_UPDATE',
-  ENTITLEMENT_CREATE = 'ENTITLEMENT_CREATE',
   THERMAL_STATE_UPDATE = 'THERMAL_STATE_UPDATE',
-  ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE = 'ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE',
-  RELATIONSHIP_UPDATE = 'RELATIONSHIP_UPDATE',
-  ACTIVITY_JOIN = 'ACTIVITY_JOIN',
-  QUEST_ENROLLMENT_STATUS_UPDATE = 'QUEST_ENROLLMENT_STATUS_UPDATE',
+  VOICE_STATE_UPDATE = 'VOICE_STATE_UPDATE',
+  // END-GENERATED-SECTION
 }
 
 export const DispatchEventFrame = ReceiveFrame.extend({
@@ -137,109 +130,83 @@ export const EventSchema = {
       }),
     }),
   },
-  [Events.VOICE_STATE_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.VOICE_STATE_UPDATE),
-      data: UserVoiceState,
-    }),
-    subscribeArgs: zod.object({
-      channel_id: zod.string(),
-    }),
-  },
-  [Events.SPEAKING_START]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.SPEAKING_START),
-      data: zod.object({
-        lobby_id: zod.string().optional(),
-        channel_id: zod.string().optional(),
-        user_id: zod.string(),
-      }),
-    }),
-    subscribeArgs: zod.object({
-      lobby_id: zod.string().nullable().optional(),
-      channel_id: zod.string().nullable().optional(),
-    }),
-  },
-  [Events.SPEAKING_STOP]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.SPEAKING_STOP),
-      data: zod.object({
-        lobby_id: zod.string().optional(),
-        channel_id: zod.string().optional(),
-        user_id: zod.string(),
-      }),
-    }),
-    subscribeArgs: zod.object({
-      lobby_id: zod.string().nullable().optional(),
-      channel_id: zod.string().nullable().optional(),
-    }),
-  },
-  [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
-      data: zod.object({
-        layout_mode: zodCoerceUnhandledValue(LayoutModeTypeObject),
-      }),
-    }),
-  },
-  [Events.CURRENT_USER_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.CURRENT_USER_UPDATE),
-      data: User,
-    }),
-  },
-  [Events.CURRENT_GUILD_MEMBER_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.CURRENT_GUILD_MEMBER_UPDATE),
-      data: GuildMemberRPC,
-    }),
-    subscribeArgs: zod.object({
-      guild_id: zod.string(),
-    }),
-  },
-  [Events.ENTITLEMENT_CREATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.ENTITLEMENT_CREATE),
-      data: zod.object({entitlement: Entitlement}),
-    }),
-  },
-  [Events.THERMAL_STATE_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.THERMAL_STATE_UPDATE),
-      data: zod.object({thermal_state: ThermalState}),
-    }),
-  },
+  // START-GENERATED-SECTION
   [Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE),
-      data: zod.object({
-        participants: GetActivityInstanceConnectedParticipantsResponseSchema.shape.participants,
-      }),
-    }),
-  },
-  [Events.RELATIONSHIP_UPDATE]: {
-    payload: DispatchEventFrame.extend({
-      evt: zod.literal(Events.RELATIONSHIP_UPDATE),
-      data: Relationship,
+      data: GeneratedEventSchemas.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE.payload,
     }),
   },
   [Events.ACTIVITY_JOIN]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.ACTIVITY_JOIN),
-      data: zod.object({
-        applicationId: zod.string(),
-        secret: zod.string(),
-      }),
+      data: GeneratedEventSchemas.ACTIVITY_JOIN.payload,
+    }),
+  },
+  [Events.ACTIVITY_LAYOUT_MODE_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ACTIVITY_LAYOUT_MODE_UPDATE),
+      data: GeneratedEventSchemas.ACTIVITY_LAYOUT_MODE_UPDATE.payload,
+    }),
+  },
+  [Events.CURRENT_GUILD_MEMBER_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.CURRENT_GUILD_MEMBER_UPDATE),
+      data: GeneratedEventSchemas.CURRENT_GUILD_MEMBER_UPDATE.payload,
+    }),
+    subscribeArgs: GeneratedEventSchemas.CURRENT_GUILD_MEMBER_UPDATE.subscribeArgs,
+  },
+  [Events.CURRENT_USER_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.CURRENT_USER_UPDATE),
+      data: GeneratedEventSchemas.CURRENT_USER_UPDATE.payload,
+    }),
+  },
+  [Events.ENTITLEMENT_CREATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.ENTITLEMENT_CREATE),
+      data: GeneratedEventSchemas.ENTITLEMENT_CREATE.payload,
     }),
   },
   [Events.QUEST_ENROLLMENT_STATUS_UPDATE]: {
     payload: DispatchEventFrame.extend({
       evt: zod.literal(Events.QUEST_ENROLLMENT_STATUS_UPDATE),
-      data: zod.object({
-        quest_id: zod.string(),
-        is_enrolled: zod.boolean(),
-        enrolled_at: zod.string().date(),
-      }),
+      data: GeneratedEventSchemas.QUEST_ENROLLMENT_STATUS_UPDATE.payload,
+    }),
+    subscribeArgs: GeneratedEventSchemas.QUEST_ENROLLMENT_STATUS_UPDATE.subscribeArgs,
+  },
+  [Events.RELATIONSHIP_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.RELATIONSHIP_UPDATE),
+      data: GeneratedEventSchemas.RELATIONSHIP_UPDATE.payload,
     }),
   },
+  [Events.SPEAKING_START]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPEAKING_START),
+      data: GeneratedEventSchemas.SPEAKING_START.payload,
+    }),
+    subscribeArgs: GeneratedEventSchemas.SPEAKING_START.subscribeArgs,
+  },
+  [Events.SPEAKING_STOP]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.SPEAKING_STOP),
+      data: GeneratedEventSchemas.SPEAKING_STOP.payload,
+    }),
+    subscribeArgs: GeneratedEventSchemas.SPEAKING_STOP.subscribeArgs,
+  },
+  [Events.THERMAL_STATE_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.THERMAL_STATE_UPDATE),
+      data: GeneratedEventSchemas.THERMAL_STATE_UPDATE.payload,
+    }),
+  },
+  [Events.VOICE_STATE_UPDATE]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.VOICE_STATE_UPDATE),
+      data: GeneratedEventSchemas.VOICE_STATE_UPDATE.payload,
+    }),
+    subscribeArgs: GeneratedEventSchemas.VOICE_STATE_UPDATE.subscribeArgs,
+  },
+  // END-GENERATED-SECTION
 } satisfies Record<keyof typeof Events, EventArgs>;
