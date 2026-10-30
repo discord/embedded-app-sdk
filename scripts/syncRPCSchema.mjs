@@ -29,6 +29,7 @@ const PATHS = {
   responses: path.join(__dirname, '..', 'src', 'schema', 'responses.ts'),
   index: path.join(__dirname, '..', 'src', 'commands', 'index.ts'),
   mock: path.join(__dirname, '..', 'src', 'mock.ts'),
+  events: path.join(__dirname, '..', 'src', 'schema', 'events.ts'),
   commandsDir: path.join(__dirname, '..', 'src', 'commands'),
 };
 
@@ -71,41 +72,45 @@ async function formatAndWriteFile(filePath, content, parser = 'typescript') {
 }
 
 /**
- * Keeps only the commands flagged with `embeddedAppSDK: true` in rpc-schema's definitions,
- * and strips the flag so the synced schema only contains request/response schemas.
+ * Keeps only the commands or events flagged with `embeddedAppSDK: true` in rpc-schema's definitions,
+ * and strips the flag so the synced schema only contains their schemas.
  *
- * @param {Record<string, any>} allSchemas - Schema definitions from the monorepo JSON
- * @returns {Promise<Record<string, any>>} Schemas for commands exposed in the SDK
+ * @param {Record<string, any>} allSchemas - Command or event schema definitions from the monorepo JSON
+ * @param {'commands' | 'events'} kind - Which section of the schema these are
+ * @param {Record<string, any> | undefined} previous - The same section from the previously synced schema
+ * @returns {Record<string, any>} Schemas exposed in the SDK
  */
-async function filterEmbeddedAppSDKSchemas(allSchemas) {
+function filterEmbeddedAppSDKSchemas(allSchemas, kind, previous) {
   const entries = Object.entries(allSchemas);
   if (!entries.some(([, schema]) => 'embeddedAppSDK' in schema)) {
-    throw new Error('No commands in the JSON Schema have an "embeddedAppSDK" flag.');
+    throw new Error(`No ${kind} in the JSON Schema have an "embeddedAppSDK" flag.`);
   }
 
   /** @type {Record<string, any>} */
   const schemas = {};
-  for (const [cmd, {embeddedAppSDK, ...schema}] of entries) {
+  for (const [name, {embeddedAppSDK, ...schema}] of entries) {
     if (embeddedAppSDK) {
-      schemas[cmd] = schema;
+      schemas[name] = schema;
     }
   }
 
   // Warn when a previously synced command is no longer exposed, since its hand-maintained
   // command file and mock are not removed automatically.
-  if (await fs.pathExists(schemaFilePath)) {
-    const previous = JSON.parse(await fs.readFile(schemaFilePath, 'utf-8'));
-    const removed = Object.keys(previous).filter((cmd) => !(cmd in schemas));
-    if (removed.length > 0) {
-      console.warn(
-        `> WARNING: ${removed.length} command(s) are no longer flagged embeddedAppSDK and were removed from the schema:`,
-        removed,
-        '\n  Delete their files in src/commands/ and entries in src/mock.ts if they should no longer be exposed.',
-      );
-    }
+  const removed = Object.keys(previous ?? {}).filter((name) => !(name in schemas));
+  if (removed.length > 0 && kind === 'commands') {
+    console.warn(
+      `> WARNING: ${removed.length} command(s) are no longer flagged embeddedAppSDK and were removed from the schema:`,
+      removed,
+      '\n  Delete their files in src/commands/ and entries in src/mock.ts if they should no longer be exposed.',
+    );
+  } else if (removed.length > 0) {
+    console.warn(
+      `> WARNING: ${removed.length} event(s) are no longer flagged embeddedAppSDK and were removed from the schema:`,
+      removed,
+    );
   }
 
-  console.log(`> Exposing ${Object.keys(schemas).length} of ${entries.length} commands flagged embeddedAppSDK`);
+  console.log(`> Exposing ${Object.keys(schemas).length} of ${entries.length} ${kind} flagged embeddedAppSDK`);
   return schemas;
 }
 
@@ -189,8 +194,12 @@ async function main() {
   // Restore the original file
   await $`git checkout HEAD -- ${filePath}`;
 
-  const schemas = await filterEmbeddedAppSDKSchemas(allSchemas);
-  await formatAndWriteFile(schemaFilePath, JSON.stringify(schemas), 'json');
+  const previous = (await fs.pathExists(schemaFilePath))
+    ? JSON.parse(await fs.readFile(schemaFilePath, 'utf-8'))
+    : {};
+  const schemas = filterEmbeddedAppSDKSchemas(allSchemas.commands, 'commands', previous.commands);
+  const eventSchemas = filterEmbeddedAppSDKSchemas(allSchemas.events, 'events', previous.events);
+  await formatAndWriteFile(schemaFilePath, JSON.stringify({commands: schemas, events: eventSchemas}), 'json');
 
   // Generate Zod Schemas
   console.log('> Generating Zod Schemas');
@@ -229,6 +238,25 @@ async function main() {
   enumCode += '}';
   schemaMapCode += '} as const';
 
+  let eventSchemaMapCode = `export const EventSchemas = {`;
+  for (const [evt, schema] of Object.entries(eventSchemas)) {
+    zodSchemaCode += `// ${evt}\n`;
+    eventSchemaMapCode += `${evt}: {`;
+    if (schema.subscribeArgs != null) {
+      const tokenName = formatToken(`${evt}SubscribeArgsSchema`);
+      zodSchemaCode += `export const ${tokenName} = ${parseZodSchema(schema.subscribeArgs)};`;
+      zodSchemaCode += `export type ${formatToken(`${evt}SubscribeArgs`)} = zInfer<typeof ${tokenName}>;`;
+      eventSchemaMapCode += `subscribeArgs: ${tokenName},`;
+    }
+    const payloadTokenName = formatToken(`${evt}PayloadSchema`);
+    zodSchemaCode += `export const ${payloadTokenName} = ${parseZodSchema(schema.payload)};`;
+    zodSchemaCode += `export type ${formatToken(`${evt}Payload`)} = zInfer<typeof ${payloadTokenName}>;`;
+    eventSchemaMapCode += `payload: ${payloadTokenName},`;
+    eventSchemaMapCode += '},';
+    zodSchemaCode += '\n\n';
+  }
+  eventSchemaMapCode += '} as const';
+
   // Only import the zodUtils helpers the generated schemas actually use
   const zodUtilsImports = ['fallbackToDefault', 'zodUnionWithUnhandled'].filter((name) => zodSchemaCode.includes(`${name}(`));
 
@@ -256,6 +284,11 @@ async function main() {
      * Request & Response schemas for each supported RPC Command.
      */
     ${schemaMapCode}
+
+    /**
+     * Subscribe args & payload schemas for each supported RPC Event.
+     */
+    ${eventSchemaMapCode}
   `;
 
   // Write to file and format with prettier
@@ -268,6 +301,7 @@ async function main() {
   await syncCommandsIndex(schemas);
   await generateCommandFiles(schemas);
   await syncMockCommands(schemas);
+  await syncEvents(eventSchemas);
 }
 
 /**
@@ -415,6 +449,37 @@ async function syncMockCommands(schemas) {
 
   const updatedFile = content.replace(fullMatch, updatedContent);
   await formatAndWriteFile(PATHS.mock, updatedFile);
+}
+
+/**
+ *
+ * @param {Record<string, any>} eventSchemas - Event schema definitions from JSON
+ */
+async function syncEvents(eventSchemas) {
+  let content = await fs.readFile(PATHS.events, 'utf-8');
+
+  const [enumMatch, schemaMatch] = findSentinelSections(content, PATHS.events, 2);
+
+  const events = Object.keys(eventSchemas).sort();
+  const enumEntries = events.map((evt) => `  ${evt} = '${evt}',`);
+  const schemaEntries = events.map((evt) => {
+    const subscribeArgs =
+      eventSchemas[evt].subscribeArgs != null ? `subscribeArgs: GeneratedEventSchemas.${evt}.subscribeArgs,` : '';
+    return `  [Events.${evt}]: {
+    payload: DispatchEventFrame.extend({
+      evt: zod.literal(Events.${evt}),
+      data: GeneratedEventSchemas.${evt}.payload,
+    }),
+    ${subscribeArgs}
+  },`;
+  });
+
+  console.log(`> Syncing ${events.length} events in events.ts`);
+
+  content = content.replace(enumMatch[0], enumMatch[1] + enumEntries.join('\n') + '\n  ' + enumMatch[3]);
+  content = content.replace(schemaMatch[0], schemaMatch[1] + schemaEntries.join('\n') + '\n  ' + schemaMatch[3]);
+
+  await formatAndWriteFile(PATHS.events, content);
 }
 
 /**
