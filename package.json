@@ -63,7 +63,7 @@
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
     "@typescript-eslint/parser": "^8.6.0",
-    "eslint": "^8.18.0",
+    "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-no-unsanitized": "^4.0.2",
