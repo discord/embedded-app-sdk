@@ -187,11 +187,18 @@ export class DiscordSDK implements IDiscordSDK {
 
     // If first subscription, subscribe via RPC
     if (Object.values(RPCEvents).includes(event as RPCEvents) && event !== RPCEvents.READY && listenerCount === 0) {
-      await this.sendCommand({
-        cmd: Commands.SUBSCRIBE,
-        args: subscribeArgs,
-        evt: event,
-      });
+      try {
+        await this.sendCommand({
+          cmd: Commands.SUBSCRIBE,
+          args: subscribeArgs,
+          evt: event,
+        });
+      } catch (error) {
+        // Drop the listener so that a retry sends SUBSCRIBE again instead of
+        // counting this listener and assuming the event is already subscribed.
+        this.eventBus.off(event, listener);
+        throw error;
+      }
     }
     return emitter;
   }
