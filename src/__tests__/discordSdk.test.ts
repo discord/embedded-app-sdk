@@ -7,7 +7,14 @@ import {DISPATCH} from '../schema/common';
 import {version as sdkVersion} from '../../package.json';
 
 describe('DiscordSDK', () => {
-  it('Can be constructed and await a "ready" event', async () => {
+  const user = {id: '5678', username: 'user', discriminator: '0'};
+
+  it.each([
+    ['without a user', {}],
+    ['with a user avatar', {user: {...user, avatar: 'a1b2c3'}}],
+    ['with a user without an avatar', {user}],
+    ['with a null user avatar', {user: {...user, avatar: null}}],
+  ])('Can be constructed and await a "ready" event %s', async (_description, readyUser) => {
     const frame_id = '1234';
     const instance_id = '2345';
     const platform = Platform.DESKTOP;
@@ -76,6 +83,7 @@ describe('DiscordSDK', () => {
                 api_endpoint: '//canary.discord.com/api',
                 environment: 'production',
               },
+              ...readyUser,
             },
             evt: Events.READY,
             nonce: null,
