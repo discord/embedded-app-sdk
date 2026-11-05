@@ -33,7 +33,7 @@ jobs:
           token: ${{ github.token }}
           release-type: node
       # The logic below handles the npm publication:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         # these if statements ensure that a publication only occurs when
         # a new release is created:
         if: ${{ steps.release.outputs.release_created }}
@@ -71,7 +71,7 @@ jobs:
             echo "Version must look like X.Y.Z-beta.N (got: $VERSION)"
             exit 1
           fi
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref }}
       - uses: actions/setup-node@v6
