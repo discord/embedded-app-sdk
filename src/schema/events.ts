@@ -131,7 +131,7 @@ export const EventSchema = {
             id: zod.string(),
             username: zod.string(),
             discriminator: zod.string(),
-            avatar: zod.string().optional(),
+            avatar: zod.string().optional().nullable(),
           })
           .optional(),
       }),
