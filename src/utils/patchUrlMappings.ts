@@ -75,16 +75,16 @@ export function patchUrlMappings(
 
   if (patchXhr) {
     const openImpl = XMLHttpRequest.prototype.open;
-    // @ts-expect-error - the ts interface exports two 'open' methods
     XMLHttpRequest.prototype.open = function (
+      this: XMLHttpRequest,
       method: string,
       url: string,
-      async: boolean,
-      username?: string | null,
-      password?: string | null,
+      ...rest: [async?: boolean, username?: string | null, password?: string | null]
     ) {
       const remapped = attemptRemap({url: absoluteURL(url), mappings});
-      openImpl.apply(this, [method, remapped, async, username, password]);
+      // Forward only the arguments the caller passed. `open(method, url)` is asynchronous, but an
+      // explicit `undefined` for `async` is coerced to `false` and makes the request synchronous.
+      Reflect.apply(openImpl, this, [method, remapped, ...rest]);
     };
   }
 
