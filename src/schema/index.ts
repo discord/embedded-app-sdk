@@ -44,7 +44,7 @@ export function parseIncomingPayload<K extends keyof typeof Events.EventSchema =
     if (incoming.evt === Events.ERROR) {
       return Events.ErrorEvent.parse(incoming);
     }
-    return Events.parseEventPayload(Events.EventFrame.parse(incoming));
+    return Events.parseEventPayload<K>(Events.EventFrame.parse(incoming));
   } else {
     return Responses.parseResponsePayload(Responses.ResponseFrame.passthrough().parse(incoming));
   }

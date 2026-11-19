@@ -32,28 +32,13 @@ export function zodCoerceUnhandledValue<T extends UnhandledObject>(inputObject: 
   );
 }
 
-export interface ZodEffectOverlayType<T extends ZodTypeAny> extends zod.ZodEffects<T> {
-  overlayType: T;
-  // Don't allow accessing the intermediate wrapper
-  innerType(): never;
-  _def: never;
-}
-
-/**
- * Fallback to the default zod value if parsing fails.
- */
-export function fallbackToDefault<T extends ZodDefault<ZodTypeAny>>(schema: T): ZodEffectOverlayType<T> {
-  const transform = zod.custom().transform((data) => {
-    const res = schema.safeParse(data);
-    if (res.success) {
-      return res.data;
-    }
-    return schema._def.defaultValue();
-  }) as ZodEffectOverlayType<T>;
-  // Must set this inner schema so inspection works correctly
-  transform.overlayType = schema;
-  // transform._def.schema = schema;
-  return transform;
+/** Fallback to the default Zod value if parsing fails. */
+export function fallbackToDefault<T extends ZodDefault<ZodTypeAny>>(schema: T) {
+  const transform = zod.transform((data): zod.output<T> => {
+    const result = schema.safeParse(data);
+    return result.success ? result.data : schema.parse(undefined);
+  });
+  return Object.assign(transform, {overlayType: schema});
 }
 
 /**
