@@ -21,7 +21,7 @@ export default function compatCommandFactory<
 }: {
   sendCommand: TSendCommand;
   cmd: Exclude<Commands, Commands.SUBSCRIBE | Commands.UNSUBSCRIBE>;
-  response: zod.ZodTypeAny;
+  response: Response;
   fallbackTransform: (args: Args) => FallbackArgs;
   transferTransform?: (args: Args | FallbackArgs) => Transferable[] | undefined;
 }): (args: Args) => Promise<zod.infer<Response>> {
@@ -34,13 +34,13 @@ export default function compatCommandFactory<
     try {
       const reply = await sendCommand({cmd, args, transfer: transferTransform(args)});
       const parsed = payload.parse(reply);
-      return parsed.data;
+      return parsed.data as zod.output<Response>;
     } catch (error: any) {
       if (error.code === RPCErrorCodes.INVALID_PAYLOAD) {
         const fallbackArgs = fallbackTransform(args);
         const reply = await sendCommand({cmd, args: fallbackArgs, transfer: transferTransform(fallbackArgs)});
         const parsed = payload.parse(reply);
-        return parsed.data;
+        return parsed.data as zod.output<Response>;
       } else {
         throw error;
       }

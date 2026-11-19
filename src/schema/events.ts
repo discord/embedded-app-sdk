@@ -36,7 +36,7 @@ export const DispatchEventFrame = ReceiveFrame.extend({
   data: zod.object({}).passthrough(),
 });
 
-export interface EventArgs<Z extends zod.AnyZodObject = zod.AnyZodObject> {
+export interface EventArgs<Z extends zod.ZodObject = zod.ZodObject> {
   payload: Z;
   // BAD CODE - this arg is being called at runtime, but it's only used to
   // enforce typescript. The perf hit is low and the DX with zod is worth it
@@ -93,7 +93,8 @@ export function parseEventPayload<K extends keyof typeof EventSchema = keyof typ
     throw new Error(`Unrecognized event type ${data.evt}`);
   }
   const eventSchema = EventSchema[event as Events];
-  return eventSchema.payload.parse(data);
+  // The event discriminator selects the payload schema; preserve the generic public return type.
+  return eventSchema.payload.parse(data) as zod.infer<(typeof EventSchema)[K]['payload']>;
 }
 
 export const EventSchema = {

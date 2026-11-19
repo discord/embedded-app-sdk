@@ -16,6 +16,20 @@ describe('fallbackToDefault', () => {
     expect(schema.parse(t.in)).toEqual(t.out);
   });
 
+  it('evaluates the default on each failed parse without changing successful output', () => {
+    let calls = 0;
+    const wrapped = fallbackToDefault(
+      z
+        .string()
+        .transform((value) => value.length)
+        .default(() => ++calls),
+    );
+    expect(wrapped.parse('hello')).toBe(5);
+    expect(calls).toBe(0);
+    expect(wrapped.parse(null)).toBe(1);
+    expect(wrapped.parse(false)).toBe(2);
+  });
+
   it('should allow pulling overlay schema', () => {
     const overlaySchema = schema.overlayType;
 

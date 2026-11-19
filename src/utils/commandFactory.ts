@@ -24,6 +24,7 @@ export function schemaCommandFactory<T extends Command, TArgs = InferArgs<T>>(
       transfer: transferTransform(args),
     });
     const parsed = payload.parse(reply);
-    return parsed.data;
+    // The literal command above selects the matching generated response schema.
+    return parsed.data as InferResponse<T>;
   };
 }
